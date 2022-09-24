@@ -5,7 +5,8 @@
   "author": "Khalid Ait Bellahs",
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "rollup -c -w",
+    "sirv": "rollup -c -w",
+    "dev": "rollup -c -w --environment ENV:development",
     "hmlg": "rollup -c -w --environment ENV:homologation",
     "prod": "rollup -c -w --environment ENV:production",
     "start": "sirv public --no-clear --single --host",
