@@ -1,0 +1,300 @@
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { Preferences } from '@capacitor/preferences';
+  import { Router, Link, Route } from 'svelte-navigator';
+  import About from './pages/About.svelte';
+  import Blog from './pages/Blog.svelte';
+  import BlogPost from './pages/BlogPost.svelte';
+  import Checkout from './pages/Checkout.svelte';
+  import Home from './pages/Home.svelte';
+  import Plans from './pages/Plans.svelte';
+  import Result from './pages/Result.svelte';
+  import TermsOfUse from './pages/TermsOfUse.svelte';
+  import PrivacyPolicy from './pages/PrivacyPolicy.svelte';
+  import Callback from './pages/callback.svelte';
+  import Contact from './pages/Contact.svelte';
+  import Navbar from './components/Navbar.svelte';
+  import Referral from './components/Referral.svelte';
+  import { Views, Stores } from '@ikomida/shared-frontend';
+
+  const COOKIES_AGREEMENT_PREFERENCE = 'COOKIES_AGREEMENT_PREFERENCE';
+  const originalPushState = history.pushState;
+  const originalReplaceState = history.replaceState;
+
+  let screenW: number;
+  let cookiesAgreement = false;
+  let location = window.location.href;
+
+  $: if (location) {
+    console.log('onNavigate', location);
+    Stores.Loading.instance.start();
+  }
+  $: style = ['ikomida.com', 'ikomida.com.br', 'www.ikomida.com', 'www.ikomida.com.br'].includes(window.location.host)
+    ? ''
+    : `margin-top: ${screenW > 820 ? 44 : 65}px !important;`;
+
+  async function acceptCookiesAgreement() {
+    await Preferences.set({
+      key: COOKIES_AGREEMENT_PREFERENCE,
+      value: JSON.stringify(true),
+    });
+    cookiesAgreement = true;
+  }
+
+  function updateHref() {
+    location = window.location.href;
+  }
+
+  history.pushState = function (data: any, unused: string, url?: string | URL | null) {
+    originalPushState.apply(this, [data, unused, url]);
+    updateHref();
+  };
+
+  history.replaceState = function (data: any, unused: string, url?: string | URL | null) {
+    originalReplaceState.apply(this, [data, unused, url]);
+    updateHref();
+  };
+
+  onMount(async () => {
+    const value = (
+      await Preferences.get({
+        key: COOKIES_AGREEMENT_PREFERENCE,
+      })
+    )?.value;
+    cookiesAgreement = JSON.parse(value === '' || !value ? 'false' : value);
+  });
+
+  window.addEventListener('popstate', updateHref);
+  window.addEventListener('hashchange', updateHref);
+</script>
+
+<Views.LoadJS url="https://www.google.com/recaptcha/api.js?render=6LebYzshAAAAAIXhka3WrAjus5tDXtefR1QefVZS" />
+<Router>
+  <Referral />
+  <main {style}>
+    <Route path="/">
+      <Home />
+    </Route>
+    <Route path="about" component={About} />
+    <Route path="plans/*">
+      <Route path="">
+        <Plans />
+      </Route>
+      <Route path=":id/:plan/:price" component={Checkout} />
+    </Route>
+    <Route path="checkout" component={Checkout} />
+    <Route path="result" component={Result} />
+    <Route path="termsOfUse" component={TermsOfUse} />
+    <Route path="privacyPolicy" component={PrivacyPolicy} />
+    <Route path="callback" component={Callback} />
+    <Route path="contact" component={Contact} />
+    <Route path="blog/*">
+      <Route path="/">
+        <Blog />
+      </Route>
+      <Route path=":id" component={BlogPost} />
+    </Route>
+  </main>
+  <footer class:hasCookiesAgreement={!cookiesAgreement}>
+    <section id="socialNetwork">
+      <img class="logo" src="/assets/icons/transparent-logo-1.svg" alt="iKomida" />
+      <p>
+        Um produto da Ti Alto Nivel<br />Todos os direitos reservados<br />
+        <img src="/assets/icons/instagram.svg" alt="iKomida instagram" /><img
+          src="/assets/icons/facebook.svg"
+          alt="iKomida facebook"
+        />
+      </p>
+    </section>
+    <section id="company">
+      <h3>Tecnologia de informação de alto nivel LTDA</h3>
+      <p>
+        Telefone: (11) 94593-0909<br />
+        E-mail: contact@tialtonivel.com.br<br /><br />
+        CNPJ: 28.994.111/0001-80<br />
+        <!-- Av. Cid Nelson Jordano 270, JD Salete,<br />Tabão da Serra / SP<br />CEP: 06767-360 -->
+      </p>
+    </section>
+    <section id="menu">
+      <h3>Acesso fácil</h3>
+      <ul>
+        <li>
+          <Link class="link" to="/">Início</Link>
+        </li>
+        <li>
+          <Link class="link" to="about">Sobre</Link>
+        </li>
+        <!-- <li>
+          <Link class="link" to="blog">Blog</Link>
+        </li> -->
+        <li>
+          <Link class="link" to="plans">Preços</Link>
+        </li>
+        <li>
+          <Link class="link" to="contact">Contato</Link>
+        </li>
+        <li>
+          <Link class="link" to="termsOfUse">Termos</Link>
+        </li>
+        <li>
+          <Link class="link" to="privacyPolicy">Privacidade</Link>
+        </li>
+      </ul>
+    </section>
+  </footer>
+  {#if !cookiesAgreement}
+    <div class="cookiesAgreement">
+      <div class="text">
+        Estamos usando cookies e outras tecnologias nesse site para melhorar sua experiência.<br />
+        Ao clicar em qualquer link nesta página, você está nos dando seu consenso em nossa <Link
+          class="link"
+          to="privacyPolicy">política de privacidade</Link
+        >.
+      </div>
+      <div class="action">
+        <Views.Button on:click={acceptCookiesAgreement}>Eu concordo</Views.Button>
+      </div>
+    </div>
+  {/if}
+  <Navbar />
+</Router>
+<Views.Loading />
+<Views.MessageAlert />
+<svelte:window bind:innerWidth={screenW} />
+
+<style>
+  .cookiesAgreement {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    background: #000;
+    color: #fff;
+    padding: 20px;
+  }
+  .cookiesAgreement > .text {
+    flex: 1 75%;
+  }
+  .cookiesAgreement > .action {
+    flex: 1 25%;
+  }
+  .cookiesAgreement > .text > :global(.link) {
+    color: white;
+    text-decoration: underline;
+  }
+  main {
+    text-align: center;
+    padding: 0;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex: 1 0 auto;
+    min-height: 300px;
+    padding: 0;
+  }
+  footer {
+    display: flex;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    flex-flow: row;
+    flex-direction: row;
+    align-items: center;
+    background-color: #202020;
+    color: #fff;
+    padding: 10px 40px;
+  }
+  footer.hasCookiesAgreement {
+    padding-bottom: 70px;
+  }
+  footer > section {
+    flex: 1;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+  }
+  footer > section ul {
+    list-style: none;
+    padding: 0;
+    align-self: center;
+  }
+  footer > section#socialNetwork {
+    text-align: center;
+    width: 30%;
+    flex-basis: 29%;
+  }
+  footer > section#company {
+    text-align: center;
+    width: 50%;
+    flex-basis: 54%;
+  }
+  footer > section#menu {
+    text-align: center;
+    width: 20%;
+    flex-basis: 14%;
+  }
+  footer > section#socialNetwork > .logo {
+    color: white;
+    object-fit: contain;
+    height: 70px;
+  }
+  footer > section#socialNetwork > p img {
+    height: 24px;
+    filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(333deg) brightness(104%) contrast(100%);
+    margin: 10px;
+  }
+  footer > section ul > li {
+    margin: 0;
+  }
+  footer > section ul > li > :global(.link) {
+    color: white;
+  }
+  @media screen and (max-width: 820px) {
+    .cookiesAgreement {
+      flex-direction: column;
+    }
+    .cookiesAgreement .action {
+      margin-top: 20px;
+    }
+    footer {
+      flex-direction: column;
+    }
+    footer.hasCookiesAgreement {
+      padding-bottom: 220px;
+    }
+    footer > section:not(:last-child) {
+      border-bottom: 1px dashed rgb(0 0 0 / 50%);
+    }
+    footer > section {
+      width: 100%;
+      flex-basis: 100%;
+    }
+    footer > section ul {
+      display: flex;
+    }
+    footer > section ul > li {
+      padding-left: 20px;
+    }
+    footer > section#socialNetwork,
+    footer > section#company,
+    footer > section#menu {
+      text-align: center;
+      width: 100%;
+      flex-basis: 100%;
+    }
+    footer > section#menu > ul {
+      flex-direction: row;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+    footer > section#menu > ul > li {
+      flex: 1;
+      width: 50%;
+      flex-basis: 48%;
+    }
+  }
+</style>
