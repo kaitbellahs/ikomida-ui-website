@@ -1,4 +1,4 @@
-name: Deploy to Firebase Hosting on push
+name: Deploy ikomida dev site to Firebase Hosting on pull request merge
 on:
   pull_request_target:
     types:
@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        # with:
-        #   ssh-key: "${{ secrets.REPO_SSHKEY }}"
       - id: "auth"
         name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v0"
