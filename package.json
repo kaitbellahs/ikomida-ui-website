@@ -6,9 +6,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "sirv": "rollup -c -w",
-    "dev": "rollup -c -w --environment ENV:development",
-    "hmlg": "rollup -c -w --environment ENV:homologation",
-    "prod": "rollup -c -w --environment ENV:production",
+    "dev": "rollup -c --environment ENV:development",
+    "hmlg": "rollup -c --environment ENV:homologation",
+    "prod": "rollup -c --environment ENV:production",
     "start": "sirv public --no-clear --single --host",
     "prebuild:types": "rimraf ./build",
     "build:types": "tsc -p ./tsconfig.json --outDir build && api-extractor run",
