@@ -26,6 +26,10 @@ const url: any = {
 }
 Stores.Cache.createInstance()
 Network.createInstance(url[env], "com.ikomida", agent, "6LebYzshAAAAAIXhka3WrAjus5tDXtefR1QefVZS", appVersion);
+Stores.Loading.createInstance()
+Stores.Layout.createInstance()
+
+// Initialize Firebase
 const firebaseConfig: any = {
 	production: {
 		apiKey: "AIzaSyBOB-RGe7Y6C2MRZazVz9DJvYXU-xgdv-4",
@@ -46,10 +50,6 @@ const firebaseConfig: any = {
 		measurementId: "G-9RNGZF8T8L"
 	}
 };
-Stores.Loading.createInstance()
-Stores.Layout.createInstance()
-
-// Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig[env]);
 getAnalytics(firebaseApp);
 const app = new App({
