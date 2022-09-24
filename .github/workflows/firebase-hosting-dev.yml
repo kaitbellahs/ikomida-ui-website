@@ -24,6 +24,8 @@ jobs:
           npx google-artifactregistry-auth
           rm .npmrc || true
           echo "@ikomida:registry=https://us-central1-npm.pkg.dev/ikomida-dev/node/" >> .npmrc && echo "//us-central1-npm.pkg.dev/ikomida-dev/node/:always-auth=true" >> .npmrc
+          rm firebase.json || true
+          echo "{"hosting":{"site":"ikomida-dev","public":"public","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]}}" >> firebase.json
           yarn install
           yarn dev
           mv ./public/build/bundle.js ./public/build/bundle_old.js
@@ -34,3 +36,4 @@ jobs:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_IKOMIDA_DEV }}"
           channelId: live
           projectId: ikomida-dev
+          target: ikomida-dev
