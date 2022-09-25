@@ -1,3 +1,5 @@
+window.environment = 'ENVIRONMENT'
+
 import {
 	initializeApp
 } from "firebase/app";
@@ -11,13 +13,6 @@ import {
 } from '@ikomida/shared-frontend';
 
 const appVersion = '0.0.1'
-let env: any = 'development'
-try {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	env = environment ?? 'development'
-	// eslint-disable-next-line no-empty
-} catch (error: any) { }
 const agent = "WEB-VENDOR"
 const url: any = {
 	production: "https://api.ikomida.com",
@@ -25,7 +20,7 @@ const url: any = {
 	homologation: "https://hmlg.api.ikomida.com"
 }
 Stores.Cache.createInstance()
-Network.createInstance(url[env], "com.ikomida", agent, "6LebYzshAAAAAIXhka3WrAjus5tDXtefR1QefVZS", appVersion);
+Network.createInstance(url[window.environment], "com.ikomida", agent, "6LebYzshAAAAAIXhka3WrAjus5tDXtefR1QefVZS", appVersion);
 Stores.Loading.createInstance()
 Stores.Layout.createInstance()
 
@@ -50,7 +45,7 @@ const firebaseConfig: any = {
 		measurementId: "G-9RNGZF8T8L"
 	}
 };
-const firebaseApp = initializeApp(firebaseConfig[env]);
+const firebaseApp = initializeApp(firebaseConfig[window.environment]);
 getAnalytics(firebaseApp);
 const app = new App({
 	target: document.body
