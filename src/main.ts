@@ -35,6 +35,15 @@ const firebaseConfig: any = {
 		appId: "1:981415290588:web:48034870056195115d3619",
 		measurementId: "G-SR97E49HFX"
 	},
+	homologation: {
+		apiKey: "AIzaSyBfhHXxMGYgNlTETLBRJwzR22JAGdVO-a8",
+		authDomain: "ikomida-hmlg.firebaseapp.com",
+		projectId: "ikomida-hmlg",
+		storageBucket: "ikomida-hmlg.appspot.com",
+		messagingSenderId: "855187514148",
+		appId: "1:855187514148:web:ce1f669b8f1a23e4bec9b1",
+		measurementId: "G-BCNP23K5P5"
+	},
 	development: {
 		apiKey: "AIzaSyBfeISBZ7aSIcmBV9LphNcaNtkfNMf2Sis",
 		authDomain: "ikomida-dev.firebaseapp.com",
