@@ -1,3 +1,5 @@
+window.environment = 'ENVIRONMENT'
+
 import {
 	initializeApp
 } from "firebase/app";
@@ -11,13 +13,6 @@ import {
 } from '@ikomida/shared-frontend';
 
 const appVersion = '0.0.1'
-let env: any = 'development'
-try {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	env = environment ?? 'development'
-	// eslint-disable-next-line no-empty
-} catch (error: any) { }
 const agent = "WEB-VENDOR"
 const url: any = {
 	production: "https://api.ikomida.com",
@@ -25,7 +20,11 @@ const url: any = {
 	homologation: "https://hmlg.api.ikomida.com"
 }
 Stores.Cache.createInstance()
-Network.createInstance(url[env], "com.ikomida", agent, "6LebYzshAAAAAIXhka3WrAjus5tDXtefR1QefVZS", appVersion);
+Network.createInstance(url[window.environment], "com.ikomida", agent, "6LebYzshAAAAAIXhka3WrAjus5tDXtefR1QefVZS", appVersion);
+Stores.Loading.createInstance()
+Stores.Layout.createInstance()
+
+// Initialize Firebase
 const firebaseConfig: any = {
 	production: {
 		apiKey: "AIzaSyBOB-RGe7Y6C2MRZazVz9DJvYXU-xgdv-4",
@@ -35,6 +34,15 @@ const firebaseConfig: any = {
 		messagingSenderId: "981415290588",
 		appId: "1:981415290588:web:48034870056195115d3619",
 		measurementId: "G-SR97E49HFX"
+	},
+	homologation: {
+		apiKey: "AIzaSyBfhHXxMGYgNlTETLBRJwzR22JAGdVO-a8",
+		authDomain: "ikomida-hmlg.firebaseapp.com",
+		projectId: "ikomida-hmlg",
+		storageBucket: "ikomida-hmlg.appspot.com",
+		messagingSenderId: "855187514148",
+		appId: "1:855187514148:web:ce1f669b8f1a23e4bec9b1",
+		measurementId: "G-BCNP23K5P5"
 	},
 	development: {
 		apiKey: "AIzaSyBfeISBZ7aSIcmBV9LphNcaNtkfNMf2Sis",
@@ -46,11 +54,7 @@ const firebaseConfig: any = {
 		measurementId: "G-9RNGZF8T8L"
 	}
 };
-Stores.Loading.createInstance()
-Stores.Layout.createInstance()
-
-// Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig[env]);
+const firebaseApp = initializeApp(firebaseConfig[window.environment]);
 getAnalytics(firebaseApp);
 const app = new App({
 	target: document.body
