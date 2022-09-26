@@ -32,8 +32,8 @@ const firebaseConfig: any = {
 		projectId: "ikomida-prod",
 		storageBucket: "ikomida-prod.appspot.com",
 		messagingSenderId: "981415290588",
-		appId: "1:981415290588:web:48034870056195115d3619",
-		measurementId: "G-SR97E49HFX"
+		appId: "1:981415290588:web:1d8ab499333a80a35d3619",
+		measurementId: "G-38ZPLEES90"
 	},
 	homologation: {
 		apiKey: "AIzaSyBfhHXxMGYgNlTETLBRJwzR22JAGdVO-a8",
