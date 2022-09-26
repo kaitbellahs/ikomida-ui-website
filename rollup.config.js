@@ -59,7 +59,7 @@ export default {
 	plugins: [
 		replace({
 			preventAssignment: true,
-			environment: process.env.ENV ?? 'development',
+			'ENVIRONMENT': process.env.ENV ?? 'development',
 		}),
 		svelte({
 			preprocess: [
