@@ -72,7 +72,7 @@
   "dependencies": {
     "@capacitor/preferences": "^4.0.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
-    "@ikomida/shared-frontend": "^0.0.104",
+    "@ikomida/shared-frontend": "^0.0.106",
     "credit-card-type": "^9.1.0",
     "firebase": "^9.10.0",
     "svelte-carousel": "^1.0.20",
