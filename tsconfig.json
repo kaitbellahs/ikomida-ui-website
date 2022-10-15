@@ -1,29 +1,35 @@
 {
-  "extends": "@tsconfig/svelte/tsconfig.json",
-  "include": [
-    "src/**/*.ts",
-  ],
-  "exclude": [
-    "node_modules/*",
-    "**/*.spec.ts",
-    "__sapper__/*",
-    "public/*",
-    "App/*"
-  ],
   "compilerOptions": {
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
-    "module": "esnext",
     "isolatedModules": false,
     "noImplicitAny": true,
     "strict": true,
     "declaration": true,
-    "rootDir": "src",
-    "outDir": "lib",
-    "declarationDir": "lib",
+    "declarationDir": "types",
+    "useDefineForClassFields": false,
     "target": "ESNext",
-  }
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "moduleResolution": "Node",
+    "removeComments": true,
+    "module": "ESNext",
+    "noEmitOnError": true,
+    "esModuleInterop": false,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "declarationMap": false,
+    "emitDeclarationOnly": true,
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  },
+  "plugins": [
+    {
+      "name": "typescript-svelte-plugin"
+    }
+  ]
 }

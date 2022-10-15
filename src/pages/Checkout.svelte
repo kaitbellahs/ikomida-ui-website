@@ -1,54 +1,49 @@
 <script lang="ts">
-  import { Views, Utils, Stores, Types } from '@ikomida/shared-frontend';
-  import { faSearch } from '@fortawesome/free-solid-svg-icons';
-  import {
-    doContract,
-    GetAddressByCep,
-    requestPhoneValidation,
-    validatePhoneValidationCode,
-  } from '../network/Contract';
-  import { getTermOfUse } from '../network/Terms';
-  import creditCardType from 'credit-card-type';
-  import { faPhone, faUnlock } from '@fortawesome/free-solid-svg-icons';
-  import { onDestroy, onMount } from 'svelte';
-  import Referral from '../stores/referral';
-  import type { CreditCardType } from 'credit-card-type/dist/types';
+  import { Views, Utils, Stores, Types } from '@ikomida/shared-frontend'
+  import { faSearch } from '@fortawesome/free-solid-svg-icons'
+  import { doContract, GetAddressByCep, requestPhoneValidation, validatePhoneValidationCode } from '../network/Contract'
+  import { getTermOfUse } from '../network/Terms'
+  import creditCardType from 'credit-card-type'
+  import { faPhone, faUnlock } from '@fortawesome/free-solid-svg-icons'
+  import { onDestroy, onMount } from 'svelte'
+  import Referral from '../stores/referral'
+  import type { CreditCardType } from 'credit-card-type/dist/types'
 
   interface IContractInputs {
     address: {
-      postalCode: Views.TextEdit | null;
-      street: Views.TextEdit | null;
-      number: Views.TextEdit | null;
-      complement: Views.TextEdit | null;
-      neighborhood: Views.TextEdit | null;
-      city: Views.TextEdit | null;
-      stat: Views.TextEdit | null;
-    };
+      postalCode: Views.TextEdit | null
+      street: Views.TextEdit | null
+      number: Views.TextEdit | null
+      complement: Views.TextEdit | null
+      neighborhood: Views.TextEdit | null
+      city: Views.TextEdit | null
+      stat: Views.TextEdit | null
+    }
   }
 
-  export let id: string;
-  export let plan: string;
-  export let price: number;
-  export let navigate: any;
-  export let location: any;
+  export let id: string
+  export let plan: string
+  export let price: number
+  export let navigate: any
+  export let location: any
 
-  const countdownWaitTime = 60;
+  const countdownWaitTime = 60
 
-  let stage = 0;
-  let timer: NodeJS.Timer | null = null;
-  let canRequestCode = true;
-  let countdown = 0;
-  let cardBrandIcon: string | null;
-  let cardNumberMask = '____ ____ ____ ____';
-  let cardCodeMask = '___';
-  let buttonNext = 'Continuar';
-  let cardInfo: CreditCardType;
-  let currentPostalCode: string | undefined = '';
-  let isValidValidationCode = false;
-  let showRequestValidatingCodeAlert = false;
-  let screenW: number;
+  let stage = 0
+  let timer: NodeJS.Timer | null = null
+  let canRequestCode = true
+  let countdown = 0
+  let cardBrandIcon: string | undefined
+  let cardNumberMask = '____ ____ ____ ____'
+  let cardCodeMask = '___'
+  let buttonNext = 'Continuar'
+  let cardInfo: CreditCardType
+  let currentPostalCode: string | undefined = ''
+  let isValidValidationCode = false
+  let showRequestValidatingCodeAlert = false
+  let screenW: number
 
-  let subscribeObject: Types.Classes.CContract = Types.Classes.CContract.fillWith(null);
+  let subscribeObject: Types.Classes.CContract = Types.Classes.CContract.fillWith(null)
   let subscribeObjectValidation = {
     canDigitValidationCode: false,
     contractName: false,
@@ -65,13 +60,13 @@
     plan: {
       id,
       name: plan,
-      price,
+      price
     },
     payment: {
       number: false,
       holder: false,
       validity: false,
-      code: false,
+      code: false
     },
     address: {
       postalCode: false,
@@ -80,9 +75,9 @@
       complement: false,
       neighborhood: false,
       city: false,
-      stat: false,
-    },
-  };
+      stat: false
+    }
+  }
   let inputs: IContractInputs = {
     address: {
       postalCode: null,
@@ -91,15 +86,15 @@
       complement: null,
       neighborhood: null,
       city: null,
-      stat: null,
-    },
-  };
+      stat: null
+    }
+  }
 
   $: canProgress =
     (stage === 0 && isStage0Valid) ||
     (stage === 1 && isStage1Valid) ||
     (stage === 2 && isStage2Valid) ||
-    (stage === 3 && isStage3Valid);
+    (stage === 3 && isStage3Valid)
 
   $: isStage0Valid =
     subscribeObjectValidation?.contractName &&
@@ -109,7 +104,7 @@
     subscribeObjectValidation?.email &&
     subscribeObjectValidation?.cpf &&
     subscribeObjectValidation?.password &&
-    subscribeObject?.password === subscribeObject?.confirmPassword;
+    subscribeObject?.password === subscribeObject?.confirmPassword
 
   $: isStage1Valid =
     subscribeObjectValidation?.address?.postalCode &&
@@ -117,196 +112,196 @@
     subscribeObjectValidation?.address?.street &&
     subscribeObjectValidation?.address?.neighborhood &&
     subscribeObjectValidation?.address?.city &&
-    subscribeObjectValidation?.address?.stat;
+    subscribeObjectValidation?.address?.stat
 
-  $: isStage2Valid = subscribeObjectValidation?.phone && isValidValidationCode;
+  $: isStage2Valid = subscribeObjectValidation?.phone && isValidValidationCode
 
   $: isStage3Valid =
     subscribeObjectValidation?.payment?.number &&
     subscribeObjectValidation?.payment?.code &&
     subscribeObjectValidation?.payment?.holder &&
-    subscribeObjectValidation?.payment?.validity;
+    subscribeObjectValidation?.payment?.validity
 
   $: if (countdown === 0) {
     if (timer) {
-      clearInterval(timer);
+      clearInterval(timer)
     }
-    canRequestCode = true;
-    countdown = countdownWaitTime;
+    canRequestCode = true
+    countdown = countdownWaitTime
   }
 
   $: if (subscribeObjectValidation?.address?.postalCode && subscribeObject?.address?.postalCode != currentPostalCode) {
-    findAddress();
+    findAddress()
   }
 
   $: if ((String(subscribeObject.payment?.number ?? 0)?.length ?? 0) <= 6) {
-    const cardInfos = creditCardType(String(subscribeObject.payment?.number ?? 0));
+    const cardInfos = creditCardType(String(subscribeObject.payment?.number ?? 0))
     if (cardInfos && cardInfos.length === 1) {
-      cardInfo = cardInfos[0];
-      let gapsIndex = 0;
-      cardNumberMask = '';
+      cardInfo = cardInfos[0]
+      let gapsIndex = 0
+      cardNumberMask = ''
       for (let i = 1; i <= cardInfo?.lengths[0]; i++) {
-        cardNumberMask += '_';
+        cardNumberMask += '_'
         if (i == cardInfo?.gaps?.[gapsIndex]) {
-          gapsIndex++;
-          cardNumberMask += ' ';
+          gapsIndex++
+          cardNumberMask += ' '
         }
       }
-      cardCodeMask = '';
+      cardCodeMask = ''
       for (let i = 1; i <= cardInfo?.code?.size; i++) {
-        cardCodeMask += '_';
+        cardCodeMask += '_'
       }
-      cardBrandIcon = `/assets/cardBrand/${cardInfo?.type?.toLowerCase()}.svg`;
+      cardBrandIcon = `/assets/cardBrand/${cardInfo?.type?.toLowerCase()}.svg`
     } else {
-      cardNumberMask = '____ ____ ____ ____';
-      cardCodeMask = '___';
-      cardBrandIcon = null;
+      cardNumberMask = '____ ____ ____ ____'
+      cardCodeMask = '___'
+      cardBrandIcon = undefined
     }
   }
 
   $: planDescription = () => {
     switch (plan) {
       case 'gold':
-        return 'Ouro';
+        return 'Ouro'
       case 'silver':
-        return 'Prata';
+        return 'Prata'
       case 'bronze':
-        return 'Bronze';
+        return 'Bronze'
       default:
-        return '';
+        return ''
     }
-  };
-
-  $: if (stage === 3) {
-    buttonNext = 'Contratar';
-  } else {
-    buttonNext = 'Continuar';
   }
 
-  $: margin = screenW > 820 ? 10 : 0;
+  $: if (stage === 3) {
+    buttonNext = 'Contratar'
+  } else {
+    buttonNext = 'Continuar'
+  }
+
+  $: margin = screenW > 820 ? 10 : 0
 
   function doBack() {
-    stage--;
+    stage--
   }
 
   function validateValidationCode(validationValid: string) {
-    return (validationValid?.length ?? 0) == 4;
+    return (validationValid?.length ?? 0) == 4
   }
 
   function toggleshowRequestValidatingCodeAlert() {
-    showRequestValidatingCodeAlert = !showRequestValidatingCodeAlert;
+    showRequestValidatingCodeAlert = !showRequestValidatingCodeAlert
   }
 
   async function RequestPhoneValidation() {
-    showRequestValidatingCodeAlert = false;
-    Stores.Loading.instance.start();
-    subscribeObject.phone = subscribeObject.phone;
-    const response = await requestPhoneValidation(subscribeObject);
+    showRequestValidatingCodeAlert = false
+    Stores.Loading.instance.start()
+    subscribeObject.phone = subscribeObject.phone
+    const response = await requestPhoneValidation(subscribeObject)
     if (response?.success) {
-      subscribeObject.signature = response?.data;
-      subscribeObjectValidation.canDigitValidationCode = true;
-      canRequestCode = false;
-      countdown = countdownWaitTime;
+      subscribeObject.signature = response?.data
+      subscribeObjectValidation.canDigitValidationCode = true
+      canRequestCode = false
+      countdown = countdownWaitTime
       timer = setInterval(() => {
-        countdown--;
-      }, 1000);
+        countdown--
+      }, 1000)
       Stores.MessageAlert.instance.show(
-        `Digite o código que você receberá em instantes no seu celular no campo "Código de validação" e clica no botão “CONFIRMAR”`,
-      );
+        `Digite o código que você receberá em instantes no seu celular no campo "Código de validação" e clica no botão “CONFIRMAR”`
+      )
     } else {
-      Stores.MessageAlert.instance.show(response?.data);
+      Stores.MessageAlert.instance.show(response?.data)
     }
-    Stores.Loading.instance.stop();
+    Stores.Loading.instance.stop()
   }
 
   async function ValidatePhoneCode() {
-    Stores.Loading.instance.start();
-    const response = await validatePhoneValidationCode(subscribeObject);
+    Stores.Loading.instance.start()
+    const response = await validatePhoneValidationCode(subscribeObject)
     if (response?.success) {
-      isValidValidationCode = true;
+      isValidValidationCode = true
       Stores.MessageAlert.instance.show(
-        `O código inserido é correto!, agora é só clicar no botão “CONTINUAR” para finalizar seu cadastro`,
-      );
+        `O código inserido é correto!, agora é só clicar no botão “CONTINUAR” para finalizar seu cadastro`
+      )
     } else {
-      Stores.MessageAlert.instance.show(response?.data);
+      Stores.MessageAlert.instance.show(response?.data)
     }
-    Stores.Loading.instance.stop();
+    Stores.Loading.instance.stop()
   }
 
   function validateStage0() {
     if (!subscribeObjectValidation?.contractName) {
-      Stores.MessageAlert.instance.show('O nome do estabelecimento é incorreto.');
-      return false;
+      Stores.MessageAlert.instance.show('O nome do estabelecimento é incorreto.')
+      return false
     } else if (!subscribeObjectValidation?.name) {
-      Stores.MessageAlert.instance.show('O nome é incorreto.');
-      return false;
+      Stores.MessageAlert.instance.show('O nome é incorreto.')
+      return false
     } else if (!subscribeObjectValidation?.lastName) {
-      Stores.MessageAlert.instance.show('O sobre nome é incorreto.');
-      return false;
+      Stores.MessageAlert.instance.show('O sobre nome é incorreto.')
+      return false
     } else if (!subscribeObjectValidation?.contractIdentity) {
-      Stores.MessageAlert.instance.show('O CNPJ é incorreto.');
-      return false;
+      Stores.MessageAlert.instance.show('O CNPJ é incorreto.')
+      return false
     } else if (!subscribeObjectValidation?.email) {
-      Stores.MessageAlert.instance.show('O email é incorreto.');
-      return false;
+      Stores.MessageAlert.instance.show('O email é incorreto.')
+      return false
     } else if (!subscribeObjectValidation?.cpf) {
-      Stores.MessageAlert.instance.show('O CPF é incorreto.');
-      return false;
+      Stores.MessageAlert.instance.show('O CPF é incorreto.')
+      return false
     } else if (!subscribeObjectValidation?.password || !subscribeObjectValidation?.confirmPassword) {
-      Stores.MessageAlert.instance.show('A senha não é válida.');
-      return false;
+      Stores.MessageAlert.instance.show('A senha não é válida.')
+      return false
     }
-    return true;
+    return true
   }
 
   function validateStage1() {
     if (!subscribeObjectValidation?.address?.postalCode) {
-      Stores.MessageAlert.instance.show('O CEP é incorreto.');
-      return false;
+      Stores.MessageAlert.instance.show('O CEP é incorreto.')
+      return false
     } else if (!subscribeObjectValidation?.address?.number) {
-      Stores.MessageAlert.instance.show('O número do endereço não é válido.');
+      Stores.MessageAlert.instance.show('O número do endereço não é válido.')
     } else if (!subscribeObjectValidation?.address?.street) {
-      Stores.MessageAlert.instance.show('O nome é incorreto.');
-      return false;
+      Stores.MessageAlert.instance.show('O nome é incorreto.')
+      return false
     } else if (!subscribeObjectValidation?.address?.neighborhood) {
-      Stores.MessageAlert.instance.show('O bairro é incorreto.');
-      return false;
+      Stores.MessageAlert.instance.show('O bairro é incorreto.')
+      return false
     } else if (!subscribeObjectValidation?.address?.city) {
-      Stores.MessageAlert.instance.show('A cidade é incorretaa');
-      return false;
+      Stores.MessageAlert.instance.show('A cidade é incorretaa')
+      return false
     } else if (!subscribeObjectValidation.address?.stat) {
-      Stores.MessageAlert.instance.show('A unidade federal é incorreta.');
-      return false;
+      Stores.MessageAlert.instance.show('A unidade federal é incorreta.')
+      return false
     }
-    return true;
+    return true
   }
 
   function validateStage2() {
     if (!subscribeObjectValidation?.phone) {
-      Stores.MessageAlert.instance.show('O Número do telefone é incorreto.');
-      return false;
+      Stores.MessageAlert.instance.show('O Número do telefone é incorreto.')
+      return false
     } else if (!isValidValidationCode) {
-      Stores.MessageAlert.instance.show('O Código de validação é incorreto.');
-      return false;
+      Stores.MessageAlert.instance.show('O Código de validação é incorreto.')
+      return false
     }
-    return true;
+    return true
   }
 
   function validateStage3() {
     if (!subscribeObjectValidation?.payment?.number) {
-      Stores.MessageAlert.instance.show('O número do cartão é incorreto.');
-      return false;
+      Stores.MessageAlert.instance.show('O número do cartão é incorreto.')
+      return false
     } else if (!subscribeObjectValidation?.payment?.code) {
-      Stores.MessageAlert.instance.show('O Código do cartão é incorreto.');
-      return false;
+      Stores.MessageAlert.instance.show('O Código do cartão é incorreto.')
+      return false
     } else if (!subscribeObjectValidation?.payment?.holder) {
-      Stores.MessageAlert.instance.show(`o nome gravado no cartão é incorreto.`);
-      return false;
+      Stores.MessageAlert.instance.show(`o nome gravado no cartão é incorreto.`)
+      return false
     } else if (!subscribeObjectValidation?.payment?.validity) {
-      Stores.MessageAlert.instance.show(`A validade do cartão é incorreto.`);
-      return false;
+      Stores.MessageAlert.instance.show(`A validade do cartão é incorreto.`)
+      return false
     }
-    return true;
+    return true
   }
 
   async function doSubscribe() {
@@ -316,69 +311,69 @@
       (stage === 2 && !validateStage2()) ||
       (stage === 3 && !validateStage3())
     ) {
-      return false;
+      return false
     }
     if (stage === 3) {
-      Stores.Loading.instance.start();
-      const response = await doContract(subscribeObject);
+      Stores.Loading.instance.start()
+      const response = await doContract(subscribeObject)
       if (response?.success) {
         navigate('/result', {
           state: { from: location.pathname },
-          replace: true,
-        });
+          replace: true
+        })
       } else {
-        Stores.MessageAlert.instance.show(response?.data);
+        Stores.MessageAlert.instance.show(response?.data)
       }
-      Stores.Loading.instance.stop();
-      return true;
+      Stores.Loading.instance.stop()
+      return true
     }
-    stage++;
+    stage++
   }
 
   function findAddress() {
-    Stores.Loading.instance.start();
-    currentPostalCode = subscribeObject?.address?.postalCode;
+    Stores.Loading.instance.start()
+    currentPostalCode = subscribeObject?.address?.postalCode
     GetAddressByCep(subscribeObject?.address?.postalCode)
-      .then((response) => {
+      .then(response => {
         if (response?.success) {
-          const address = response?.data;
-          currentPostalCode = address?.postalCode;
-          subscribeObject.address = { ...subscribeObject?.address, ...address };
-          Utils?.Objects?.updateInputs(inputs, subscribeObject);
+          const address = response?.data
+          currentPostalCode = address?.postalCode
+          subscribeObject.address = { ...subscribeObject?.address, ...address }
+          Utils?.Objects?.updateInputs(inputs, subscribeObject)
         } else {
-          Stores.MessageAlert.instance.show(response?.data);
+          Stores.MessageAlert.instance.show(response?.data)
         }
-        Stores.Loading.instance.stop();
+        Stores.Loading.instance.stop()
       })
-      .catch((exception) => {
-        Stores.MessageAlert.instance.show(exception);
-      });
+      .catch(exception => {
+        Stores.MessageAlert.instance.show(exception)
+      })
   }
 
   function validatePassword(password: string) {
-    return subscribeObject.confirmPassword === password;
+    return subscribeObject.confirmPassword === password
   }
 
   onDestroy(() => {
     if (timer) {
-      clearInterval(timer);
+      clearInterval(timer)
     }
-  });
-  import ShapeDivider from '../components/ShapeDivider.svelte';
+  })
+  import ShapeDivider from '../components/ShapeDivider.svelte'
 
   onMount(async () => {
-    const term = await getTermOfUse();
+    const term = await getTermOfUse()
     if (term) {
-      subscribeObject.termId = term?.id;
+      subscribeObject.termId = term?.id
     }
     subscribeObject.plan = Types.Classes.CPlan.fromObject({
       id,
       name: plan,
-      price,
-    });
-    subscribeObject.areaCode = 55;
-    Stores.Loading.instance.stop();
-  });
+      price
+    })
+    subscribeObject.areaCode = 55
+    Stores.Loading.instance.stop()
+  })
 </script>
 
 <ShapeDivider />
@@ -687,7 +682,7 @@
   <Views.Divider />
   <div class="form-group buttons">
     {#if stage > 0}
-      <Views.Button type="transparent" rightPadding={margin} on:click={doBack}>Voltar</Views.Button>
+      <Views.Button type={Types.TButton.TRANSPARENT} rightPadding={margin} on:click={doBack}>Voltar</Views.Button>
     {/if}
     <Views.Button disabled={!canProgress} leftPadding={stage > 0 ? margin : 0} on:click={doSubscribe}
       >{buttonNext}</Views.Button
@@ -698,19 +693,19 @@
     <Views.Alert
       title="Alerta"
       message={`Verifica se seu número de telefone inserido ${Utils.Strings.formatAsPhone(
-        subscribeObject?.phone,
+        subscribeObject?.phone
       )} está correto para prosseguir`}
       closeCallBack={toggleshowRequestValidatingCodeAlert}
       buttons={[
         {
           name: 'Quero corrigir',
-          callback: toggleshowRequestValidatingCodeAlert,
+          callback: toggleshowRequestValidatingCodeAlert
         },
         {
           name: 'Está correto',
           callback: RequestPhoneValidation,
-          principal: true,
-        },
+          principal: true
+        }
       ]}
     />
   {/if}
