@@ -79,5 +79,5 @@ jobs:
         with:
           firebaseServiceAccount: "${{ endsWith(github.ref, '/main') && secrets.FIREBASE_IKOMIDA_PROD_SERVICE_ACOUNT || (endsWith(github.ref, '/hmlg') && secrets.FIREBASE_IKOMIDA_HMLG_SERVICE_ACOUNT || secrets.FIREBASE_IKOMIDA_DEV_SERVICE_ACOUNT) }}"
           channelId: live
-          projectId: $PROJECT_ID
-          target: $PROJECT_ID
+          projectId: "$PROJECT_ID"
+          target: "$PROJECT_ID"
