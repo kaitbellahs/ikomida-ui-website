@@ -28,7 +28,6 @@ jobs:
           PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')
           echo "PACKAGE_VERSION=$(echo $PACKAGE_VERSION)" >> $GITHUB_ENV
           echo "PROJECT_ID=$(echo $GCLOUD_PROJECT)" >> $GITHUB_ENV
-          echo "::set-output name=projectId::${PROJECT_ID}"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -81,5 +80,3 @@ jobs:
         with:
           firebaseServiceAccount: "${{ endsWith(github.ref, '/main') && secrets.FIREBASE_IKOMIDA_PROD_SERVICE_ACOUNT || (endsWith(github.ref, '/hmlg') && secrets.FIREBASE_IKOMIDA_HMLG_SERVICE_ACOUNT || secrets.FIREBASE_IKOMIDA_DEV_SERVICE_ACOUNT) }}"
           channelId: live
-          projectId: ${{ steps.env.outputs.projectId }}
-          target: ${{ steps.env.outputs.projectId }}
