@@ -1,6 +1,6 @@
 module.exports = {
   compact: true,
-  controlFlowFlattening: true,
+  controlFlowFlattening: false,
   controlFlowFlatteningThreshold: 0.2,
   deadCodeInjection: true,
   deadCodeInjectionThreshold: 0.2,
@@ -13,7 +13,7 @@ module.exports = {
   renameProperties: false,
   rotateStringArray: true,
   selfDefending: false,
-  // domainLock: ['.ikomida.com', '.ikomida.com.br', '.web.app'],
+  domainLock: ['.ikomida.com', '.ikomida.com.br', '.web.app'],
   shuffleStringArray: true,
   sourceMap: false,
   numbersToExpressions: true,
