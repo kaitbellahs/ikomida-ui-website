@@ -1,25 +1,25 @@
 <script lang="ts">
-  import { Views } from '@ikomida/shared-frontend';
-  import { Link, useLocation, navigate } from 'svelte-navigator';
+  import { Views } from '@ikomida/shared-frontend'
+  import { Link, useLocation, navigate } from 'svelte-navigator'
 
-  const location = useLocation();
-  $: isProd = ['ikomida.com', 'ikomida.com.br', 'www.ikomida.com', 'www.ikomida.com.br'].includes(window.location.host);
+  const location = useLocation()
+  $: isProd = ['ikomida.com', 'ikomida.com.br', 'www.ikomida.com', 'www.ikomida.com.br'].includes(window.location.host)
 
-  let showMenu = false;
-  let screenY: number;
-  let screenH: number;
-  $: background = screenY > 50 || $location?.pathname !== '/' ? 'background' : '';
-  $: shadow = screenY > screenH || ($location?.pathname !== '/' && screenY > 50) ? 'shadow' : '';
-  $: style = `${background} ${shadow}`;
+  let showMenu = false
+  let screenY: number
+  let screenH: number
+  $: background = screenY > 50 || $location?.pathname !== '/' ? 'background' : ''
+  $: shadow = screenY > screenH || ($location?.pathname !== '/' && screenY > 50) ? 'shadow' : ''
+  $: style = `${background} ${shadow}`
   function toggleMenu() {
-    showMenu = !showMenu;
+    showMenu = !showMenu
   }
   function goHome() {
     if ($location?.pathname !== '/') {
       navigate('/', {
         state: { from: $location.pathname },
-        replace: true,
-      });
+        replace: true
+      })
     }
   }
 </script>

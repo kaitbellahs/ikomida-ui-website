@@ -1,71 +1,71 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { Preferences } from '@capacitor/preferences';
-  import { Router, Link, Route } from 'svelte-navigator';
-  import About from './pages/About.svelte';
-  import Blog from './pages/Blog.svelte';
-  import BlogPost from './pages/BlogPost.svelte';
-  import Checkout from './pages/Checkout.svelte';
-  import Home from './pages/Home.svelte';
-  import Plans from './pages/Plans.svelte';
-  import Result from './pages/Result.svelte';
-  import TermsOfUse from './pages/TermsOfUse.svelte';
-  import PrivacyPolicy from './pages/PrivacyPolicy.svelte';
-  import Callback from './pages/callback.svelte';
-  import Contact from './pages/Contact.svelte';
-  import Navbar from './components/Navbar.svelte';
-  import Referral from './components/Referral.svelte';
-  import { Views, Stores } from '@ikomida/shared-frontend';
+  import { onMount } from 'svelte'
+  import { Preferences } from '@capacitor/preferences'
+  import { Router, Link, Route } from 'svelte-navigator'
+  import About from './pages/About.svelte'
+  import Blog from './pages/Blog.svelte'
+  import BlogPost from './pages/BlogPost.svelte'
+  import Checkout from './pages/Checkout.svelte'
+  import Home from './pages/Home.svelte'
+  import Plans from './pages/Plans.svelte'
+  import Result from './pages/Result.svelte'
+  import TermsOfUse from './pages/TermsOfUse.svelte'
+  import PrivacyPolicy from './pages/PrivacyPolicy.svelte'
+  import Callback from './pages/callback.svelte'
+  import Contact from './pages/Contact.svelte'
+  import Navbar from './components/Navbar.svelte'
+  import Referral from './components/Referral.svelte'
+  import { Views, Stores } from '@ikomida/shared-frontend'
 
-  const COOKIES_AGREEMENT_PREFERENCE = 'COOKIES_AGREEMENT_PREFERENCE';
-  const originalPushState = history.pushState;
-  const originalReplaceState = history.replaceState;
+  const COOKIES_AGREEMENT_PREFERENCE = 'COOKIES_AGREEMENT_PREFERENCE'
+  const originalPushState = history.pushState
+  const originalReplaceState = history.replaceState
 
-  let screenW: number;
-  let cookiesAgreement = false;
-  let location = window.location.href;
+  let screenW: number
+  let cookiesAgreement = false
+  let location = window.location.href
 
   $: if (location) {
-    console.log('onNavigate', location);
-    Stores.Loading.instance.start();
+    console.log('onNavigate', location)
+    Stores.Loading.instance.start()
   }
   $: style = ['ikomida.com', 'ikomida.com.br', 'www.ikomida.com', 'www.ikomida.com.br'].includes(window.location.host)
     ? ''
-    : `margin-top: ${screenW > 820 ? 44 : 65}px !important;`;
+    : `margin-top: ${screenW > 820 ? 44 : 65}px !important;`
 
   async function acceptCookiesAgreement() {
     await Preferences.set({
       key: COOKIES_AGREEMENT_PREFERENCE,
-      value: JSON.stringify(true),
-    });
-    cookiesAgreement = true;
+      value: JSON.stringify(true)
+    })
+    cookiesAgreement = true
   }
 
   function updateHref() {
-    location = window.location.href;
+    location = window.location.href
   }
 
   history.pushState = function (data: any, unused: string, url?: string | URL | null) {
-    originalPushState.apply(this, [data, unused, url]);
-    updateHref();
-  };
+    originalPushState.apply(this, [data, unused, url])
+    updateHref()
+  }
 
   history.replaceState = function (data: any, unused: string, url?: string | URL | null) {
-    originalReplaceState.apply(this, [data, unused, url]);
-    updateHref();
-  };
+    originalReplaceState.apply(this, [data, unused, url])
+    updateHref()
+  }
 
   onMount(async () => {
     const value = (
       await Preferences.get({
-        key: COOKIES_AGREEMENT_PREFERENCE,
+        key: COOKIES_AGREEMENT_PREFERENCE
       })
-    )?.value;
-    cookiesAgreement = JSON.parse(value === '' || !value ? 'false' : value);
-  });
+    )?.value
+    cookiesAgreement = JSON.parse(value === '' || !value ? 'false' : value)
+  })
 
-  window.addEventListener('popstate', updateHref);
-  window.addEventListener('hashchange', updateHref);
+  window.addEventListener('popstate', updateHref)
+  window.addEventListener('hashchange', updateHref)
 </script>
 
 <Views.LoadJS url="https://www.google.com/recaptcha/api.js?render=6LebYzshAAAAAIXhka3WrAjus5tDXtefR1QefVZS" />
@@ -97,14 +97,16 @@
   </main>
   <footer class:hasCookiesAgreement={!cookiesAgreement}>
     <section id="socialNetwork">
-      <img class="logo" src="/assets/icons/transparent-logo-1.svg" alt="iKomida" />
-      <p>
-        Um produto da Ti Alto Nivel<br />Todos os direitos reservados<br />
-        <img src="/assets/icons/instagram.svg" alt="iKomida instagram" /><img
-          src="/assets/icons/facebook.svg"
-          alt="iKomida facebook"
-        />
-      </p>
+      <div class="logo">
+        <Views.Image source="/assets/icons/transparent-logo-1.svg" name="iKomida" />
+      </div>
+      <div>
+        Um produto da Ti Alto Nivel<br />Todos os direitos reservados
+      </div>
+      <div class="icons">
+        <Views.Image source="/assets/icons/instagram.svg" name="iKomida instagram" />
+        <Views.Image source="/assets/icons/facebook.svg" name="iKomida facebook" />
+      </div>
     </section>
     <section id="company">
       <h3>Tecnologia de informação de alto nivel LTDA</h3>
@@ -216,6 +218,7 @@
     margin: 5px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
   }
   footer > section ul {
     list-style: none;
@@ -237,12 +240,25 @@
     width: 20%;
     flex-basis: 14%;
   }
+  footer > section#socialNetwork {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    place-items: center;
+  }
   footer > section#socialNetwork > .logo {
     color: white;
     object-fit: contain;
-    height: 70px;
+    max-height: 70px;
+    width: inherit;
   }
-  footer > section#socialNetwork > p img {
+  footer > section#socialNetwork > div.icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  footer > section#socialNetwork > div.icons > :global(img) {
+    width: fit-content;
     height: 24px;
     filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(333deg) brightness(104%) contrast(100%);
     margin: 10px;

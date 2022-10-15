@@ -13,6 +13,9 @@ import {
 } from 'svelte-as-markup-preprocessor';
 import replace from "@rollup/plugin-replace";
 import typescript from '@rollup/plugin-typescript';
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+const tsconfig = require('./tsconfig.json')
 // import obfuscatorPlugin from 'rollup-plugin-javascript-obfuscator';
 
 const production = !process.env.ROLLUP_WATCH;
@@ -101,6 +104,7 @@ export default {
 		}),
 		commonjs(),
 		typescript({
+			...tsconfig,
 			sourceMap: !production,
 			inlineSources: !production
 		}),
@@ -115,7 +119,7 @@ export default {
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
-		production && terser()
+		production && terser({ compress: { ecma: 'ESNext', drop_console: true } })
 	],
 	watch: {
 		clearScreen: false
