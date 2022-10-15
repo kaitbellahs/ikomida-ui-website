@@ -48,7 +48,16 @@ jobs:
         name: Building website app
         run: |-
           yarn install --frozen-lockfile
-          yarn dev
+          BRANCH="${GITHUB_REF##*/}"
+          if [[ $BRANCH == "main" ]]
+          then
+              yarn prod
+          elif [[ $BRANCH == "hmlg" ]]
+          then
+              yarn hmlg
+          else
+              yarn dev
+          fi
       - name: Obfuscating website files
           mv ./public/build/bundle.js ./public/build/bundle_old.js
           yarn javascript-obfuscator  ./public/build/bundle_old.js --output  ./public/build/bundle.js --config JsObfuscator.json
