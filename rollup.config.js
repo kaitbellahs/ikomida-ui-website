@@ -16,7 +16,6 @@ import typescript from '@rollup/plugin-typescript';
 import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
 const tsconfig = require('./tsconfig.json')
-// import obfuscatorPlugin from 'rollup-plugin-javascript-obfuscator';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -28,9 +27,9 @@ function serve() {
 	}
 
 	return {
-		writeBundle() {
+		async writeBundle() {
 			if (server) return;
-			server = require('child_process').spawn('yarn', ['start', '--', '--dev'], {
+			server = (await import('child_process')).spawn('yarn', ['start', '--', '--dev'], {
 				stdio: ['ignore', 'inherit', 'inherit'],
 				shell: true
 			});
@@ -40,7 +39,6 @@ function serve() {
 		}
 	};
 }
-
 export default {
 	onwarn(warning, warn) {
 		if (warning.code === 'CIRCULAR_DEPENDENCY') {
