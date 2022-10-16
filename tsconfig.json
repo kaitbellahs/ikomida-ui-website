@@ -5,27 +5,15 @@
       "dom.iterable",
       "esnext"
     ],
+    "module": "esnext",
     "isolatedModules": false,
     "noImplicitAny": true,
     "strict": true,
     "declaration": true,
     "declarationDir": "types",
-    "useDefineForClassFields": false,
-    "target": "ES2021",
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "moduleResolution": "Node",
-    "removeComments": true,
-    "module": "ESNext",
-    "noEmitOnError": true,
-    "esModuleInterop": false,
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "declarationMap": false,
-    "emitDeclarationOnly": true,
-    "sourceMap": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "useDefineForClassFields": false,
+    "target": "ES2021"
   },
   "plugins": [
     {

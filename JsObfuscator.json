@@ -1,6 +1,6 @@
 {
   "compact": true,
-  "controlFlowFlattening": true,
+  "controlFlowFlattening": false,
   "deadCodeInjection": true,
   "deadCodeInjectionThreshold": 0.2,
   "debugProtection": true,
@@ -12,11 +12,6 @@
   "renameProperties": false,
   "rotateStringArray": true,
   "selfDefending": false,
-  "domainLock": [
-    ".ikomida.com",
-    ".ikomida.com.br",
-    ".web.app"
-  ],
   "shuffleStringArray": true,
   "sourceMap": false,
   "numbersToExpressions": true,
@@ -32,5 +27,5 @@
   "transformObjectKeys": false,
   "unicodeEscapeSequence": false,
   "log": false,
-  "mangle": true
+  "mangle": false
 }
