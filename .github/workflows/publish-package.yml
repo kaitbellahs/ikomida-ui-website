@@ -78,10 +78,12 @@ jobs:
           echo "GOOGLE_APPLICATION_CREDENTIALS=$(echo $FIREBASE_SERVICE_ACCOUNT_FILE)" >> $GITHUB_ENV
           rm firebase.json || true
           echo '{"hosting":{"site":"${PROJECT_ID}","public":"public","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]}}' >> firebase.json
+          echo "firebase.json: $(cat firebase.json)"
       - id: Publisher
         name: Publishing website
         run: |-
           echo "GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS"
+          firebase projects:list
           firebase deploy --project $PROJECT_ID --only hosting
       - name: Update branch tag version
         run: |
