@@ -1,12 +1,17 @@
 name: publish ikomida main website to firebase hosting on pull request merge
 on:
-  pull_request_target:
-    types:
-      - closed
+  pull_request:
     branches:
       - dev
       - hmlg
       - main
+  # pull_request_target:
+  #   types:
+  #     - closed
+  #   branches:
+  #     - dev
+  #     - hmlg
+  #     - main
 
 env:
   GCLOUD_LOCATION: us-central1
@@ -59,11 +64,11 @@ jobs:
           else
               yarn dev
           fi
-      - name: Obfuscating website files
-        run: |-
-          mv ./public/build/bundle.js ./public/build/bundle_old.js
-          yarn javascript-obfuscator  ./public/build/bundle_old.js --output  ./public/build/bundle.js --config JsObfuscator.json
-          rm ./public/build/bundle_old.js
+      # - name: Obfuscating website files
+      #   run: |-
+      #     mv ./public/build/bundle.js ./public/build/bundle_old.js
+      #     yarn javascript-obfuscator  ./public/build/bundle_old.js --output  ./public/build/bundle.js --config JsObfuscator.json
+      #     rm ./public/build/bundle_old.js
       - name: Setup firebase
         env:
           FIREBASE_SERVICE_ACCOUNT: "${{ endsWith(github.ref, '/main') && secrets.FIREBASE_IKOMIDA_PROD_SERVICE_ACOUNT || (endsWith(github.ref, '/hmlg') && secrets.FIREBASE_IKOMIDA_HMLG_SERVICE_ACOUNT || secrets.FIREBASE_IKOMIDA_DEV_SERVICE_ACOUNT) }}"
@@ -72,11 +77,13 @@ jobs:
           echo $FIREBASE_SERVICE_ACCOUNT >> $FIREBASE_SERVICE_ACCOUNT_FILE
           echo "GOOGLE_APPLICATION_CREDENTIALS=$(echo $FIREBASE_SERVICE_ACCOUNT_FILE)" >> $GITHUB_ENV
           rm firebase.json || true
-          echo '{"hosting":{"site":"${PROJECT_ID}","public":"public","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]}}' >> firebase.json
+          echo "{\"hosting\":{\"site\":\"${PROJECT_ID}\",\"public\":\"public\",\"ignore\":[\"firebase.json\",\"**/.*\",\"**/node_modules/**\"],\"rewrites\":[{\"source\":\"**\",\"destination\":\"/index.html\"}]}}" >> firebase.json
+          echo "firebase.json: $(cat firebase.json)"
       - id: Publisher
         name: Publishing website
         run: |-
           echo "GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS"
+          firebase projects:list
           firebase deploy --project $PROJECT_ID --only hosting
       - name: Update branch tag version
         run: |
