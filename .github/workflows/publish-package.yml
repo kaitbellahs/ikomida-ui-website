@@ -64,19 +64,23 @@ jobs:
           mv ./public/build/bundle.js ./public/build/bundle_old.js
           yarn javascript-obfuscator  ./public/build/bundle_old.js --output  ./public/build/bundle.js --config JsObfuscator.json
           rm ./public/build/bundle_old.js
+      - name: Setup firebase
+        env:
+          FIREBASE_SERVICE_ACCOUNT: "${{ endsWith(github.ref, '/main') && secrets.FIREBASE_IKOMIDA_PROD_SERVICE_ACOUNT || (endsWith(github.ref, '/hmlg') && secrets.FIREBASE_IKOMIDA_HMLG_SERVICE_ACOUNT || secrets.FIREBASE_IKOMIDA_DEV_SERVICE_ACOUNT) }}"
+        run: |-
+          FIREBASE_SERVICE_ACCOUNT_FILE="./firebaseServiceAccount.json"
+          echo $FIREBASE_SERVICE_ACCOUNT >> $FIREBASE_SERVICE_ACCOUNT_FILE
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$(echo $FIREBASE_SERVICE_ACCOUNT_FILE) >> $GITHUB_ENV
+          rm firebase.json || true
+          echo '{"hosting":{"site":"${PROJECT_ID}","public":"public","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]}}' >> firebase.json
+      - id: Publisher
+        name: Publishing website
+        run: |-
+          echo "GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS"
+          firebase deploy --project $PROJECT_ID --only hosting
       - name: Update branch tag version
         run: |
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git tag "v${PACKAGE_VERSION}"
           git push origin "v${PACKAGE_VERSION}"
-      - name: Setup firebase
-        run: |-
-          rm firebase.json || true
-          echo '{"hosting":{"site":"${PROJECT_ID}","public":"public","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]}}' >> firebase.json
-      - id: Publisher
-        name: Publishing website
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          firebaseServiceAccount: "${{ endsWith(github.ref, '/main') && secrets.FIREBASE_IKOMIDA_PROD_SERVICE_ACOUNT || (endsWith(github.ref, '/hmlg') && secrets.FIREBASE_IKOMIDA_HMLG_SERVICE_ACOUNT || secrets.FIREBASE_IKOMIDA_DEV_SERVICE_ACOUNT) }}"
-          channelId: live
