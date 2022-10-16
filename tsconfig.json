@@ -11,7 +11,7 @@
     "declaration": true,
     "declarationDir": "types",
     "useDefineForClassFields": false,
-    "target": "ESNext",
+    "target": "ES2021",
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "moduleResolution": "Node",
