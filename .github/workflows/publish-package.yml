@@ -82,7 +82,7 @@ jobs:
         name: Publishing website
         run: |-
           echo "GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS"
-          yarn firebase deploy --project $PROJECT_ID --only hosting
+          firebase deploy --project $PROJECT_ID --only hosting
       - name: Update branch tag version
         run: |
           git config user.name "${GITHUB_ACTOR}"
