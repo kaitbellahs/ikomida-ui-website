@@ -26,7 +26,6 @@
   let location = window.location.href
 
   $: if (location) {
-    console.log('onNavigate', location)
     Stores.Loading.instance.start()
   }
   $: style = ['ikomida.com', 'ikomida.com.br', 'www.ikomida.com', 'www.ikomida.com.br'].includes(window.location.host)
