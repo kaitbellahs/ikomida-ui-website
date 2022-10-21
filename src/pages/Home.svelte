@@ -1,21 +1,21 @@
 <script lang="ts">
-  import { Link } from 'svelte-navigator';
-  import Carousel from 'svelte-carousel';
-  import { Views, Stores } from '@ikomida/shared-frontend';
-  import ShapeDivider from '../components/ShapeDivider.svelte';
-  import { onMount } from 'svelte';
+  import { Link } from 'svelte-navigator'
+  import Carousel from 'svelte-carousel'
+  import { Views, Stores } from '@ikomida/shared-frontend'
+  import ShapeDivider from '../components/ShapeDivider.svelte'
+  import { onMount } from 'svelte'
 
   onMount(async () => {
-    Stores.Loading.instance.stop();
-  });
+    Stores.Loading.instance.stop()
+  })
 </script>
 
 <div style="background: rgba(53,1,1,1);">
   <div style="background-image: linear-gradient(90deg, #000000, #350101);">
     <Carousel autoplay={false} dots={false} autoplayDuration={5000} pauseOnFocus
-      ><div slot="prev" let:showPrevPage on:click={showPrevPage} class="custom-arrow custom-arrow-prev">
+      ><button slot="prev" let:showPrevPage on:click={showPrevPage} class="custom-arrow custom-arrow-prev">
         <i />
-      </div>
+      </button>
       <div style="--image: url(/assets/images/carousel-slide-3.jpeg)" class="carousel">
         <div class="data">
           <h2>Tenha seu próprio APP</h2>
@@ -33,14 +33,14 @@
           <p>Não fique mais refém das políticas dos outros.</p>
         </div>
         <div class="screenshot">
-          <img src="/assets/images/iphone iKomida-client-login.png" alt="iKomida" class="iphone" />
+          <Views.Image source="/assets/images/iphone iKomida-client-login.png" name="iKomida" />
         </div>
       </div>
       <div style="--image: url(/assets/images/carousel-slide-1.jpg)" class="carousel">
         <div class="data">
           <h2>Venda mais e pague menos<br />Chega de abuso de autoridade!</h2>
           <div class="stop">
-            <img src="/assets/icons/stop-hand.svg" alt="Chega de abuso de autoridade!" />
+            <Views.Image source="/assets/icons/stop-hand.svg" name="Chega de abuso de autoridade!" />
             <p>
               Por que pagar, além da mensalidade, taxas absurdas sobre suas vendas?!<br />Aqui você não paga nada mais
               que uma mensalidade
@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class="screenshot">
-          <img src="/assets/images/iphone iKomida-client-menu.png" alt="iKomida" />
+          <Views.Image source="/assets/images/iphone iKomida-client-menu.png" name="iKomida" />
         </div>
       </div>
       <div class="carousel" style="--image: url(/assets/images/carousel-slide-5.jpg)">
@@ -66,7 +66,7 @@
           </div>
         </div>
         <div class="screenshot">
-          <img src="/assets/images/iphone iKomida-client-home.png" alt="iKomida" />
+          <Views.Image source="/assets/images/iphone iKomida-client-home.png" name="iKomida" />
         </div>
       </div>
       <div class="carousel" style="--image: url(/assets/images/carousel-slide-4.jpeg)">
@@ -83,12 +83,12 @@
           </div>
         </div>
         <div class="screenshot">
-          <img src="/assets/images/iphone iKomida-client-product.png" alt="iKomida" />
+          <Views.Image source="/assets/images/iphone iKomida-client-product.png" name="iKomida" />
         </div>
       </div>
-      <div slot="next" let:showNextPage on:click={showNextPage} class="custom-arrow custom-arrow-next">
+      <button slot="next" let:showNextPage on:click={showNextPage} class="custom-arrow custom-arrow-next">
         <i />
-      </div>
+      </button>
     </Carousel>
   </div>
 </div>
@@ -141,10 +141,14 @@
       ideia para revolucionar o jeito que você está sendo tratado; de agora em diante viemos para te ajudar a obter o controle
       de volta e trazer mais ganhos proporcionado com mais vendas e clientes.
     </div>
-    <img src="/assets/images/restaurante-owner.jpg" alt="" />
+    <div>
+      <Views.Image source="/assets/images/restaurante-owner.jpg" name="" />
+    </div>
   </section>
   <section class="slide slide2">
-    <img src="/assets/images/restaurante-app-dev.jpeg" alt="" />
+    <div>
+      <Views.Image source="/assets/images/restaurante-app-dev.jpeg" name="" />
+    </div>
     <div>
       <h3>Ter seu proprio app não é mais aquele bicho de 7 cabeças</h3>
       Com a nossa tecnologia e estratégia, conseguimos trazer um app sob medida para todos os restaurantes do brasil, não
@@ -158,11 +162,17 @@
       Alèm de você ter o seu proprio app, você contará com a nossa consultoria para fazer seu negocio crescer mais ainda,
       e alcançar mais clientes que não teria como conhecer seu negocio sem você aparecer.
     </div>
-    <img src="/assets/images/thinking-hamburger.jpeg" alt="" />
+    <div>
+      <Views.Image source="/assets/images/thinking-hamburger.jpeg" name="" />
+    </div>
   </section>
 </div>
 
 <style>
+  button {
+    background-color: transparent;
+    border: 0;
+  }
   .container > .slide {
     display: flex;
   }
@@ -188,7 +198,7 @@
     align-items: flex-start;
     padding: 0;
   }
-  .carousel > .screenshot > img {
+  .carousel > .screenshot > :global(img) {
     max-height: 100%;
     object-fit: contain;
 
@@ -226,7 +236,7 @@
     display: flex;
     /* width: 70%; */
   }
-  .carousel > div > .stop > img {
+  .carousel > div > .stop > :global(img) {
     max-width: 25%;
     object-fit: fill;
     margin-right: 20px;
@@ -359,7 +369,9 @@
       order: 0;
       z-index: 99;
     }
-    .carousel > .screenshot > img {
+    .carousel > .screenshot > .iphone,
+    .carousel > .screenshot > :global(img),
+    .carousel > .screenshot > .iphone > :global(img) {
       max-height: 100%;
       object-fit: contain;
 
@@ -412,7 +424,7 @@
       display: block;
       /* width: 70%; */
     }
-    .carousel > div > .stop > img {
+    .carousel > div > .stop > :global(img) {
       max-width: 40%;
       object-fit: fill;
       margin: 20px;
@@ -424,13 +436,13 @@
       margin-top: 30px;
       width: 100%;
     }
-    .container > .slide.slide1 > img {
+    .container > .slide.slide1 > :global(img) {
       order: 1;
     }
     .container > .slide.slide1 > div {
       order: 2;
     }
-    .container > .slide.slide3 > img {
+    .container > .slide.slide3 > :global(img) {
       order: 1;
     }
     .container > .slide.slide3 > div {

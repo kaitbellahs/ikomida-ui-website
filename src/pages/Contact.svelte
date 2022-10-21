@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { Views, Stores } from '@ikomida/shared-frontend';
-  import { onMount } from 'svelte';
-  import ShapeDivider from '../components/ShapeDivider.svelte';
+  import { Views, Stores } from '@ikomida/shared-frontend'
+  import { onMount } from 'svelte'
+  import ShapeDivider from '../components/ShapeDivider.svelte'
 
   function openWhatsapp() {
-    window.open('https://wa.me/5511945930909', '_blank')?.focus();
+    window.open('https://wa.me/5511945930909', '_blank')?.focus()
   }
 
   onMount(async () => {
-    Stores.Loading.instance.stop();
-  });
+    Stores.Loading.instance.stop()
+  })
 </script>
 
 <ShapeDivider />
@@ -29,7 +29,9 @@
     <h1>E pra facilitar!</h1>
     Você também pode nos ligar nesse numero (11) 94593-0909 ou nos mandar um email nesse endereço eletrônico contact@tialtonivel.com.br
   </div>
-  <img src="/assets/images/contactUs.jpg" alt="Entre em contato com iKomida" />
+    <div>
+  <Views.Image source="/assets/images/contactUs.jpg" name="Entre em contato com iKomida" />
+    </div>div>
 </div>
 
 <style>

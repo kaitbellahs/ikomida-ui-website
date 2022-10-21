@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Views, Stores } from '@ikomida/shared-frontend';
-  import { onMount } from 'svelte';
-  import ShapeDivider from '../components/ShapeDivider.svelte';
+  import { Views, Stores } from '@ikomida/shared-frontend'
+  import { onMount } from 'svelte'
+  import ShapeDivider from '../components/ShapeDivider.svelte'
 
   onMount(async () => {
-    Stores.Loading.instance.stop();
-  });
+    Stores.Loading.instance.stop()
+  })
 </script>
 
 <ShapeDivider />
@@ -29,7 +29,9 @@
     e muitos não teriam como fazer aquele jantar romântico à luz de velas na sua casa de última hora.<br />
     Assim surgiu essa ideia de recompensar esse esforço e ajudar esses estabelecimentos maravilhosos a crescer e aparecer.
   </div>
-  <img src="/assets/images/about-1.jpg" alt="Sobre iKomida" />
+  <div>
+    <Views.Image source="/assets/images/about-1.jpg" name="Sobre iKomida" />
+  </div>
 </div>
 <div class="container">
   <h1>Viemos para resolver seu problema</h1>

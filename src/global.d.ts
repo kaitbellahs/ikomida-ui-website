@@ -1,7 +1,8 @@
 /// <reference types="svelte" />
 declare module '*.svelte' {
-  export { SvelteComponentDev as default } from 'svelte/internal';
+  export { SvelteComponentDev as default } from 'svelte/internal'
 }
 interface Window {
-  environment: string;
+  environment: string
 }
+declare module 'svelte-carousel'

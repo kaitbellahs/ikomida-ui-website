@@ -2,10 +2,7 @@
   <div class="sectionInnerWrap">
     <div id="shapeDivider1" class="shapeDividerContainer">
       <div class="shapeDivider" style="transform:  scaleX(-1)">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1440 320"
-          preserveAspectRatio="none"
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none"
           ><path
             fill="currentColor"
             fill-opacity="1"
@@ -17,10 +14,7 @@
 
     <div id="shapeDivider2" class="shapeDividerContainer">
       <div class="shapeDivider">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1440 320"
-          preserveAspectRatio="none"
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none"
           ><path
             fill="currentColor"
             fill-opacity="1"
@@ -32,10 +26,7 @@
 
     <div id="shapeDivider3" class="shapeDividerContainer">
       <div class="shapeDivider" style="transform:  scaleX(-1)">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1440 320"
-          preserveAspectRatio="none"
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none"
           ><path
             fill="currentColor"
             fill-opacity="1"
@@ -66,7 +57,7 @@
     margin-left: auto;
     margin-right: auto;
     height: 100%;
-    padding-top: 75px;
+    padding-top: 0px;
     max-width: 100%;
     padding-right: 20px;
     padding-bottom: 102px;
