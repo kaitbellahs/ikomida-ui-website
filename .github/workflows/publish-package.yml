@@ -21,7 +21,7 @@ jobs:
         name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v0"
         with:
-          credentials_json: "${{ endsWith(github.ref, '/main') && secrets.ARTIFACT_REGISTRY_IKOMIDA_PROD_SERVICE_ACOUNT || (endsWith(github.ref, '/hmlg') && secrets.ARTIFACT_REGISTRY_IKOMIDA_HMLG_SERVICE_ACOUNT || secrets.ARTIFACT_REGISTRY_IKOMIDA_DEV_SERVICE_ACOUNT) }}"
+          credentials_json: "${{ endsWith(github.base_ref, 'main') && secrets.ARTIFACT_REGISTRY_IKOMIDA_PROD_SERVICE_ACOUNT || (endsWith(github.base_ref, 'hmlg') && secrets.ARTIFACT_REGISTRY_IKOMIDA_HMLG_SERVICE_ACOUNT || secrets.ARTIFACT_REGISTRY_IKOMIDA_DEV_SERVICE_ACOUNT) }}"
       - name: Export ENV
         id: env
         run: |-
@@ -29,9 +29,11 @@ jobs:
           echo "PACKAGE_VERSION=$(echo $PACKAGE_VERSION)" >> $GITHUB_ENV
           echo "PROJECT_ID=$(echo $GCLOUD_PROJECT)" >> $GITHUB_ENV
       - name: Get yarn cache directory path
+        if: github.base_ref == 'dev'
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
       - uses: actions/cache@v3
+        if: github.base_ref == 'dev'
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -49,7 +51,7 @@ jobs:
         name: Building website app
         run: |-
           yarn install --frozen-lockfile
-          BRANCH="${GITHUB_REF##*/}"
+          BRANCH="${GITHUB_BASE_REF##*/}"
           if [[ $BRANCH == "main" ]]
           then
               yarn prod
@@ -66,7 +68,7 @@ jobs:
           rm ./public/build/bundle_old.js
       - name: Setup firebase
         env:
-          FIREBASE_SERVICE_ACCOUNT: "${{ endsWith(github.ref, '/main') && secrets.FIREBASE_IKOMIDA_PROD_SERVICE_ACOUNT || (endsWith(github.ref, '/hmlg') && secrets.FIREBASE_IKOMIDA_HMLG_SERVICE_ACOUNT || secrets.FIREBASE_IKOMIDA_DEV_SERVICE_ACOUNT) }}"
+          FIREBASE_SERVICE_ACCOUNT: "${{ endsWith(github.base_ref, 'main') && secrets.FIREBASE_IKOMIDA_PROD_SERVICE_ACOUNT || (endsWith(github.base_ref, 'hmlg') && secrets.FIREBASE_IKOMIDA_HMLG_SERVICE_ACOUNT || secrets.FIREBASE_IKOMIDA_DEV_SERVICE_ACOUNT) }}"
         run: |-
           FIREBASE_SERVICE_ACCOUNT_FILE="./firebaseServiceAccount.json"
           echo $FIREBASE_SERVICE_ACCOUNT >> $FIREBASE_SERVICE_ACCOUNT_FILE
@@ -78,6 +80,7 @@ jobs:
         run: |-
           firebase deploy --project $PROJECT_ID --only hosting -m "v${PACKAGE_VERSION}"
       - name: Update branch tag version
+        if: github.base_ref == 'dev'
         run: |
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
