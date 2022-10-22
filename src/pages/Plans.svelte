@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { Views, Types, Utils, Stores } from '@ikomida/shared-frontend';
-  import { onMount } from 'svelte';
-  import { Link } from 'svelte-navigator';
-  import { getPlans } from '../network/Plans';
-  import ShapeDivider from '../components/ShapeDivider.svelte';
+  import { Views, Types, Utils, Stores } from '@ikomida/shared-frontend'
+  import { onMount } from 'svelte'
+  import { Link } from 'svelte-navigator'
+  import { getPlans } from '../network/Plans'
+  import ShapeDivider from '../components/ShapeDivider.svelte'
 
-  let plans: Types.Classes.CPlan[] = [];
+  let plans: Types.Classes.CPlan[] = []
 
   onMount(async () => {
-    plans = await getPlans();
-    Stores.Loading.instance.stop();
-  });
+    plans = await getPlans()
+    Stores.Loading.instance.stop()
+  })
 </script>
 
 <ShapeDivider />
@@ -46,6 +46,11 @@
               <span>Produtos</span>: {(plan?.products ?? -1) > 0 ? `até ${plan?.products} produtos` : 'ilimitado'}
             </li>
             <li>
+              <span>Opções por produto</span>: {(plan?.productOptions ?? -1) > 0
+                ? `até ${plan?.productOptions} opção por produto`
+                : 'ilimitado'}
+            </li>
+            <li>
               <span>Push notifications</span>: {(plan?.pushNotifications ?? -1) > 0
                 ? `até ${plan?.pushNotifications} mensagens/mês`
                 : 'ilimitado'}
@@ -60,10 +65,10 @@
             </li>
             <li>
               <span>Suporte</span>: {plan.support
-                ?.map((support) => {
-                  return support.name;
+                ?.map(support => {
+                  return support.name
                 })
-                ?.filter((item) => item !== null)
+                ?.filter(item => item !== null)
                 ?.join(', ') ?? '-'}
             </li>
             {#each plan.details ?? [] as detail}
@@ -161,7 +166,6 @@
     right: -5px;
     border-radius: 20.5px;
     min-width: 60px;
-    /* height: 30px; */
     border: 1px solid #4c0708;
     background: #4c0708;
     color: white;
@@ -170,9 +174,6 @@
     text-shadow: 0.5px 1px #00000055;
     box-shadow: 2px 3px #00000099;
   }
-  /* section > article > ul {
-      list-style: none;
-  } */
   section > article > ul {
     list-style: none;
     margin: 0;
