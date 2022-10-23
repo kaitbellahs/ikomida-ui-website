@@ -13,6 +13,7 @@
   import PrivacyPolicy from './pages/PrivacyPolicy.svelte'
   import Callback from './pages/callback.svelte'
   import Contact from './pages/Contact.svelte'
+  import Apps from './pages/Apps.svelte'
   import Navbar from './components/Navbar.svelte'
   import Referral from './components/Referral.svelte'
   import { Views, Stores } from '@ikomida/shared-frontend'
@@ -87,6 +88,7 @@
     <Route path="privacyPolicy" component={PrivacyPolicy} />
     <Route path="callback" component={Callback} />
     <Route path="contact" component={Contact} />
+    <Route path="apps" component={Apps} />
     <Route path="blog/*">
       <Route path="/">
         <Blog />
@@ -139,6 +141,9 @@
         </li>
         <li>
           <Link class="link" to="privacyPolicy">Privacidade</Link>
+        </li>
+        <li>
+          <Link class="link" to="apps">Download</Link>
         </li>
       </ul>
     </section>

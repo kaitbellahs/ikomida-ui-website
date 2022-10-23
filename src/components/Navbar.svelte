@@ -55,6 +55,9 @@
       <li>
         <Link class="link" to="contact">Contato</Link>
       </li>
+      <li>
+        <Link class="link" to="apps">Apps</Link>
+      </li>
       <li id="menuRights">
         Um produto da <Views.Link url="https://tialtonivel.com.br">Ti Alto Nivel</Views.Link>
       </li>
