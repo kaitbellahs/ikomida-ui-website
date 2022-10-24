@@ -20,7 +20,7 @@
   <h1>Escolha o seu plano adequado!</h1>
   <section>
     {#if plans}
-      {#each plans.sort((i1, i2) => (i1.order ?? 0) - (i2.order ?? 0)) as plan (plan?.id)}
+      {#each plans as plan}
         <article>
           {#if [Types.Types.TDiscount.PERCENT, Types.Types.TDiscount.VALUE].includes(plan.discountType)}
             <span class="discount"

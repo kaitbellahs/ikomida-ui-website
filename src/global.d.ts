@@ -4,5 +4,6 @@ declare module '*.svelte' {
 }
 interface Window {
   environment: string
+  version: string
 }
 declare module 'svelte-carousel'
