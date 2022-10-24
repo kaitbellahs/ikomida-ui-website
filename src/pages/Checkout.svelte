@@ -169,7 +169,7 @@
       case 'bronze':
         return 'Bronze'
       default:
-        return ''
+        return plan
     }
   }
 
@@ -372,7 +372,6 @@
     }
     return true
   }
-  $: console.log('subscribeObject.referredBy:', subscribeObject?.referredBy)
   onMount(async () => {
     subscribeObject = Types.Classes.CContract.fillWith(null)
     const term = await getTermOfUse()

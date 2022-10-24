@@ -25,6 +25,7 @@
   let screenW: number
   let cookiesAgreement = false
   let location = window.location.href
+  const version = window.version
 
   $: if (location) {
     Stores.Loading.instance.start()
@@ -102,7 +103,7 @@
         <Views.Image source="/assets/icons/transparent-logo-1.svg" name="iKomida" />
       </div>
       <div>
-        Um produto da Ti Alto Nivel<br />Todos os direitos reservados
+        Um produto da Ti Alto Nivel<br />Todos os direitos reservados<br />iKomida website V{version}
       </div>
       <div class="icons">
         <Views.Image source="/assets/icons/instagram.svg" name="iKomida instagram" />

@@ -13,6 +13,7 @@
     "declarationDir": "types",
     "allowSyntheticDefaultImports": true,
     "useDefineForClassFields": false,
+    "resolveJsonModule": true,
     "target": "ES2021"
   },
   "plugins": [
