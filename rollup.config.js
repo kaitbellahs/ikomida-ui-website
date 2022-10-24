@@ -5,7 +5,7 @@ import livereload from 'rollup-plugin-livereload';
 import {
 	terser
 } from 'rollup-plugin-terser';
-import css from 'rollup-plugin-css-only';
+import postcss from 'rollup-plugin-postcss'
 import cssModules from 'svelte-preprocess-cssmodules';
 import sveltePreprocess from 'svelte-preprocess';
 import {
@@ -71,11 +71,15 @@ export default {
 				cssModules(),
 			],
 			compilerOptions: {
-				dev: !production
-			}
+				dev: !production,
+				cssHash: ({ hash, css }) => `iKomida-${hash(css)}`
+			},
+			emitCss: true
 		}),
-		css({
-			output: 'bundle.css'
+		postcss({
+			minimize: true,
+			extensions: ['.css'],
+			extract: 'bundle.css',
 		}),
 		json(),
 		resolve({

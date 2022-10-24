@@ -1,4 +1,4 @@
-import pkg from '../package.json' assert {type: 'json'}
+import pkg from '../package.json' assert { type: 'json' }
 window.environment = 'ENVIRONMENT'
 window.version = pkg.version
 import { initializeApp } from 'firebase/app'
