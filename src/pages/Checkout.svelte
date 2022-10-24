@@ -169,7 +169,7 @@
       case 'bronze':
         return 'Bronze'
       default:
-        return ''
+        return plan
     }
   }
 
