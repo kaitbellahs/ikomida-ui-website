@@ -1,12 +1,12 @@
+import pkg from '../package.json' assert {type: 'json'}
 window.environment = 'ENVIRONMENT'
-
+window.version = pkg.version
 import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
 import App from './App.svelte'
 import { Network, Stores } from '@ikomida/shared-frontend'
-
-const appVersion = '0.0.1'
-const agent = 'WEB-VENDOR'
+const appVersion = pkg.version
+const agent = 'SITE-VENDOR'
 const url: any = {
   production: 'https://api.ikomida.com',
   development: 'https://dev.api.ikomida.com',
