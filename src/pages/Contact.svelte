@@ -10,6 +10,7 @@
   onMount(async () => {
     Stores.Loading.instance.stop()
   })
+  Stores.Title.instance.set(`Contato`)
 </script>
 
 <ShapeDivider />
@@ -29,9 +30,10 @@
     <h1>E pra facilitar!</h1>
     Você também pode nos ligar nesse numero (11) 94593-0909 ou nos mandar um email nesse endereço eletrônico contact@tialtonivel.com.br
   </div>
-    <div>
-  <Views.Image source="/assets/images/contactUs.jpg" name="Entre em contato com iKomida" />
-    </div>div>
+  <div>
+    <Views.Image source="/assets/images/contactUs.jpg" name="Entre em contato com iKomida" />
+  </div>
+  div>
 </div>
 
 <style>

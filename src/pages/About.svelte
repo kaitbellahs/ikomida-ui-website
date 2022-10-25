@@ -6,6 +6,7 @@
   onMount(async () => {
     Stores.Loading.instance.stop()
   })
+  Stores.Title.instance.set('Sobre')
 </script>
 
 <ShapeDivider />

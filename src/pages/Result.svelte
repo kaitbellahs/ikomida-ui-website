@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { Views, Stores } from '@ikomida/shared-frontend';
-  import { onMount } from 'svelte';
-  import ShapeDivider from '../components/ShapeDivider.svelte';
+  import { Views, Stores } from '@ikomida/shared-frontend'
+  import { onMount } from 'svelte'
+  import ShapeDivider from '../components/ShapeDivider.svelte'
 
   onMount(async () => {
-    Stores.Loading.instance.stop();
-  });
+    Stores.Loading.instance.stop()
+  })
+  Stores.Title.instance.set(`Resultado`)
 </script>
 
 <ShapeDivider />
