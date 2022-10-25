@@ -8,6 +8,7 @@
   onMount(async () => {
     Stores.Loading.instance.stop()
   })
+  Stores.Title.instance.set('')
 </script>
 
 <div style="background: rgba(53,1,1,1);">

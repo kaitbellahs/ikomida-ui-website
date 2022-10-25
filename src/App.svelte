@@ -17,11 +17,13 @@
   import Navbar from './components/Navbar.svelte'
   import Referral from './components/Referral.svelte'
   import { Views, Stores } from '@ikomida/shared-frontend'
+  import { Writable } from 'svelte/store'
 
   const COOKIES_AGREEMENT_PREFERENCE = 'COOKIES_AGREEMENT_PREFERENCE'
   const originalPushState = history.pushState
   const originalReplaceState = history.replaceState
 
+  let pageName: Writable<string | null> = Stores.Title.instance.store
   let screenW: number
   let cookiesAgreement = false
   let location = window.location.href
@@ -67,7 +69,16 @@
 
   window.addEventListener('popstate', updateHref)
   window.addEventListener('hashchange', updateHref)
+
+  $: title = $pageName ? `Ikomida - ${$pageName}` : 'Ikomida'
+  $: {
+    document.title = title
+  }
 </script>
+
+<svelte:head>
+  <title>{title}</title>
+</svelte:head>
 
 <Views.LoadJS url="https://www.google.com/recaptcha/api.js?render=6LebYzshAAAAAIXhka3WrAjus5tDXtefR1QefVZS" />
 <Router>
@@ -282,7 +293,7 @@
       margin-top: 20px;
     }
     footer {
-      flex-direction: column;
+      flex-direction: row;
     }
     footer.hasCookiesAgreement {
       padding-bottom: 220px;
