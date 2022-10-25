@@ -1,15 +1,16 @@
 <script lang="ts">
-  import { Views, Utils, Stores, Types } from '@ikomida/shared-frontend';
-  import ShapeDivider from '../components/ShapeDivider.svelte';
-  import { onMount } from 'svelte';
-  import { getTermsOfUse } from '../network/Terms';
+  import { Views, Utils, Stores, Types } from '@ikomida/shared-frontend'
+  import ShapeDivider from '../components/ShapeDivider.svelte'
+  import { onMount } from 'svelte'
+  import { getTermsOfUse } from '../network/Terms'
 
-  let term: Types.Classes.CTerm;
+  let term: Types.Classes.CTerm
 
   onMount(async () => {
-    term = await getTermsOfUse();
-    Stores.Loading.instance.stop();
-  });
+    term = await getTermsOfUse()
+    Stores.Loading.instance.stop()
+  })
+  Stores.Title.instance.set(`Termos de uso`)
 </script>
 
 <ShapeDivider />

@@ -11,6 +11,7 @@
     plans = await getPlans()
     Stores.Loading.instance.stop()
   })
+  Stores.Title.instance.set(`Pratos`)
 </script>
 
 <ShapeDivider />

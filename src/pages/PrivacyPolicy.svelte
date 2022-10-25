@@ -1,14 +1,15 @@
 <script lang="ts">
-  import { Views, Utils, Stores, Types } from '@ikomida/shared-frontend';
-  import ShapeDivider from '../components/ShapeDivider.svelte';
-  import { onMount } from 'svelte';
-  import { getPrivacyPolicy } from '../network/Terms';
-  let term: Types.Classes.CTerm;
+  import { Views, Utils, Stores, Types } from '@ikomida/shared-frontend'
+  import ShapeDivider from '../components/ShapeDivider.svelte'
+  import { onMount } from 'svelte'
+  import { getPrivacyPolicy } from '../network/Terms'
+  let term: Types.Classes.CTerm
 
   onMount(async () => {
-    term = await getPrivacyPolicy();
-    Stores.Loading.instance.stop();
-  });
+    term = await getPrivacyPolicy()
+    Stores.Loading.instance.stop()
+  })
+  Stores.Title.instance.set(`Política de Privacidade`)
 </script>
 
 <ShapeDivider />

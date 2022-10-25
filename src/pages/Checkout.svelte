@@ -386,6 +386,7 @@
     subscribeObject.areaCode = 55
     Stores.Loading.instance.stop()
   })
+  $: Stores.Title.instance.set(`Checkout [${stage + 1}/4]`)
 </script>
 
 <ShapeDivider />

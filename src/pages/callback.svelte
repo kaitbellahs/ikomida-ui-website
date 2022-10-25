@@ -1,18 +1,19 @@
 <script lang="ts">
-  import { useLocation } from 'svelte-navigator';
-  import { Views, Stores } from '@ikomida/shared-frontend';
-  import ShapeDivider from '../components/ShapeDivider.svelte';
-  import { onMount } from 'svelte';
+  import { useLocation } from 'svelte-navigator'
+  import { Views, Stores } from '@ikomida/shared-frontend'
+  import ShapeDivider from '../components/ShapeDivider.svelte'
+  import { onMount } from 'svelte'
 
-  const location = useLocation();
+  const location = useLocation()
   function onClick() {
-    const url = `com.ikomida.br.vendor://pagseguro.integration.callback${$location?.search}`;
-    window.location.href = url;
+    const url = `com.ikomida.br.vendor://pagseguro.integration.callback${$location?.search}`
+    window.location.href = url
   }
 
   onMount(async () => {
-    Stores.Loading.instance.stop();
-  });
+    Stores.Loading.instance.stop()
+  })
+  Stores.Title.instance.set('Integração')
 </script>
 
 <ShapeDivider />

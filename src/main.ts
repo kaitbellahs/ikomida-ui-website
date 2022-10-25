@@ -13,6 +13,9 @@ const url: any = {
   homologation: 'https://hmlg.api.ikomida.com'
 }
 Stores.Cache.createInstance()
+Stores.Loading.createInstance()
+Stores.Layout.createInstance()
+Stores.Title.createInstance()
 Network.createInstance(
   url[window.environment],
   'com.ikomida',
@@ -20,8 +23,6 @@ Network.createInstance(
   '6LebYzshAAAAAIXhka3WrAjus5tDXtefR1QefVZS',
   appVersion
 )
-Stores.Loading.createInstance()
-Stores.Layout.createInstance()
 
 // Initialize Firebase
 const firebaseConfig: any = {

@@ -30,7 +30,7 @@ function serve() {
 	return {
 		async writeBundle() {
 			if (server) return;
-			server = (await import('child_process')).spawn('yarn', ['start', '--', '--dev'], {
+			server = (await import('child_process')).spawn('yarn', ['start', '--dev'], {
 				stdio: ['ignore', 'inherit', 'inherit'],
 				shell: true
 			});
@@ -47,7 +47,7 @@ export default {
 				return;
 			}
 		}
-		// if (warning.code === 'THIS_IS_UNDEFINED') { return; }
+		if (warning.code === 'THIS_IS_UNDEFINED') { return; }
 		warn(warning);
 	},
 	input: 'src/main.ts',
