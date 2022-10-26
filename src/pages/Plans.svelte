@@ -5,7 +5,24 @@
   import { getPlans } from '../network/Plans'
   import ShapeDivider from '../components/ShapeDivider.svelte'
 
-  let plans: Types.Classes.CPlan[] = []
+  let plans: Types.Classes.CPlan[]
+
+  function daysToMonths(days: number) {
+    const months = Math.floor(days / 30)
+    const leftDays = days - months * 30
+    const leftDaysString = leftDays > 0 ? `e ${leftDays} dia${months > 1 ? 's' : ''}` : ''
+    return `${months} ${isPlural(days) ? 'meses' : 'mês'}${leftDaysString}`
+  }
+
+  function isPlural(days: number) {
+    return Math.floor(days / 30) > 1 || days - Math.floor(days / 30) * 30 > 1
+  }
+
+  function getPromoDate(days = 7) {
+    const date = new Date()
+    date.setDate(date.getDate() + days)
+    return Utils.Strings.dateToDateString(date)
+  }
 
   onMount(async () => {
     plans = await getPlans()
@@ -18,9 +35,19 @@
 <Views.Divider />
 
 <div class="container">
-  <h1>Escolha o seu plano adequado!</h1>
-  <section>
-    {#if plans}
+  {#if plans}
+    {#if plans[0].dueDateAfterXDays}
+      <div class="header">
+        <h3>Aproveite e tenha seu app nas lojas gratuitamente por {daysToMonths(plans[0].dueDateAfterXDays)}</h3>
+        <p>Depois pague somente {Utils.Strings.currency(plans[0].discountedPrice)}/mês. cancele quando quiser.</p>
+      </div>
+      <Views.Divider />
+    {/if}
+    <Views.Divider />
+    <h1>Escolha o seu plano adequado!</h1>
+    <span>Mantenha seus clientes fiéis a sua marca</span>
+    <Views.Divider />
+    <section>
       {#each plans as plan}
         <article>
           {#if [Types.Types.TDiscount.PERCENT, Types.Types.TDiscount.VALUE].includes(plan.discountType)}
@@ -32,6 +59,12 @@
           {/if}
           {#if plan.highlighted}
             <span class="bestChoice">Melhor escolha</span>
+          {/if}
+          {#if plan.dueDateAfterXDays}
+            <Views.Status type={Types.Status.INFO}
+              >Faça uma assinatura e tenha {daysToMonths(plan.dueDateAfterXDays)} grátis</Views.Status
+            >
+            <Views.Divider />
           {/if}
           <h2>Prato de {plan.name}</h2>
           <ul>
@@ -91,12 +124,23 @@
           <Link to="{plan.id}/{plan.name}/{plan.price}">
             <Views.Button size="half">Assine já</Views.Button>
           </Link>
+          {#if plan.dueDateAfterXDays}
+            <small
+              ><Link to="termsOfUse"><u>Sujeito a Termos e Condições</u></Link>. {isPlural(plan.dueDateAfterXDays)
+                ? `Os`
+                : 'O'}
+              {daysToMonths(plan.dueDateAfterXDays)} grátis não estão disponíveis para usuários que contrataram um plano.
+              A oferta termina em {getPromoDate()}.</small
+            >
+          {/if}
         </article>
       {/each}
-    {:else}
+    </section>
+  {:else}
+    <section>
       <h2>Não foi encontrado nenhum plano, tente verificar a sua conexão com a rede de internet</h2>
-    {/if}
-  </section>
+    </section>
+  {/if}
   <p>
     Após a assinatura é necessário aguardar até 7 dias úteis para que o seu app seja publicado nas lojas Apple store e
     Google play, se não houver dependência no processo!
@@ -104,6 +148,17 @@
 </div>
 
 <style>
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    place-content: center;
+    padding: 30px;
+    background: #cccccc33;
+    min-height: 400px;
+    border: 1px solid #cccccc44;
+    border-radius: 10px;
+  }
   section {
     display: flex;
     flex-wrap: wrap;
@@ -200,6 +255,14 @@
   }
   section > article > .price > span.current {
     color: green;
+  }
+  small {
+    font-size: 0.8em;
+    padding: 20px;
+  }
+  small :global(*) {
+    font-size: 1em;
+    color: black;
   }
   @media screen and (max-width: 820px) {
     section > article {

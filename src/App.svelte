@@ -18,6 +18,7 @@
   import Referral from './components/Referral.svelte'
   import { Views, Stores } from '@ikomida/shared-frontend'
   import { Writable } from 'svelte/store'
+  import Image from '@ikomida/shared-frontend/lib/components/Image.svelte'
 
   const COOKIES_AGREEMENT_PREFERENCE = 'COOKIES_AGREEMENT_PREFERENCE'
   const originalPushState = history.pushState
@@ -56,6 +57,10 @@
   history.replaceState = function (data: any, unused: string, url?: string | URL | null) {
     originalReplaceState.apply(this, [data, unused, url])
     updateHref()
+  }
+
+  function openWhatsapp() {
+    window.open('http://wa.me/5511945930909', 'whatsapp')
   }
 
   onMount(async () => {
@@ -178,9 +183,29 @@
 </Router>
 <Views.Loading />
 <Views.MessageAlert />
+<button class="whatsapp" on:click={openWhatsapp}>
+  <Views.Image source="assets/icons/whatsapp.png" name="iKomida whatsapp" />
+  <span>Dúvidas entre<br />em contato</span>
+</button>
 <svelte:window bind:innerWidth={screenW} />
 
 <style>
+  button.whatsapp {
+    place-items: center;
+    background-color: rgb(255 255 255 / 50%);
+    border: 0;
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  button.whatsapp > :global(img) {
+    width: 50px;
+  }
+  button.whatsapp > span {
+    text-shadow: 1px 1px #000;
+  }
   .cookiesAgreement {
     position: fixed;
     left: 0;
