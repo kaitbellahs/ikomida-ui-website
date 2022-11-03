@@ -50,6 +50,9 @@
         <Link class="link" to="plans">Planos</Link>
       </li>
       <li>
+        <Link class="link" to="calculator">Quanto economizaria?</Link>
+      </li>
+      <li>
         <Link class="link" to="about">A empresa</Link>
       </li>
       <li>

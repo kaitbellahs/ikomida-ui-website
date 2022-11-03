@@ -11,6 +11,7 @@
   import Result from './pages/Result.svelte'
   import TermsOfUse from './pages/TermsOfUse.svelte'
   import PrivacyPolicy from './pages/PrivacyPolicy.svelte'
+  import Calculator from './pages/Calculator.svelte'
   import Callback from './pages/callback.svelte'
   import Contact from './pages/Contact.svelte'
   import Apps from './pages/Apps.svelte'
@@ -105,6 +106,7 @@
     <Route path="privacyPolicy" component={PrivacyPolicy} />
     <Route path="callback" component={Callback} />
     <Route path="contact" component={Contact} />
+    <Route path="calculator" component={Calculator} />
     <Route path="apps" component={Apps} />
     <Route path="blog/*">
       <Route path="/">
@@ -152,6 +154,9 @@
         </li>
         <li>
           <Link class="link" to="contact">Contato</Link>
+        </li>
+        <li>
+          <Link class="link" to="calculator">Quanto economizaria?</Link>
         </li>
         <li>
           <Link class="link" to="termsOfUse">Termos</Link>
