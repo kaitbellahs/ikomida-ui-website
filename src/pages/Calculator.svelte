@@ -184,7 +184,7 @@
         <Views.Divider />
         <Views.Status type={Types.Status.WARNING}
           >Você economizaria <span class="economy"
-            >{Utils.Strings.currency(resultConcurrence.spends - resultiKomida.spends)}</span
+            >{Utils.Strings.currency(resultConcurrence.spends - resultiKomida.spends)}/mês</span
           > com iKomida app, e ainda o app vai ser o seu.</Views.Status
         >
         <Views.Divider />
@@ -235,9 +235,9 @@
       </Link>
       <Views.Button on:click={onReset}>Fazer outro calculo</Views.Button>
     {/if}
+    <Views.Divider />
+    <RequestContact />
   </div>
-  <Views.Divider />
-  <RequestContact />
 </div>
 
 <style>

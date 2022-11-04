@@ -131,6 +131,7 @@
   </div>
   <Views.Divider />
   <Views.Button disabled={!canProced} on:click={send}>Solicitar um contato</Views.Button>
+  <Views.GTerms />
 </div>
 <svelte:window bind:innerWidth={screenW} />
 {#if showAlert}
