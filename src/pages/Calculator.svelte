@@ -5,6 +5,7 @@
   import { onMount } from 'svelte'
   import { getPlans } from '../network/Plans'
   import { Link } from 'svelte-navigator'
+  import Description from '../stores/Description'
 
   let plans: Types.Classes.CPlan[]
   let showResult = false
@@ -64,6 +65,11 @@
     Stores.Loading.instance.stop()
   })
   Stores.Title.instance.set(`Calculadora de gastos`)
+  Description.instance.set(`Você tem estabelecimento no ramo de gastronomia, bebidas ou similares?
+      Vamos fazer algumas contas para você ver quanto você está gastando ou gastaria para vender online, sem e com o uso
+      nossa querida plataforma iKomida.
+      Esta calculadora vai calcular seus gastos com outros marketplaces e te ajudará a escolher o plano adequado para
+      seu negócio digital.`)
 </script>
 
 <ShapeDivider />

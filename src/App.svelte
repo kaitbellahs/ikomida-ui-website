@@ -19,13 +19,14 @@
   import Referral from './components/Referral.svelte'
   import { Views, Stores } from '@ikomida/shared-frontend'
   import { Writable } from 'svelte/store'
-  import Image from '@ikomida/shared-frontend/lib/components/Image.svelte'
+  import Description from './stores/Description'
 
   const COOKIES_AGREEMENT_PREFERENCE = 'COOKIES_AGREEMENT_PREFERENCE'
   const originalPushState = history.pushState
   const originalReplaceState = history.replaceState
 
-  let pageName: Writable<string | null> = Stores.Title.instance.store
+  let pageName: Writable<string | undefined> = Stores.Title.instance.store
+  let pageDescription: Writable<string | undefined> = Description.instance.store
   let screenW: number
   let cookiesAgreement = false
   let location = window.location.href
@@ -80,10 +81,14 @@
   $: {
     document.title = title
   }
+  $: description = $pageDescription
+    ? $pageDescription
+    : 'Uma plataforma completa para suas vendas online, e melhor ainda, o aplicativo será seu com sua marca, dois meses de graça e depois a partir de R$148,75, e claro pode cancelar quando quiser.'
 </script>
 
 <svelte:head>
   <title>{title}</title>
+  <meta name="description" content={description} />
 </svelte:head>
 
 <Views.LoadJS url="https://www.google.com/recaptcha/api.js?render=6LebYzshAAAAAIXhka3WrAjus5tDXtefR1QefVZS" />

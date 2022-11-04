@@ -3,11 +3,15 @@
   import { onMount } from 'svelte'
   import RequestContact from '../components/RequestContact.svelte'
   import ShapeDivider from '../components/ShapeDivider.svelte'
+  import Description from '../stores/Description'
 
   onMount(async () => {
     Stores.Loading.instance.stop()
   })
   Stores.Title.instance.set('Apps')
+  Description.instance.set(`Um só app que você precisa para que tudo dê certo.
+        Disponibilizamos um app completo nas principais lojas de aplicativos para Android e iOS (iPhone), para que você
+      possa gerenciar seu negócio de uma maneira bem simples, eficiente e sem complicações.`)
 </script>
 
 <ShapeDivider />

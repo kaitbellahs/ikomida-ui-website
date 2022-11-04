@@ -5,6 +5,7 @@ import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
 import App from './App.svelte'
 import { Network, Stores } from '@ikomida/shared-frontend'
+import Description from './stores/Description'
 const appVersion = pkg.version
 const agent = 'SITE-VENDOR'
 const url: any = {
@@ -16,6 +17,7 @@ Stores.Cache.createInstance()
 Stores.Loading.createInstance()
 Stores.Layout.createInstance()
 Stores.Title.createInstance()
+Description.createInstance()
 Network.createInstance(
   url[window.environment],
   'com.ikomida',
