@@ -22,10 +22,5 @@ export async function requestPhoneValidation(object: Types.Classes.CContract) {
 
 export async function validatePhoneValidationCode(object: Types.Classes.CContract) {
   const network: Network = Network.instance
-  return network?.post(
-    '/contract/validatePhoneValidationCode',
-    false,
-    object,
-    'validateContractPhoneValidationCode'
-  )
+  return network?.post('/contract/validatePhoneValidationCode', false, object, 'validateContractPhoneValidationCode')
 }

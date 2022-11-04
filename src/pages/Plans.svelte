@@ -5,7 +5,12 @@
   import { getPlans } from '../network/Plans'
   import ShapeDivider from '../components/ShapeDivider.svelte'
   import RequestContact from '../components/RequestContact.svelte'
+  import { Preferences } from '@capacitor/preferences'
+  import Description from '../stores/Description'
 
+  const PROMO_TIME_PREFERENCE = 'PROMO_TIME_PREFERENCE'
+
+  let promoTime: Date
   let plans: Types.Classes.CPlan[]
 
   function daysToMonths(days: number) {
@@ -19,17 +24,30 @@
     return Math.floor(days / 30) > 1 || days - Math.floor(days / 30) * 30 > 1
   }
 
-  function getPromoDate(days = 7) {
-    const date = new Date()
-    date.setDate(date.getDate() + days)
-    return Utils.Strings.dateToDateString(date)
-  }
-
   onMount(async () => {
+    let savedDate = (
+      await Preferences.get({
+        key: PROMO_TIME_PREFERENCE
+      })
+    )?.value
+    if (!savedDate) {
+      promoTime = new Date()
+      promoTime.setDate(promoTime.getDate() + 7)
+      await Preferences.set({
+        key: PROMO_TIME_PREFERENCE,
+        value: promoTime.toString()
+      })
+    } else {
+      promoTime = new Date(savedDate)
+    }
     plans = await getPlans()
     Stores.Loading.instance.stop()
   })
   Stores.Title.instance.set(`Pratos`)
+  $: Description.instance.set(`Aproveite e tenha seu app nas lojas ${
+    plans?.length > 0 ? `gratuitamente por ${daysToMonths(plans[0].dueDateAfterXDays ?? 0)} Depois` : 'e'
+  }
+     pague somente ${Utils.Strings.currency(plans?.[0].discountedPrice ?? 14727)}/mês. cancele quando quiser.`)
 </script>
 
 <ShapeDivider />
@@ -131,7 +149,7 @@
                 ? `Os`
                 : 'O'}
               {daysToMonths(plan.dueDateAfterXDays)} grátis não estão disponíveis para usuários que contrataram um plano.
-              A oferta termina em {getPromoDate()}.</small
+              A oferta termina em {Utils.Strings.dateToDateString(promoTime)}.</small
             >
           {/if}
         </article>

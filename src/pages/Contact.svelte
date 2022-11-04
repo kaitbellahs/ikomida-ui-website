@@ -3,6 +3,7 @@
   import { onMount } from 'svelte'
   import RequestContact from '../components/RequestContact.svelte'
   import ShapeDivider from '../components/ShapeDivider.svelte'
+  import Description from '../stores/Description'
 
   function openWhatsapp() {
     window.open('https://wa.me/5511945930909', '_blank')?.focus()
@@ -12,6 +13,9 @@
     Stores.Loading.instance.stop()
   })
   Stores.Title.instance.set(`Contato`)
+  Description.instance.set(
+    `Vamos ficar muito felizes em receber seu contato, seja feedback, elogios ou reclamações, nós vamos priorizar cada contato que recebemos.`
+  )
 </script>
 
 <ShapeDivider />
