@@ -2,22 +2,17 @@
   import { Views, Utils, Stores, Types, Logics } from '@ikomida/shared-frontend'
   import ShapeDivider from '../components/ShapeDivider.svelte'
   import { onMount } from 'svelte'
-  import { percent } from '@ikomida/shared-frontend/lib/Utils/Strings'
-  import { percent } from '@ikomida/shared-frontend/lib/Utils/Strings'
-  import { percent } from '@ikomida/shared-frontend/lib/Utils/Strings'
-  import { currency } from '@ikomida/shared-frontend/lib/Utils/Strings'
-  import { Strings } from '@ikomida/shared-frontend/lib/Utils'
   import { getPlans } from '../network/Plans'
   import { Link } from 'svelte-navigator'
 
   let plans: Types.Classes.CPlan[]
   let showResult = false
   let item = {
-    orders: 30,
+    orders: 160,
     tax: 2300,
     monthly: 20000,
     others: 0,
-    billing: 500000
+    billing: 600000
   }
   let resultConcurrence = {
     spends: 0,
@@ -29,7 +24,7 @@
     spends: 0,
     rest: 0,
     percent: 0,
-    plan: Types.Classes.CPlan.fillWith(),
+    plan: Types.Classes.CPlan.fillWith(undefined),
     gain: 0
   }
   function onReset() {
@@ -44,7 +39,7 @@
       spends: 0,
       rest: 0,
       percent: 0,
-      plan: Types.Classes.CPlan.fillWith(),
+      plan: Types.Classes.CPlan.fillWith(undefined),
       gain: 0
     }
   }
@@ -54,7 +49,7 @@
     resultConcurrence.rest = item.billing - resultConcurrence.spends
     resultConcurrence.percent = Math.round((resultConcurrence.spends * 100) / item.billing) * 100
     resultiKomida.plan =
-      plans.filter(plan => plan.billing >= item.billing && plan.orders >= item.orders)?.[0] ?? plans[0]
+      plans.filter(plan => (plan.billing ?? 0) >= item.billing && (plan.orders ?? 0) >= item.orders)?.[0] ?? plans[0]
     if (resultiKomida.plan) {
       resultiKomida.spends = resultiKomida.plan.discountedPrice
       resultiKomida.rest = item.billing - resultiKomida.spends
@@ -94,30 +89,31 @@
         <Views.TextEdit
           placeHolder="Quantidade de pedidos por mês?"
           bind:value={item.orders}
-          initailValue={item.orders}
+          initialValue={item.orders}
           type={Types.TTextEdit.NUMBER}
         />
         <Views.TextEdit
           placeHolder="Quanto fatura por mês?"
           bind:value={item.billing}
+          initialValue={item.billing}
           type={Types.TTextEdit.CURRENCY}
         />
         <Views.TextEdit
           placeHolder="Quanto paga de comissão por venda?"
           bind:value={item.tax}
-          initailValue={item.tax}
+          initialValue={item.tax}
           type={Types.TTextEdit.PERCENT}
         />
         <Views.TextEdit
           placeHolder="Quanto paga de mensalidade?"
           bind:value={item.monthly}
-          initailValue={item.monthly}
+          initialValue={item.monthly}
           type={Types.TTextEdit.CURRENCY}
         />
         <Views.TextEdit
           placeHolder="Outros gastos para vender online?"
           bind:value={item.others}
-          initailValue={item.others}
+          initialValue={item.others}
           type={Types.TTextEdit.CURRENCY}
         />
         <Views.Button on:click={onClick}>Calcular</Views.Button>
