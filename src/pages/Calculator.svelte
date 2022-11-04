@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Views, Utils, Stores, Types, Logics } from '@ikomida/shared-frontend'
   import ShapeDivider from '../components/ShapeDivider.svelte'
+  import RequestContact from '../components/RequestContact.svelte'
   import { onMount } from 'svelte'
   import { getPlans } from '../network/Plans'
   import { Link } from 'svelte-navigator'
@@ -229,6 +230,8 @@
       <Views.Button on:click={onReset}>Fazer outro calculo</Views.Button>
     {/if}
   </div>
+  <Views.Divider />
+  <RequestContact />
 </div>
 
 <style>

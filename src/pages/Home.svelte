@@ -4,6 +4,7 @@
   import { Views, Stores } from '@ikomida/shared-frontend'
   import ShapeDivider from '../components/ShapeDivider.svelte'
   import { onMount } from 'svelte'
+  import RequestContact from '../components/RequestContact.svelte'
 
   onMount(async () => {
     Stores.Loading.instance.stop()
@@ -95,8 +96,10 @@
 </div>
 <ShapeDivider />
 <Views.Divider height={60} />
-<h2 class="sectionsTitle">Por que precisa ter seu próprio app???</h2>
 <div class="container">
+  <RequestContact />
+  <Views.Divider height={60} />
+  <h2 class="sectionsTitle">Por que precisa ter seu próprio app???</h2>
   <section class="boxes">
     <article>
       <h3>Lucro</h3>
@@ -167,6 +170,8 @@
       <Views.Image source="/assets/images/thinking-hamburger.jpeg" name="" />
     </div>
   </section>
+  <Views.Divider height={60} />
+  <RequestContact />
 </div>
 
 <style>

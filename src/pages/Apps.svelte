@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Views, Stores } from '@ikomida/shared-frontend'
   import { onMount } from 'svelte'
+  import RequestContact from '../components/RequestContact.svelte'
   import ShapeDivider from '../components/ShapeDivider.svelte'
 
   onMount(async () => {
@@ -32,6 +33,8 @@
       </Views.Link>
     </div>
   </div>
+  <Views.Divider />
+  <RequestContact />
 </div>
 
 <style>
