@@ -1,12 +1,20 @@
 <script lang="ts">
   import { Views, Stores } from '@ikomida/shared-frontend'
   import { onMount } from 'svelte'
+  import RequestContact from '../components/RequestContact.svelte'
   import ShapeDivider from '../components/ShapeDivider.svelte'
+  import Description from '../stores/Description'
 
   onMount(async () => {
     Stores.Loading.instance.stop()
   })
   Stores.Title.instance.set('Sobre')
+  Description.instance
+    .set(`TI Alto Nível, é uma empresa fundada em 2017, e registrada sob CNPJ N˚ 28.994.111/0001-80 por incentivos para
+      atender demandas de desenvolvimento de software que a empresa vem fazendo com muito sucesso até agora que pensamos
+      em desenvolver o nosso próprio produto e atender uma parte muito importante da sociedade, facilitando o acesso a
+      tecnologia que é geralmente cara, o que fará a posse de uma pequena fatia que pode pagar milhões para desenvolver
+      seus apps.`)
 </script>
 
 <ShapeDivider />
@@ -42,6 +50,8 @@
     não é fácil com as soluções atuais nesse mercado, e através disso mastigamos todas essas dores e trazemos esse bebê
     que vai alegrar muita gente para vida.
   </p>
+  <Views.Divider />
+  <RequestContact />
 </div>
 
 <style>

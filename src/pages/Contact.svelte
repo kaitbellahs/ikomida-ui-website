@@ -1,7 +1,9 @@
 <script lang="ts">
   import { Views, Stores } from '@ikomida/shared-frontend'
   import { onMount } from 'svelte'
+  import RequestContact from '../components/RequestContact.svelte'
   import ShapeDivider from '../components/ShapeDivider.svelte'
+  import Description from '../stores/Description'
 
   function openWhatsapp() {
     window.open('https://wa.me/5511945930909', '_blank')?.focus()
@@ -11,6 +13,9 @@
     Stores.Loading.instance.stop()
   })
   Stores.Title.instance.set(`Contato`)
+  Description.instance.set(
+    `Vamos ficar muito felizes em receber seu contato, seja feedback, elogios ou reclamações, nós vamos priorizar cada contato que recebemos.`
+  )
 </script>
 
 <ShapeDivider />
@@ -34,6 +39,10 @@
     <Views.Image source="/assets/images/contactUs.jpg" name="Entre em contato com iKomida" />
   </div>
   div>
+</div>
+<Views.Divider />
+<div class="container">
+  <RequestContact />
 </div>
 
 <style>
