@@ -18,7 +18,7 @@
     phone: false
   }
   let screenW: number
-  let showAlert = true
+  let showAlert = false
   let promoTime: Date
 
   $: margin = screenW > 820 ? 10 : 0
@@ -134,7 +134,6 @@
 </div>
 <svelte:window bind:innerWidth={screenW} />
 {#if showAlert}
-  {console.log('location:', $location.pathname)}
   <Views.Alert
     title="Oferta imperdível"
     closeCallBack={hideAlert}
@@ -162,10 +161,7 @@
         principal: true
       }
     ]}
-    ><h1>
-      Não sei se você já sacou que a gente não quer seu dinheiro, mas na verdade nós queremos te ajudar a ganhar mais
-      dinheiro?
-    </h1>
+    ><h1>Não sei se você já sacou, mas a gente quer te ajudar a ganhar mais dinheiro?</h1>
     <Views.Divider />
     <Views.Status
       >Pensando em como vamos te ajudar a tornar seu negócio mais lucrativo, desenvolvemos essa plataforma iKomida para
