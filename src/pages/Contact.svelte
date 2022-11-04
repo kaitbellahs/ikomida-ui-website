@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Views, Stores } from '@ikomida/shared-frontend'
   import { onMount } from 'svelte'
+  import RequestContact from '../components/RequestContact.svelte'
   import ShapeDivider from '../components/ShapeDivider.svelte'
 
   function openWhatsapp() {
@@ -34,6 +35,10 @@
     <Views.Image source="/assets/images/contactUs.jpg" name="Entre em contato com iKomida" />
   </div>
   div>
+</div>
+<Views.Divider />
+<div class="container">
+  <RequestContact />
 </div>
 
 <style>

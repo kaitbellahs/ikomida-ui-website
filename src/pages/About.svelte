@@ -1,6 +1,8 @@
 <script lang="ts">
   import { Views, Stores } from '@ikomida/shared-frontend'
+  import Divider from '@ikomida/shared-frontend/lib/components/Divider.svelte'
   import { onMount } from 'svelte'
+  import RequestContact from '../components/RequestContact.svelte'
   import ShapeDivider from '../components/ShapeDivider.svelte'
 
   onMount(async () => {
@@ -42,6 +44,8 @@
     não é fácil com as soluções atuais nesse mercado, e através disso mastigamos todas essas dores e trazemos esse bebê
     que vai alegrar muita gente para vida.
   </p>
+  <Views.Divider />
+  <RequestContact />
 </div>
 
 <style>

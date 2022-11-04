@@ -4,6 +4,7 @@
   import { Link } from 'svelte-navigator'
   import { getPlans } from '../network/Plans'
   import ShapeDivider from '../components/ShapeDivider.svelte'
+  import RequestContact from '../components/RequestContact.svelte'
 
   let plans: Types.Classes.CPlan[]
 
@@ -145,6 +146,8 @@
     Após a assinatura é necessário aguardar até 7 dias úteis para que o seu app seja publicado nas lojas Apple store e
     Google play, se não houver dependência no processo!
   </p>
+  <Views.Divider />
+  <RequestContact />
 </div>
 
 <style>
