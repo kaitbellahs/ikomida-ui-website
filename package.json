@@ -1,6 +1,6 @@
 {
   "name": "ikomida-website",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "private": true,
   "author": "Khalid Ait Bellahs",
   "license": "UNLICENSED",
@@ -29,7 +29,7 @@
     "version": "yarn format && git add -A src",
     "postversion": "git push && git push --tags",
     "test": "mocha",
-    "local:watch:dev": "yarn glogin && ncu -u && yarn && yarn format && yarn lint && yarn sveltecheck && yarn watch:dev",
+    "local:watch:dev": "yarn glogin && ncu -u && yarn && yarn format && yarn lint && yarn svelte-check && yarn watch:dev",
     "sveltecheck": "svelte-check --tsconfig ./tsconfig.json --ignore lib --use-new-transformation  true"
   },
   "devDependencies": {
@@ -44,7 +44,7 @@
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
-    "eslint": "^8.26.0",
+    "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",
     "google-artifactregistry-auth": "^3.0.2",
     "http-server": "^14.1.1",
@@ -85,7 +85,7 @@
     "@capacitor/preferences": "^4.0.1",
     "@capacitor/push-notifications": "^4.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
-    "@ikomida/shared-frontend": "^1.5.16",
+    "@ikomida/shared-frontend": "^1.5.18",
     "credit-card-type": "^9.1.0",
     "firebase": "^9.13.0",
     "svelte-carousel": "^1.0.20",
