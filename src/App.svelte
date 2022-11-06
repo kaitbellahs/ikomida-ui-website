@@ -129,8 +129,15 @@
         Um produto da Ti Alto Nivel<br />Todos os direitos reservados<br />iKomida website V{version}
       </div>
       <div class="icons">
-        <Views.Image source="/assets/icons/instagram.svg" name="iKomida instagram" />
-        <Views.Image source="/assets/icons/facebook.svg" name="iKomida facebook" />
+        <a target="_blank" href="https://www.instagram.com/ikomida"
+          ><Views.Image source="/assets/icons/instagram.svg" name="iKomida instagram" /></a
+        >
+        <a target="_blank" href="https://facebook.com/ikomida"
+          ><Views.Image source="/assets/icons/facebook.svg" name="iKomida facebook" /></a
+        >
+        <a target="_blank" href="https://www.youtube.com/@ikomida"
+          ><Views.Image source="/assets/icons/youtube.svg" name="iKomida youtube" /></a
+        >
       </div>
     </section>
     <section id="company">
@@ -308,9 +315,11 @@
     flex-direction: row;
     justify-content: center;
   }
-  footer > section#socialNetwork > div.icons > :global(img) {
+  footer > section#socialNetwork > div.icons > a,
+  footer > section#socialNetwork > div.icons > a > :global(img) {
     width: fit-content;
-    height: 24px;
+    height: 40px;
+    width: 40px;
     filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(333deg) brightness(104%) contrast(100%);
     margin: 10px;
   }
