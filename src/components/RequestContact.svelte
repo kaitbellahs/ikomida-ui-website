@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Preferences } from '@capacitor/preferences'
-  import { Stores, Types, Views } from '@ikomida/shared-frontend'
+  import { Stores, Types, Utils, Views } from '@ikomida/shared-frontend'
   import { onMount } from 'svelte'
   import { navigate, useLocation } from 'svelte-navigator'
   import { requestContact } from '../network/Contract'
@@ -163,15 +163,17 @@
       }
     ]}
     ><h1>Não sei se você já sacou, mas a gente quer te ajudar a ganhar mais dinheiro?</h1>
-    <Views.Divider />
-    <Views.Status
-      >Pensando em como vamos te ajudar a tornar seu negócio mais lucrativo, desenvolvemos essa plataforma iKomida para
-      lhe ajudar a ganhar mais clientes fiéis a sua marca e vender mais sem precisar se preocupar com pagar uma comissão
-      absurda sobre seu faturamento, {promoTime > new Date()
-        ? 'e além dos valores mensais simbólicos, vamos lhe oferecer 2 meses grátis para que você possa conhecer a plataforma iKomida sem compromisso'
-        : 'e valores mensais simbólicos'}. E claro, se não gostar pode cancelar quando quiser sem carência ou tempo
-      mínimo do contrato.</Views.Status
-    >
+    {#if !Utils.Browsers.isMobile() || $location?.pathname === '/calculator'}
+      <Views.Divider />
+      <Views.Status
+        >Pensando em como vamos te ajudar a tornar seu negócio mais lucrativo, desenvolvemos essa plataforma iKomida
+        para lhe ajudar a ganhar mais clientes fiéis a sua marca e vender mais sem precisar se preocupar com pagar uma
+        comissão absurda sobre seu faturamento, {promoTime > new Date()
+          ? 'e além dos valores mensais simbólicos, vamos lhe oferecer 2 meses grátis para que você possa conhecer a plataforma iKomida sem compromisso'
+          : 'e valores mensais simbólicos'}. E claro, se não gostar pode cancelar quando quiser sem carência ou tempo
+        mínimo do contrato.</Views.Status
+      >
+    {/if}
     {#if $location?.pathname !== '/calculator'}
       <Views.Divider />
       <Views.Status type={Types.Status.WARNING} showIcon={false}
