@@ -1,6 +1,6 @@
 {
   "name": "ikomida-website",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "private": true,
   "author": "Khalid Ait Bellahs",
   "license": "UNLICENSED",
@@ -84,7 +84,7 @@
     "@capacitor/preferences": "^4.0.1",
     "@capacitor/push-notifications": "^4.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
-    "@ikomida/shared-frontend": "^1.5.24",
+    "@ikomida/shared-frontend": "^1.5.25",
     "credit-card-type": "^9.1.0",
     "firebase": "^9.13.0",
     "svelte-carousel": "^1.0.20",
