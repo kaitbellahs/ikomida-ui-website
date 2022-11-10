@@ -21,7 +21,7 @@
   import { Views, Stores } from '@ikomida/shared-frontend'
   import { Writable } from 'svelte/store'
   import Description from './stores/Description'
-  import MetaPixel from './comp./components/MetaPixel.svelte
+  import MetaPixel from './components/MetaPixel.svelte'
 
   const COOKIES_AGREEMENT_PREFERENCE = 'COOKIES_AGREEMENT_PREFERENCE'
   const originalPushState = history.pushState
