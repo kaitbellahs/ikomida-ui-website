@@ -47,6 +47,9 @@
         <Link class="link" to="/">Home</Link>
       </li>
       <li>
+        <Link class="link" to="/features">Funcionalidades</Link>
+      </li>
+      <li>
         <Link class="link" to="plans">Planos</Link>
       </li>
       <li>

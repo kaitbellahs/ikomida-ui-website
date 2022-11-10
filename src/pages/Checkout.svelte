@@ -9,6 +9,7 @@
   import Referral from '../stores/referral'
   import type { CreditCardType } from 'credit-card-type/dist/types'
   import ShapeDivider from '../components/ShapeDivider.svelte'
+  import { Preferences } from '@capacitor/preferences'
 
   interface IContractInputs {
     address: {
@@ -24,12 +25,17 @@
 
   export let id: string
   export let plan: string
+  export let dueDateAfterXDays: string
   export let price: number
   export let navigate: any
   export let location: any
 
   const countdownWaitTime = 60
+  const ADSCLID_PREFERENCE = 'ADSCLID_PREFERENCE'
+  const PROMO_TIME_PREFERENCE = 'PROMO_TIME_PREFERENCE'
 
+  let promoTime: Date
+  let clickId: string | null = null
   let stage = 0
   let timer: NodeJS.Timer | null = null
   let canRequestCode = true
@@ -373,6 +379,36 @@
     return true
   }
   onMount(async () => {
+    const params = new URLSearchParams(location?.search)
+    clickId = params.get('gclid')
+    if (clickId) {
+      Preferences.set({
+        key: ADSCLID_PREFERENCE,
+        value: clickId
+      })
+    }
+    clickId = (
+      await Preferences.get({
+        key: ADSCLID_PREFERENCE
+      })
+    )?.value
+    if (clickId) {
+      let savedDate = (
+        await Preferences.get({
+          key: PROMO_TIME_PREFERENCE
+        })
+      )?.value
+      if (!savedDate) {
+        promoTime = new Date()
+        promoTime.setDate(promoTime.getDate() + 7)
+        await Preferences.set({
+          key: PROMO_TIME_PREFERENCE,
+          value: promoTime.toString()
+        })
+      } else {
+        promoTime = new Date(savedDate)
+      }
+    }
     subscribeObject = Types.Classes.CContract.fillWith(null)
     const term = await getTermOfUse()
     if (term) {
@@ -383,6 +419,9 @@
       name: plan,
       price
     })
+    if (subscribeObject.plan && clickId && promoTime > new Date()) {
+      subscribeObject.plan.dueDateAfterXDays = Number(dueDateAfterXDays)
+    }
     subscribeObject.areaCode = 55
     Stores.Loading.instance.stop()
   })
