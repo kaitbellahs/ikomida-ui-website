@@ -64,16 +64,16 @@
   })
   Stores.Title.instance.set(`Pratos`)
   $: Description.instance.set(`Aproveite e tenha seu app nas lojas ${
-    plans?.length > 0 ? `gratuitamente por ${daysToMonths(plans[0].dueDateAfterXDays ?? 0)} Depois` : 'e'
+    plans?.length > 0 ? `gratuitamente por ${daysToMonths(plans?.[0]?.dueDateAfterXDays ?? 0)} Depois` : 'e'
   }
-     pague somente ${Utils.Strings.currency(plans?.[0].discountedPrice ?? 14727)}/mês. cancele quando quiser.`)
+     pague somente ${Utils.Strings.currency(plans?.[0]?.discountedPrice ?? 14875)}/mês. cancele quando quiser.`)
 </script>
 
 <ShapeDivider />
 <Views.Divider />
 
 <div class="container">
-  {#if plans}
+  {#if (plans?.length ?? 0) > 0}
     <div class="header">
       <h2>Nunca foi tão fácil criar seu próprio app para android e iOS para seu estabelecimento.</h2>
       <p>
@@ -88,7 +88,7 @@
         <h3>
           Agora aproveita que estamos oferecendo gratuitamente {daysToMonths(plans[0].dueDateAfterXDays)} por tempo limitado
         </h3>
-        <p>Depois pague somente {Utils.Strings.currency(plans[0].discountedPrice)}/mês. cancele quando quiser.</p>
+        <p>Depois pague somente {Utils.Strings.currency(plans[0]?.discountedPrice)}/mês. cancele quando quiser.</p>
       {/if}
     </div>
     <Views.Divider />
