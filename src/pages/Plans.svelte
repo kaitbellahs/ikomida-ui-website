@@ -1,16 +1,20 @@
 <script lang="ts">
   import { Views, Types, Utils, Stores } from '@ikomida/shared-frontend'
   import { onMount } from 'svelte'
-  import { Link } from 'svelte-navigator'
+  import { Link, useLocation } from 'svelte-navigator'
   import { getPlans } from '../network/Plans'
   import ShapeDivider from '../components/ShapeDivider.svelte'
   import RequestContact from '../components/RequestContact.svelte'
   import { Preferences } from '@capacitor/preferences'
   import Description from '../stores/Description'
 
+  const location = useLocation()
+  const ADSCLID_PREFERENCE = 'ADSCLID_PREFERENCE'
   const PROMO_TIME_PREFERENCE = 'PROMO_TIME_PREFERENCE'
 
   let promoTime: Date
+  let today = new Date()
+  let clickId: string | null = null
   let plans: Types.Classes.CPlan[]
 
   function daysToMonths(days: number) {
@@ -25,20 +29,35 @@
   }
 
   onMount(async () => {
-    let savedDate = (
+    const params = new URLSearchParams($location?.search)
+    clickId = params.get('gclid')
+    if (clickId) {
+      Preferences.set({
+        key: ADSCLID_PREFERENCE,
+        value: clickId
+      })
+    }
+    clickId = (
       await Preferences.get({
-        key: PROMO_TIME_PREFERENCE
+        key: ADSCLID_PREFERENCE
       })
     )?.value
-    if (!savedDate) {
-      promoTime = new Date()
-      promoTime.setDate(promoTime.getDate() + 7)
-      await Preferences.set({
-        key: PROMO_TIME_PREFERENCE,
-        value: promoTime.toString()
-      })
-    } else {
-      promoTime = new Date(savedDate)
+    if (clickId) {
+      let savedDate = (
+        await Preferences.get({
+          key: PROMO_TIME_PREFERENCE
+        })
+      )?.value
+      if (!savedDate) {
+        promoTime = new Date()
+        promoTime.setDate(promoTime.getDate() + 7)
+        await Preferences.set({
+          key: PROMO_TIME_PREFERENCE,
+          value: promoTime.toString()
+        })
+      } else {
+        promoTime = new Date(savedDate)
+      }
     }
     plans = await getPlans()
     Stores.Loading.instance.stop()
@@ -55,13 +74,24 @@
 
 <div class="container">
   {#if plans}
-    {#if plans[0].dueDateAfterXDays}
-      <div class="header">
-        <h3>Aproveite e tenha seu app nas lojas gratuitamente por {daysToMonths(plans[0].dueDateAfterXDays)}</h3>
+    <div class="header">
+      <h2>Nunca foi tão fácil criar seu próprio app para android e iOS para seu estabelecimento.</h2>
+      <p>
+        Com alguns clicks só você vai criar um app completo e customizável para seu estabelecimento, e ainda você vai
+        economizar mais que <span class="green">20%</span> do seu faturamento se comparar com outras plataformas e
+        marketplaces, e também você conta com nosso <span class="green">garçom digital</span> para otimizar sua mão de
+        obra.<br />
+        Resumindo, você vai sair ganhando de qualquer jeito.<br />
+        <span class="green">Ei, não esqueça, pode cancelar se não gostar quando quiser.</span>
+      </p>
+      {#if plans[0].dueDateAfterXDays && clickId && promoTime > today}
+        <h3>
+          Agora aproveita que estamos oferecendo gratuitamente {daysToMonths(plans[0].dueDateAfterXDays)} por tempo limitado
+        </h3>
         <p>Depois pague somente {Utils.Strings.currency(plans[0].discountedPrice)}/mês. cancele quando quiser.</p>
-      </div>
-      <Views.Divider />
-    {/if}
+      {/if}
+    </div>
+    <Views.Divider />
     <Views.Divider />
     <h1>Escolha o seu plano adequado!</h1>
     <span>Mantenha seus clientes fiéis a sua marca</span>
@@ -79,7 +109,7 @@
           {#if plan.highlighted}
             <span class="bestChoice">Melhor escolha</span>
           {/if}
-          {#if plan.dueDateAfterXDays}
+          {#if plan.dueDateAfterXDays && clickId && promoTime > today}
             <Views.Status type={Types.Status.INFO}
               >Faça uma assinatura e tenha {daysToMonths(plan.dueDateAfterXDays)} grátis</Views.Status
             >
@@ -140,10 +170,10 @@
             <span class="current">{Utils.Strings.currency(plan.discountedPrice)}/mês</span>
           </div>
           <Views.Divider />
-          <Link to="{plan.id}/{plan.name}/{plan.price}">
-            <Views.Button size="half">Assine já</Views.Button>
+          <Link to="{plan.id}/{plan.name}/{plan.price}/{plan.dueDateAfterXDays}">
+            <Views.Button size="half">Tenha seu app Agora</Views.Button>
           </Link>
-          {#if plan.dueDateAfterXDays}
+          {#if plan.dueDateAfterXDays && clickId && promoTime > today}
             <small
               ><Link to="termsOfUse"><u>Sujeito a Termos e Condições</u></Link>. {isPlural(plan.dueDateAfterXDays)
                 ? `Os`
@@ -160,6 +190,11 @@
       <h2>Não foi encontrado nenhum plano, tente verificar a sua conexão com a rede de internet</h2>
     </section>
   {/if}
+  <Views.Divider />
+  <h2 class="green">
+    Não achou o plano adequado para você? deixe seu contato embaixo e vamos entrar em contato com você em breve para
+    customizar um plano para suas necessidades.
+  </h2>
   <p>
     Após a assinatura é necessário aguardar até 7 dias úteis para que o seu app seja publicado nas lojas Apple store e
     Google play, se não houver dependência no processo!
@@ -291,5 +326,8 @@
       flex-basis: 100%;
       margin-top: 20px;
     }
+  }
+  .green {
+    color: green;
   }
 </style>

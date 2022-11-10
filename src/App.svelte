@@ -9,6 +9,7 @@
   import Home from './pages/Home.svelte'
   import Plans from './pages/Plans.svelte'
   import Result from './pages/Result.svelte'
+  import Features from './pages/Features.svelte'
   import TermsOfUse from './pages/TermsOfUse.svelte'
   import PrivacyPolicy from './pages/PrivacyPolicy.svelte'
   import Calculator from './pages/Calculator.svelte'
@@ -103,9 +104,10 @@
       <Route path="">
         <Plans />
       </Route>
-      <Route path=":id/:plan/:price" component={Checkout} />
+      <Route path=":id/:plan/:price/:dueDateAfterXDays" component={Checkout} />
     </Route>
     <Route path="checkout" component={Checkout} />
+    <Route path="features" component={Features} />
     <Route path="result" component={Result} />
     <Route path="termsOfUse" component={TermsOfUse} />
     <Route path="privacyPolicy" component={PrivacyPolicy} />
@@ -162,6 +164,7 @@
           <Link class="link" to="blog">Blog</Link>
         </li> -->
         <li>
+          <Link class="link" to="features">Funcionalidades</Link>
           <Link class="link" to="plans">Preços</Link>
         </li>
         <li>
