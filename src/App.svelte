@@ -128,7 +128,8 @@
         <Views.Image source="/assets/icons/transparent-logo-1.svg" name="iKomida" />
       </div>
       <div>
-        Um produto da Ti Alto Nivel<br />Todos os direitos reservados<br />iKomida website V{version}
+        Um produto da <a href="https://tialtonivel.com.br">Ti Alto Nivel</a><br />Todos os direitos reservados<br
+        />iKomida website V{version}
       </div>
       <div class="icons">
         <a target="_blank" href="https://www.instagram.com/ikomida"
@@ -307,7 +308,8 @@
     justify-content: center;
     place-items: center;
   }
-  footer > section#socialNetwork > .logo {
+  footer > section#socialNetwork > .logo,
+  footer > section#socialNetwork > div > a {
     color: white;
     object-fit: contain;
     max-height: 70px;
