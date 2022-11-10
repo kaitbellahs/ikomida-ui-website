@@ -64,7 +64,7 @@
         key: SHOW_PROMO_PREFERENCE
       })
     )?.value
-    showAlert = JSON.parse(value === '' || !value ? 'true' : value)
+    showAlert = JSON.parse(value === '' || !value ? 'true' : value) && !Utils.Browsers.isMobile()
     if (showAlert) {
       let savedDate = (
         await Preferences.get({

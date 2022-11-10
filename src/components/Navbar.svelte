@@ -56,9 +56,6 @@
         <Link class="link" to="calculator">Quanto economizaria?</Link>
       </li>
       <li>
-        <Link class="link" to="about">A empresa</Link>
-      </li>
-      <li>
         <Link class="link" to="contact">Contato</Link>
       </li>
       <li>
