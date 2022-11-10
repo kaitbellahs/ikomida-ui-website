@@ -4,9 +4,16 @@
   import RequestContact from '../components/RequestContact.svelte'
   import { onMount } from 'svelte'
   import { getPlans } from '../network/Plans'
-  import { Link } from 'svelte-navigator'
+  import { Link, useLocation } from 'svelte-navigator'
   import Description from '../stores/Description'
+  import { Preferences } from '@capacitor/preferences'
 
+  const location = useLocation()
+  const ADSCLID_PREFERENCE = 'ADSCLID_PREFERENCE'
+  const PROMO_TIME_PREFERENCE = 'PROMO_TIME_PREFERENCE'
+
+  let promoTime: Date
+  let clickId: string | null = null
   let plans: Types.Classes.CPlan[]
   let showResult = false
   let item = {
@@ -61,6 +68,36 @@
     showResult = true
   }
   onMount(async () => {
+    const params = new URLSearchParams($location?.search)
+    clickId = params.get('gclid')
+    if (clickId) {
+      Preferences.set({
+        key: ADSCLID_PREFERENCE,
+        value: clickId
+      })
+    }
+    clickId = (
+      await Preferences.get({
+        key: ADSCLID_PREFERENCE
+      })
+    )?.value
+    if (clickId) {
+      let savedDate = (
+        await Preferences.get({
+          key: PROMO_TIME_PREFERENCE
+        })
+      )?.value
+      if (!savedDate) {
+        promoTime = new Date()
+        promoTime.setDate(promoTime.getDate() + 7)
+        await Preferences.set({
+          key: PROMO_TIME_PREFERENCE,
+          value: promoTime.toString()
+        })
+      } else {
+        promoTime = new Date(savedDate)
+      }
+    }
     plans = await getPlans()
     Stores.Loading.instance.stop()
   })
@@ -225,7 +262,10 @@
             perder dinheiro)!</Views.Status
           >
           <Views.Divider />
-          <Link to="/plans/{resultiKomida.plan.id}/{resultiKomida.plan.name}/{resultiKomida.plan.price}">
+          <Link
+            to="/plans/{resultiKomida.plan.id}/{resultiKomida.plan.name}/{resultiKomida.plan.price}/{resultiKomida.plan
+              .dueDateAfterXDays}"
+          >
             <Views.Button>Assine já o plano ({resultiKomida.plan.name})</Views.Button>
           </Link>
         {/if}

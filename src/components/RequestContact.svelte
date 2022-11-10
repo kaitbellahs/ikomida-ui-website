@@ -86,7 +86,9 @@
 </script>
 
 <div class="requestContact">
-  <h2>Quer saber mais ou ficou com duvidas, preencha seus dados aqui e vamos entrar em contato sem compromisso.</h2>
+  <h2>
+    Quer saber mais ou ficou com duvidas, preencha seus dados aqui e vamos entrar em contato contigo sem compromisso.
+  </h2>
   <div class="form-group">
     <Views.TextEdit
       placeHolder="Nome"
