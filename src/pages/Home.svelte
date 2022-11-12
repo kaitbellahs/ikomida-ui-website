@@ -60,10 +60,10 @@
           <h3>fidelize os clientes</h3>
           <div class="fidelize">
             <p>
-              Ter sua identidade no mundo digital nunca foi tão facil.<br />
-              Sabemos que pra ter um negócio bem sucedido você precisa de um leal público alvo e, os apps de delivery atuais
-              além de cobrarem taxas absurdas, você enfrenta uma ampla concorrência.<br />Tudo isso porque você ainda
-              não tem um APP que é só seu.
+              Ter sua identidade no mundo digital nunca foi tão fácil.<br />
+              Sabemos que para ter um negócio bem-sucedido você precisa de um leal público-alvo. Os apps de delivery atuais
+              além de cobrarem taxas absurdas, têm uma ampla concorrência.<br />
+              Tudo isso porque você ainda não tem um APP que é só seu.
             </p>
           </div>
         </div>
@@ -99,7 +99,7 @@
 <div class="container">
   <RequestContact />
   <Views.Divider height={60} />
-  <h2 class="sectionsTitle">Por que precisa ter seu próprio app???</h2>
+  <h2 class="sectionsTitle">POR QUE PRECISA TER SEU PRÓPRIO APP???</h2>
   <section class="boxes">
     <article>
       <h3>Lucro</h3>
@@ -110,13 +110,13 @@
     <article>
       <h3>Layout</h3>
       <p>
-        Quer app com sua cara?<br />Aqui o app é seu e você quem define a cara dele
+        Quer app com sua cara?<br />Aqui o app é seu e você quem define seu layout
       </p>
     </article>
     <article>
       <h3>Controle</h3>
       <p>
-        O controle sobre seu app é importante.<br />Aqui você é o dono do seu app, você define e controla tudo.
+        O controle sobre seu app é importante.<br />Aqui você é o dono. Você define e controla tudo.
       </p>
     </article>
     <article>

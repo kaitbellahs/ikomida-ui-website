@@ -85,7 +85,7 @@
   }
   $: description = $pageDescription
     ? $pageDescription
-    : 'Uma plataforma completa para suas vendas online, e melhor ainda, o aplicativo será seu com sua marca, dois meses de graça e depois a partir de R$148,75, e claro pode cancelar quando quiser.'
+    : 'A plataforma mais completa (garçom digital, delivery e retirada) que vai te ajudar a reduzir até 95% das taxas que você está pagando para os marketplaces.'
 </script>
 
 <svelte:head>
