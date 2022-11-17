@@ -218,16 +218,16 @@
     background-color: rgb(255 255 255 / 50%);
     border: 0;
     position: fixed;
-    bottom: 30px;
-    right: 20px;
+    bottom: 32pt;
+    right: 16pt;
     display: flex;
     flex-direction: column;
   }
   button.whatsapp > :global(img) {
-    width: 50px;
+    width: 48pt;
   }
   button.whatsapp > span {
-    text-shadow: 1px 1px #000;
+    text-shadow: 1pt 1pt #000;
   }
   .cookiesAgreement {
     position: fixed;
@@ -238,7 +238,7 @@
     flex-direction: row;
     background: #000;
     color: #fff;
-    padding: 20px;
+    padding: 16pt;
   }
   .cookiesAgreement > .text {
     flex: 1 75%;
@@ -251,15 +251,17 @@
     text-decoration: underline;
   }
   main {
-    text-align: center;
     padding: 0;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     width: 100%;
     flex: 1 0 auto;
-    min-height: 300px;
+    min-height: 304pt;
     padding: 0;
+  }
+  p {
+    text-indent: 1em;
   }
   footer {
     display: flex;
@@ -270,16 +272,16 @@
     align-items: center;
     background-color: #202020;
     color: #fff;
-    padding: 10px 40px;
+    padding: 16pt 32pt;
   }
   footer.hasCookiesAgreement {
-    padding-bottom: 70px;
+    padding-bottom: 72pt;
   }
   footer > section {
     flex: 1;
-    padding: 10px;
-    border-radius: 4px;
-    margin: 5px;
+    padding: 16pt;
+    border-radius: 4pt;
+    margin: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -291,18 +293,21 @@
   }
   footer > section#socialNetwork {
     text-align: center;
+    flex: 1 30%;
     width: 30%;
     flex-basis: 29%;
   }
   footer > section#company {
     text-align: center;
-    width: 50%;
-    flex-basis: 54%;
+    flex: 1 45%;
+    width: 45%;
+    flex-basis: 45%;
   }
   footer > section#menu {
     text-align: center;
-    width: 20%;
-    flex-basis: 14%;
+    flex: 1 25%;
+    width: 25%;
+    flex-basis: 25%;
   }
   footer > section#socialNetwork {
     display: flex;
@@ -314,7 +319,7 @@
   footer > section#socialNetwork > div > a {
     color: white;
     object-fit: contain;
-    max-height: 70px;
+    max-height: 72pt;
     width: inherit;
   }
   footer > section#socialNetwork > div.icons {
@@ -322,13 +327,26 @@
     flex-direction: row;
     justify-content: center;
   }
-  footer > section#socialNetwork > div.icons > a,
+  footer > section#socialNetwork > div.icons > a:nth-child(1) {
+    height: 39pt;
+    width: 39pt;
+    margin: 9pt;
+    /* width: fit-content; */
+  }
+  footer > section#socialNetwork > div.icons > a:nth-child(2) {
+    height: 43pt;
+    margin: 8pt;
+    /* width: fit-content; */
+  }
+  footer > section#socialNetwork > div.icons > a:nth-child(3) {
+    width: 58pt;
+    margin: 0;
+    /* width: fit-content; */
+  }
   footer > section#socialNetwork > div.icons > a > :global(img) {
-    width: fit-content;
-    height: 40px;
-    width: 40px;
-    filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(333deg) brightness(104%) contrast(100%);
-    margin: 10px;
+    filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(333deg) brightness(55%) contrast(55%);
+    width: 100%;
+    height: 100%;
   }
   footer > section ul > li {
     margin: 0;
@@ -336,21 +354,21 @@
   footer > section ul > li > :global(.link) {
     color: white;
   }
-  @media screen and (max-width: 820px) {
+  @media screen and (max-width: 816pt) {
     .cookiesAgreement {
       flex-direction: column;
     }
     .cookiesAgreement .action {
-      margin-top: 20px;
+      margin-top: 16pt;
     }
     footer {
       flex-direction: row;
     }
     footer.hasCookiesAgreement {
-      padding-bottom: 220px;
+      padding-bottom: 216pt;
     }
     footer > section:not(:last-child) {
-      border-bottom: 1px dashed rgb(0 0 0 / 50%);
+      border-bottom: 1pt dashed rgb(0 0 0 / 50%);
     }
     footer > section {
       width: 100%;
@@ -360,7 +378,7 @@
       display: flex;
     }
     footer > section ul > li {
-      padding-left: 20px;
+      padding-left: 16pt;
     }
     footer > section#socialNetwork,
     footer > section#company,

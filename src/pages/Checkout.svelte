@@ -10,6 +10,7 @@
   import type { CreditCardType } from 'credit-card-type/dist/types'
   import ShapeDivider from '../components/ShapeDivider.svelte'
   import { Preferences } from '@capacitor/preferences'
+  import { NavigateFn } from 'svelte-navigator'
 
   interface IContractInputs {
     address: {
@@ -27,16 +28,17 @@
   export let plan: string
   export let dueDateAfterXDays: string
   export let price: number
-  export let navigate: any
+  export let navigate: NavigateFn
   export let location: any
 
   const countdownWaitTime = 60
   const ADSCLID_PREFERENCE = 'ADSCLID_PREFERENCE'
   const PROMO_TIME_PREFERENCE = 'PROMO_TIME_PREFERENCE'
 
+  let stage = 0
+
   let promoTime: Date
   let clickId: string | null = null
-  let stage = 0
   let timer: NodeJS.Timer | null = null
   let canRequestCode = true
   let countdown = 0
@@ -100,8 +102,10 @@
   $: canProgress =
     (stage === 0 && isStage0Valid) ||
     (stage === 1 && isStage1Valid) ||
-    (stage === 2 && isStage2Valid) ||
-    (stage === 3 && isStage3Valid)
+    (stage === 2 &&
+      isStage2Valid &&
+      (subscribeObject.billingType ||
+        !(subscribeObject.billingType !== Types.Types.Asaas.TAsaasBilling.CREDIT_CARD || isStage3Valid)))
 
   $: isStage0Valid =
     subscribeObjectValidation?.contractName &&
@@ -124,10 +128,13 @@
   $: isStage2Valid = subscribeObjectValidation?.phone && isValidValidationCode
 
   $: isStage3Valid =
-    subscribeObjectValidation?.payment?.number &&
-    subscribeObjectValidation?.payment?.code &&
-    subscribeObjectValidation?.payment?.holder &&
-    subscribeObjectValidation?.payment?.validity
+    subscribeObject?.billingType &&
+    subscribeObject.billingType !== Types.Types.Asaas.TAsaasBilling.UNDEFINED &&
+    (Types.Types.Asaas.TAsaasBilling.CREDIT_CARD !== subscribeObject.billingType ||
+      (subscribeObjectValidation?.payment?.number &&
+        subscribeObjectValidation?.payment?.code &&
+        subscribeObjectValidation?.payment?.holder &&
+        subscribeObjectValidation?.payment?.validity))
 
   $: if (countdown === 0) {
     if (timer) {
@@ -179,13 +186,13 @@
     }
   }
 
-  $: if (stage === 3) {
+  $: if (stage === 2) {
     buttonNext = 'Contratar'
   } else {
     buttonNext = 'Continuar'
   }
 
-  $: margin = screenW > 820 ? 10 : 0
+  $: margin = screenW > 820 ? 16 : 0
 
   function doBack() {
     stage--
@@ -260,7 +267,7 @@
     }
     return true
   }
-
+  $: console.log(subscribeObject?.billingType)
   function validateStage1() {
     if (!subscribeObjectValidation?.address?.postalCode) {
       Stores.MessageAlert.instance.show('O CEP é incorreto.')
@@ -315,18 +322,24 @@
     if (
       (stage === 0 && !validateStage0()) ||
       (stage === 1 && !validateStage1()) ||
-      (stage === 2 && !validateStage2()) ||
-      (stage === 3 && !validateStage3())
+      (stage === 2 &&
+        (!validateStage2() ||
+          !subscribeObject.billingType ||
+          !(subscribeObject.billingType !== Types.Types.Asaas.TAsaasBilling.CREDIT_CARD || validateStage3())))
     ) {
       return false
     }
-    if (stage === 3) {
+    if (stage === 2) {
       Stores.Loading.instance.start()
       const response = await doContract(subscribeObject)
       if (response?.success) {
         navigate('/result', {
-          state: { from: location.pathname },
-          replace: true
+          state: {
+            from: location.pathname,
+            data: response.data,
+            isPromotion: Number(dueDateAfterXDays) > 0
+          },
+          replace: false
         })
       } else {
         Stores.MessageAlert.instance.show(response?.data)
@@ -358,7 +371,7 @@
   }
 
   function validatePassword(password: string) {
-    return subscribeObject.confirmPassword === password
+    return subscribeObject.password === password
   }
 
   onDestroy(() => {
@@ -432,302 +445,350 @@
 <Views.Divider />
 {#if subscribeObject}
   <div class="container">
-    {#if stage === 0}
-      <h1>Contratar o serviço</h1>
+    <div class="shadowedBox headerData">
+      <h1>Contrato de prestação do serviço</h1>
       <h3>Você escolheu o prato de {planDescription()}!</h3>
       <p>Preencha todos dados corretamente!</p>
-      <h2>Dados do estabelecimento</h2>
-      <div class="form-group">
-        <Views.TextEdit
-          focus={true}
-          type={Types.TTextEdit.NAME}
-          filter={/[A-Za-z0-9 -\.]/gi}
-          placeHolder="Nome do estabelecimento"
-          bind:value={subscribeObject.contractName}
-          bind:isValid={subscribeObjectValidation.contractName}
-          initialValue={subscribeObject.contractName}
-          rightPadding={margin}
-          min={3}
-          max={255}
-        />
-        <Views.TextEdit
-          type={Types.TTextEdit.CNPJ}
-          placeHolder="CNPJ do estabelecimento"
-          bind:value={subscribeObject.contractIdentity}
-          initialValue={subscribeObject.contractIdentity}
-          bind:isValid={subscribeObjectValidation.contractIdentity}
-          leftPadding={margin}
-        />
-        <Views.TextEdit
-          type={Types.TTextEdit.NAME}
-          placeHolder="Nome do responsável"
-          bind:value={subscribeObject.name}
-          bind:isValid={subscribeObjectValidation.name}
-          initialValue={subscribeObject.name}
-          rightPadding={margin}
-          min={3}
-          max={255}
-        />
-        <Views.TextEdit
-          type={Types.TTextEdit.NAME}
-          placeHolder="Sobre nome do responsável"
-          bind:value={subscribeObject.lastName}
-          bind:isValid={subscribeObjectValidation.lastName}
-          initialValue={subscribeObject.lastName}
-          leftPadding={margin}
-          min={3}
-          max={255}
-        />
-        <Views.TextEdit
-          placeHolder="Email do responsável"
-          type={Types.TTextEdit.EMAIL}
-          bind:value={subscribeObject.email}
-          initialValue={subscribeObject.email}
-          bind:isValid={subscribeObjectValidation.email}
-          rightPadding={margin}
-        />
-        <Views.TextEdit
-          type={Types.TTextEdit.CPF}
-          placeHolder="CPF do responsável"
-          bind:value={subscribeObject.identity}
-          initialValue={subscribeObject.identity}
-          bind:isValid={subscribeObjectValidation.cpf}
-          leftPadding={margin}
-        />
-        <Views.TextEdit
-          placeHolder="Senha"
-          type={Types.TTextEdit.PASSWORD}
-          bind:value={subscribeObject.password}
-          bind:isValid={subscribeObjectValidation.password}
-          rightPadding={margin}
-          min={8}
-          max={40}
-          error="A senha deve ter um tamanho entre 8 e 40 caracteres e contendo no mínimo
-        uma letra maiúscula, uma letra minúscula, um número e um símbolo"
-        />
-        <Views.TextEdit
-          placeHolder="Confirmar a senha"
-          type={Types.TTextEdit.PASSWORD}
-          bind:value={subscribeObject.confirmPassword}
-          bind:isValid={subscribeObjectValidation.confirmPassword}
-          leftPadding={margin}
-          error="A confirmação da senha não é válida"
-          validation={validatePassword}
-        />
-
-        <Views.TextEdit
-          type={Types.TTextEdit.ALPHA_NUMERIC}
-          placeHolder="Código de indicação"
-          initialValue={$Referral}
-          bind:value={subscribeObject.referredBy}
-        />
-      </div>
-    {:else if stage === 1}
-      <h2>Endereço do estabelecimento</h2>
-
-      {#if subscribeObject.address}
-        <Views.TextEdit
-          focus={true}
-          type={Types.TTextEdit.CEP}
-          callback={findAddress}
-          buttonIcon={faSearch}
-          bind:value={subscribeObject.address.postalCode}
-          initialValue={subscribeObject.address.postalCode}
-          bind:isValid={subscribeObjectValidation.address.postalCode}
-          placeHolder="CEP do estabelecimento"
-        />
-      {/if}
-      {#if subscribeObject.address}
-        <Views.TextEdit
-          disabled={true}
-          type={Types.TTextEdit.SPACE_ALPHA_NUMERIC}
-          placeHolder="Endereço"
-          bind:this={inputs.address.street}
-          bind:value={subscribeObject.address.street}
-          bind:isValid={subscribeObjectValidation.address.street}
-          initialValue={subscribeObject.address.street}
-          min={2}
-          max={255}
-        />
-      {/if}
-      {#if subscribeObject.address}
-        <Views.TextEdit
-          type={Types.TTextEdit.ALPHA_NUMERIC}
-          placeHolder="Número"
-          bind:this={inputs.address.number}
-          bind:value={subscribeObject.address.number}
-          bind:isValid={subscribeObjectValidation.address.number}
-          initialValue={subscribeObject.address.number}
-          empty={!subscribeObjectValidation.address.postalCode}
-          min={1}
-          max={255}
-        />
-      {/if}
-      {#if subscribeObject.address}
-        <Views.TextEdit
-          type={Types.TTextEdit.SPACE_ALPHA_NUMERIC}
-          placeHolder="Complemento"
-          bind:this={inputs.address.complement}
-          bind:value={subscribeObject.address.complement}
-          bind:isValid={subscribeObjectValidation.address.complement}
-          initialValue={subscribeObject.address.complement}
-        />
-      {/if}
-      {#if subscribeObject.address}
-        <Views.TextEdit
-          disabled={true}
-          type={Types.TTextEdit.SPACE_ALPHA_NUMERIC}
-          placeHolder="Bairro"
-          bind:this={inputs.address.neighborhood}
-          bind:value={subscribeObject.address.neighborhood}
-          bind:isValid={subscribeObjectValidation.address.neighborhood}
-          initialValue={subscribeObject.address.neighborhood}
-          min={2}
-          max={255}
-        />
-      {/if}
-      {#if subscribeObject.address}
-        <Views.TextEdit
-          disabled={true}
-          placeHolder="Cidade"
-          bind:this={inputs.address.city}
-          bind:value={subscribeObject.address.city}
-          bind:isValid={subscribeObjectValidation.address.city}
-          initialValue={subscribeObject.address.city}
-          min={2}
-          max={255}
-        />
-      {/if}
-      {#if subscribeObject.address}
-        <Views.TextEdit
-          disabled={true}
-          placeHolder="UF"
-          bind:this={inputs.address.stat}
-          bind:value={subscribeObject.address.stat}
-          bind:isValid={subscribeObjectValidation.address.stat}
-          initialValue={subscribeObject.address.stat}
-          min={2}
-          max={2}
-        />
-      {/if}
-    {:else if stage === 2}
-      <h2>Por favor informe seu número de telefone cadastrado</h2>
-      <small>clique em "<b>Solicitar</b>" para solicitar o código de validação</small>
-      <Views.TextEdit
-        focus={true}
-        type={Types.TTextEdit.PHONE}
-        bind:value={subscribeObject.phone}
-        initialValue={subscribeObject.phone}
-        icon={faPhone}
-        buttonName="Solicitar"
-        callback={toggleshowRequestValidatingCodeAlert}
-        buttonDisabled={!subscribeObjectValidation?.phone || !canRequestCode}
-        bind:isValid={subscribeObjectValidation.phone}
-        placeHolder="Número do telefone"
-      />
-      {#if !canRequestCode}
-        <span>Caso não receber o código, espera {countdown} segundos para solicitar um novo!</span>
-      {/if}
-      <Views.TextEdit
-        type={Types.TTextEdit.NUMBER}
-        bind:value={subscribeObject.phoneValidationCode}
-        icon={faUnlock}
-        mask="_ _ _ _"
-        buttonName="Confirmar"
-        callback={ValidatePhoneCode}
-        buttonDisabled={!subscribeObjectValidation?.phoneValidationCode}
-        disabled={!subscribeObjectValidation?.canDigitValidationCode}
-        bind:isValid={subscribeObjectValidation.phoneValidationCode}
-        validation={validateValidationCode}
-        placeHolder="Código de validação"
-      />
-      <Views.GTerms />
-    {:else if stage === 3}
-      <h2>Dados de pagamento</h2>
-      <p>
-        É importante usar um cartão de crédito que permite cobrança recorrente, igual o que você usa para contratar
-        Netflix, para evitar eventual suspensão do serviço!
-      </p>
-      <div class="form-group">
-        {#if subscribeObject.payment}
+    </div>
+    <Views.Divider />
+    <Views.StepsHeader steps={['Dados', 'Endereço', 'Efetivação']} step={stage} />
+    <Views.Divider height={40} />
+    {#if stage === 0}
+      <div class="shadowedBox contractData">
+        <h2>Dados do estabelecimento</h2>
+        <div class="form-group">
           <Views.TextEdit
             focus={true}
             type={Types.TTextEdit.NAME}
-            placeHolder="Nome impresso no cartão"
-            bind:value={subscribeObject.payment.holder}
-            bind:isValid={subscribeObjectValidation.payment.holder}
+            filter={/[A-Za-z0-9 -\.]/gi}
+            placeHolder="Nome do estabelecimento"
+            bind:value={subscribeObject.contractName}
+            bind:isValid={subscribeObjectValidation.contractName}
+            initialValue={subscribeObject.contractName}
+            rightPadding={margin}
             min={3}
             max={255}
+          />
+          <Views.TextEdit
+            type={Types.TTextEdit.CNPJ}
+            placeHolder="CNPJ do estabelecimento"
+            bind:value={subscribeObject.contractIdentity}
+            initialValue={subscribeObject.contractIdentity}
+            bind:isValid={subscribeObjectValidation.contractIdentity}
+            leftPadding={margin}
+          />
+          <Views.TextEdit
+            type={Types.TTextEdit.NAME}
+            placeHolder="Nome do responsável"
+            bind:value={subscribeObject.name}
+            bind:isValid={subscribeObjectValidation.name}
+            initialValue={subscribeObject.name}
+            rightPadding={margin}
+            min={3}
+            max={255}
+          />
+          <Views.TextEdit
+            type={Types.TTextEdit.NAME}
+            placeHolder="Sobre nome do responsável"
+            bind:value={subscribeObject.lastName}
+            bind:isValid={subscribeObjectValidation.lastName}
+            initialValue={subscribeObject.lastName}
+            leftPadding={margin}
+            min={3}
+            max={255}
+          />
+          <Views.TextEdit
+            placeHolder="Email do responsável"
+            type={Types.TTextEdit.EMAIL}
+            bind:value={subscribeObject.email}
+            initialValue={subscribeObject.email}
+            bind:isValid={subscribeObjectValidation.email}
             rightPadding={margin}
           />
-        {/if}
-        {#if subscribeObject.payment}
           <Views.TextEdit
-            icon={cardBrandIcon}
-            mask={cardNumberMask}
-            type={Types.TTextEdit.NUMBER}
-            maskKey="_"
-            bind:value={subscribeObject.payment.number}
-            bind:isValid={subscribeObjectValidation.payment.number}
-            placeHolder="Número do cartão"
+            type={Types.TTextEdit.CPF}
+            placeHolder="CPF do responsável"
+            bind:value={subscribeObject.identity}
+            initialValue={subscribeObject.identity}
+            bind:isValid={subscribeObjectValidation.cpf}
             leftPadding={margin}
-            min={cardInfo?.lengths?.[0] ?? 6}
-            max={cardInfo?.lengths?.[0] ?? 6}
           />
-        {/if}
-        {#if subscribeObject.payment}
           <Views.TextEdit
-            type={Types.TTextEdit.NUMBER}
-            mask="__/__"
-            maskKey="_"
-            placeHolder="Validade do cartão"
-            bind:value={subscribeObject.payment.validity}
-            bind:isValid={subscribeObjectValidation.payment.validity}
+            placeHolder="Senha"
+            type={Types.TTextEdit.PASSWORD}
+            bind:value={subscribeObject.password}
+            bind:isValid={subscribeObjectValidation.password}
             rightPadding={margin}
-            validation={validateCardValidation}
-            error="A data de validade do cartão deve ser uma data válida (12/26) maior que a data atual."
+            min={8}
+            max={40}
+            error="A senha deve ter um tamanho entre 8 e 40 caracteres e contendo no mínimo
+        uma letra maiúscula, uma letra minúscula, um número e um símbolo"
+          />
+          <Views.TextEdit
+            placeHolder="Confirmar a senha"
+            type={Types.TTextEdit.PASSWORD}
+            bind:value={subscribeObject.confirmPassword}
+            bind:isValid={subscribeObjectValidation.confirmPassword}
+            leftPadding={margin}
+            error="A confirmação da senha não é válida"
+            validation={validatePassword}
+          />
+
+          <Views.TextEdit
+            type={Types.TTextEdit.ALPHA_NUMERIC}
+            placeHolder="Código de indicação"
+            initialValue={$Referral}
+            bind:value={subscribeObject.referredBy}
+          />
+        </div>
+      </div>
+    {:else if stage === 1}
+      <div class="shadowedBox adressData">
+        <h2>Endereço do estabelecimento</h2>
+
+        {#if subscribeObject.address}
+          <Views.TextEdit
+            focus={true}
+            type={Types.TTextEdit.CEP}
+            callback={findAddress}
+            buttonIcon={faSearch}
+            bind:value={subscribeObject.address.postalCode}
+            initialValue={subscribeObject.address.postalCode}
+            bind:isValid={subscribeObjectValidation.address.postalCode}
+            placeHolder="CEP do estabelecimento"
           />
         {/if}
-        {#if subscribeObject.payment}
+        {#if subscribeObject.address}
           <Views.TextEdit
-            type={Types.TTextEdit.NUMBER}
-            mask={cardCodeMask}
-            maskKey="_"
-            placeHolder="Código de segurança"
-            bind:value={subscribeObject.payment.code}
-            bind:isValid={subscribeObjectValidation.payment.code}
-            leftPadding={margin}
-            min={cardInfo?.code?.size ?? 3}
-            max={cardInfo?.code?.size ?? 3}
+            disabled={true}
+            type={Types.TTextEdit.SPACE_ALPHA_NUMERIC}
+            placeHolder="Endereço"
+            bind:this={inputs.address.street}
+            bind:value={subscribeObject.address.street}
+            bind:isValid={subscribeObjectValidation.address.street}
+            initialValue={subscribeObject.address.street}
+            min={2}
+            max={255}
+          />
+        {/if}
+        {#if subscribeObject.address}
+          <Views.TextEdit
+            type={Types.TTextEdit.ALPHA_NUMERIC}
+            placeHolder="Número"
+            bind:this={inputs.address.number}
+            bind:value={subscribeObject.address.number}
+            bind:isValid={subscribeObjectValidation.address.number}
+            initialValue={subscribeObject.address.number}
+            empty={!subscribeObjectValidation.address.postalCode}
+            min={1}
+            max={255}
+          />
+        {/if}
+        {#if subscribeObject.address}
+          <Views.TextEdit
+            type={Types.TTextEdit.SPACE_ALPHA_NUMERIC}
+            placeHolder="Complemento"
+            bind:this={inputs.address.complement}
+            bind:value={subscribeObject.address.complement}
+            bind:isValid={subscribeObjectValidation.address.complement}
+            initialValue={subscribeObject.address.complement}
+          />
+        {/if}
+        {#if subscribeObject.address}
+          <Views.TextEdit
+            disabled={true}
+            type={Types.TTextEdit.SPACE_ALPHA_NUMERIC}
+            placeHolder="Bairro"
+            bind:this={inputs.address.neighborhood}
+            bind:value={subscribeObject.address.neighborhood}
+            bind:isValid={subscribeObjectValidation.address.neighborhood}
+            initialValue={subscribeObject.address.neighborhood}
+            min={2}
+            max={255}
+          />
+        {/if}
+        {#if subscribeObject.address}
+          <Views.TextEdit
+            disabled={true}
+            placeHolder="Cidade"
+            bind:this={inputs.address.city}
+            bind:value={subscribeObject.address.city}
+            bind:isValid={subscribeObjectValidation.address.city}
+            initialValue={subscribeObject.address.city}
+            min={2}
+            max={255}
+          />
+        {/if}
+        {#if subscribeObject.address}
+          <Views.TextEdit
+            disabled={true}
+            placeHolder="UF"
+            bind:this={inputs.address.stat}
+            bind:value={subscribeObject.address.stat}
+            bind:isValid={subscribeObjectValidation.address.stat}
+            initialValue={subscribeObject.address.stat}
+            min={2}
+            max={2}
           />
         {/if}
       </div>
-      <small>
-        <p>
-          Esta transação será processada pelo Assas de acordo com os
-          <a target="_blank" href="https://ajuda.asaas.com/termos-de-uso" rel="noreferrer">termos e condições de uso</a>
-          e
-          <a
-            target="_blank"
-            href="https://docs.google.com/forms/d/e/1FAIpQLSfIZYUY5eLjn_LO0q2Zq5I0OH_KGCxU1DAde3CdsrjUukLH9Q/viewform"
-            rel="noreferrer">política de privacidade</a
-          >
-          deles. Ao continuar, você reconhece e aceita estes termos e condições. Para autorizar seu cartão, as vezes uma
-          pequena quantia será cobrada e reembolsada imediatamente.<br />Este site é protegido pela criptografia e somos
-          dentro da conformidade de PCI DSS para protegir seus dados de pagamento e gerenciar seus pagamentos.<br />Ao
-          clicar em enviar, certifique que todas as informações estão corretas.
-        </p>
-        <p>A cobrança é feita automaticamente mensalmente e pode ser cancelada a qualquer momento.!</p>
-        <p>
-          Ao continuar você concorda com os <Views.Link url="/termsOfUse">termos de uso</Views.Link>
-          aplicáveis ao serviço contratado e confrma que leu a nossa
-          <Views.Link url="/privacy">politica de privacidade</Views.Link>
-        </p>
-        <p>
-          Devolvemos seu dinheiro 30 dias contando a partir do momento de contratação se você não gostar dos nossos
-          serviços!
-        </p>
-      </small>
+    {:else if stage === 2}
+      <div class="shadowedBox contactData">
+        <h2>Por favor informe seu número de telefone cadastrado</h2>
+        <small>clique em "<b>Solicitar</b>" para solicitar o código de validação</small>
+        <Views.TextEdit
+          focus={true}
+          type={Types.TTextEdit.PHONE}
+          bind:value={subscribeObject.phone}
+          initialValue={subscribeObject.phone}
+          icon={faPhone}
+          buttonName="Solicitar"
+          callback={toggleshowRequestValidatingCodeAlert}
+          buttonDisabled={!subscribeObjectValidation?.phone || !canRequestCode}
+          bind:isValid={subscribeObjectValidation.phone}
+          placeHolder="Número do telefone"
+        />
+        {#if !canRequestCode}
+          <span>Caso não receber o código, espera {countdown} segundos para solicitar um novo!</span>
+        {/if}
+        <Views.TextEdit
+          type={Types.TTextEdit.NUMBER}
+          bind:value={subscribeObject.phoneValidationCode}
+          icon={faUnlock}
+          mask="_ _ _ _"
+          buttonName="Confirmar"
+          callback={ValidatePhoneCode}
+          buttonDisabled={!subscribeObjectValidation?.phoneValidationCode}
+          disabled={!subscribeObjectValidation?.canDigitValidationCode}
+          bind:isValid={subscribeObjectValidation.phoneValidationCode}
+          validation={validateValidationCode}
+          placeHolder="Código de validação"
+        />
+      </div>
+      {#if isStage2Valid}
+        <Views.Divider />
+        <div class="shadowedBox paymentData">
+          <Views.Selector
+            name="Escolhe tipo de cobranca"
+            bind:selected={subscribeObject.billingType}
+            options={Types.Types.Asaas.TAsaasBilling.methods}
+          />
+          <Views.Divider />
+          <div class="line" />
+          <Views.Divider />
+          {#if subscribeObject?.billingType && subscribeObject.billingType !== Types.Types.Asaas.TAsaasBilling.UNDEFINED}
+            {#if subscribeObject.billingType === Types.Types.Asaas.TAsaasBilling.BOLETO}
+              <Views.Status
+                >Será gerado um boleto mensalmente para que você possa realizar os pagamentos do seu prato.<br /><b
+                  >Agora é só clicar no botão continuar</b
+                ></Views.Status
+              >
+            {:else if subscribeObject.billingType === Types.Types.Asaas.TAsaasBilling.PIX}
+              <Views.Status
+                >Será gerada uma chave PIX mensalmente para realizar os pagamentos do seu prato.<br /><b
+                  >Agora é só clicar no botão continuar</b
+                ></Views.Status
+              >
+            {:else if subscribeObject.billingType === Types.Types.Asaas.TAsaasBilling.CREDIT_CARD}
+              <h2>Dados de pagamento</h2>
+              <p>
+                É importante usar um cartão de crédito que permite cobrança recorrente, igual o que você usa para
+                contratar Netflix, para evitar eventual suspensão do serviço!
+              </p>
+              <div class="form-group">
+                {#if subscribeObject.payment}
+                  <Views.TextEdit
+                    focus={true}
+                    type={Types.TTextEdit.NAME}
+                    placeHolder="Nome impresso no cartão"
+                    bind:value={subscribeObject.payment.holder}
+                    bind:isValid={subscribeObjectValidation.payment.holder}
+                    min={3}
+                    max={255}
+                    marginTop={24}
+                    rightPadding={margin}
+                  />
+                {/if}
+                {#if subscribeObject.payment}
+                  <Views.TextEdit
+                    icon={cardBrandIcon}
+                    mask={cardNumberMask}
+                    type={Types.TTextEdit.NUMBER}
+                    maskKey="_"
+                    bind:value={subscribeObject.payment.number}
+                    bind:isValid={subscribeObjectValidation.payment.number}
+                    placeHolder="Número do cartão"
+                    leftPadding={margin}
+                    min={cardInfo?.lengths?.[0] ?? 6}
+                    max={cardInfo?.lengths?.[0] ?? 6}
+                    marginTop={24}
+                  />
+                {/if}
+                {#if subscribeObject.payment}
+                  <Views.TextEdit
+                    type={Types.TTextEdit.NUMBER}
+                    mask="__/__"
+                    maskKey="_"
+                    placeHolder="Validade do cartão"
+                    bind:value={subscribeObject.payment.validity}
+                    bind:isValid={subscribeObjectValidation.payment.validity}
+                    rightPadding={margin}
+                    validation={validateCardValidation}
+                    marginTop={24}
+                    error="A data de validade do cartão deve ser uma data válida (12/26) maior que a data atual."
+                  />
+                {/if}
+                {#if subscribeObject.payment}
+                  <Views.TextEdit
+                    type={Types.TTextEdit.NUMBER}
+                    mask={cardCodeMask}
+                    maskKey="_"
+                    placeHolder="Código de segurança"
+                    bind:value={subscribeObject.payment.code}
+                    bind:isValid={subscribeObjectValidation.payment.code}
+                    leftPadding={margin}
+                    min={cardInfo?.code?.size ?? 3}
+                    max={cardInfo?.code?.size ?? 3}
+                    marginTop={24}
+                  />
+                {/if}
+              </div>
+            {/if}
+            <small>
+              <p>
+                Esta transação será processada pelo Assas de acordo com os
+                <a target="_blank" href="https://ajuda.asaas.com/termos-de-uso" rel="noreferrer"
+                  >termos e condições de uso</a
+                >
+                e
+                <a
+                  target="_blank"
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSfIZYUY5eLjn_LO0q2Zq5I0OH_KGCxU1DAde3CdsrjUukLH9Q/viewform"
+                  rel="noreferrer">política de privacidade</a
+                >
+                deles. Ao continuar, você reconhece e aceita estes termos e condições. Para autorizar seu cartão, as vezes
+                uma pequena quantia será cobrada e reembolsada imediatamente.<br />Este site é protegido pela
+                criptografia e somos dentro da conformidade de PCI DSS para protegir seus dados de pagamento e gerenciar
+                seus pagamentos.<br />Ao clicar em enviar, certifique que todas as informações estão corretas.
+              </p>
+              <p>A cobrança é feita automaticamente mensalmente e pode ser cancelada a qualquer momento.!</p>
+              <p>
+                Ao continuar você concorda com os <Views.Link url="/termsOfUse">termos de uso</Views.Link>
+                aplicáveis ao serviço contratado e confrma que leu a nossa
+                <Views.Link url="/privacy">politica de privacidade</Views.Link>
+              </p>
+              <p>
+                Devolvemos seu dinheiro 30 dias contando a partir do momento de contratação se você não gostar dos
+                nossos serviços!
+              </p>
+            </small>
+          {:else}
+            <Views.Status type={Types.Status.WARNING}
+              >Para continuar precisa escolher um meio de pagamento.</Views.Status
+            >
+          {/if}
+        </div>
+      {/if}
       <Views.GTerms />
     {/if}
     <Views.Divider />
@@ -765,6 +826,10 @@
 <svelte:window bind:innerWidth={screenW} />
 
 <style>
+  .container {
+    display: flex;
+    place-items: center;
+  }
   .form-group {
     display: flex;
     flex-wrap: wrap;
@@ -777,7 +842,28 @@
   .form-group.buttons {
     flex-wrap: nowrap;
   }
-  @media screen and (max-width: 820px) {
+  .headerData {
+    text-align: center;
+    width: 100%;
+  }
+  .contractData,
+  .adressData,
+  .contactData,
+  .paymentData {
+    width: 100%;
+  }
+  .line {
+    height: 1pt;
+    width: 100%;
+    background-color: #ccc;
+  }
+  @media screen and (max-width: 816pt) {
+    .contractData,
+    .adressData,
+    .contactData,
+    .paymentData {
+      width: 100%;
+    }
     .form-group > :global(.form-cell) {
       flex: 1;
       width: 100%;

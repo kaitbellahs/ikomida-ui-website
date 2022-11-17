@@ -16,7 +16,7 @@
 <Views.Divider />
 <div class="container">
   {#if term}
-    <div class="jambtron">
+    <div class="shadowedBox jambtron">
       <h1>{term?.name}</h1>
       <Views.Divider />
       <h2>id: #{term?.id}</h2>
@@ -44,14 +44,14 @@
     flex-direction: column;
     /* align-items: center; */
     place-content: center;
-    margin-bottom: 30px;
+    margin-bottom: 32pt;
     min-height: 20vh;
     background: #cccccc25;
-    border-radius: 10px;
-    box-shadow: 1px 2px #cccccc33;
+    border-radius: 8pt;
+    box-shadow: 0 4pt 8pt #0000009e;
     width: 100%;
-    max-width: 1024px;
-    padding: 30px;
+    max-width: 1024pt;
+    padding: 32pt;
   }
   .jambtron > h1 {
     align-self: center;
