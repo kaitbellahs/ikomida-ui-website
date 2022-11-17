@@ -74,7 +74,7 @@
 
 <div class="container">
   {#if (plans?.length ?? 0) > 0}
-    <div class="header">
+    <div class="shadowedBox header">
       <h2>Nunca foi tão fácil criar seu próprio app para android e iOS para seu estabelecimento.</h2>
       <p>
         Com alguns clicks só você vai criar um app completo e customizável para seu estabelecimento, e ainda você vai
@@ -93,8 +93,10 @@
     </div>
     <Views.Divider />
     <Views.Divider />
-    <h1>Escolha o seu plano adequado!</h1>
-    <span>Mantenha seus clientes fiéis a sua marca</span>
+    <div class="shadowedBox subHeader">
+      <h1>Escolha o seu plano adequado!</h1>
+      <span>Mantenha seus clientes fiéis a sua marca</span>
+    </div>
     <Views.Divider />
     <section>
       {#each plans as plan}
@@ -196,7 +198,7 @@
     customizar um plano para suas necessidades.
   </h2>
   <p>
-    Após a assinatura é necessário aguardar até 7 dias úteis para que o seu app seja publicado nas lojas Apple store e
+    Após a assinatura é necessário aguardar até 15 dias úteis para que o seu app seja publicado nas lojas Apple store e
     Google play, se não houver dependência no processo!
   </p>
   <Views.Divider />
@@ -209,82 +211,85 @@
     flex-direction: column;
     align-items: center;
     place-content: center;
-    padding: 30px;
+    padding: 32pt;
     background: #cccccc33;
-    min-height: 400px;
-    border: 1px solid #cccccc44;
-    border-radius: 10px;
+    min-height: 400pt;
+    border: 1pt solid #cccccc44;
+    border-radius: 8pt;
+  }
+  .subHeader {
+    text-align: center;
   }
   section {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 20px;
+    margin-top: 16pt;
   }
 
   section > article {
     position: relative;
-    border: 1px solid #ccc;
-    margin: 5px 10px;
-    border-radius: 5px;
+    margin: 12pt 12pt;
+    border-radius: 8pt;
     flex: 1;
     width: 33%;
     flex-basis: 30%;
     display: flex;
     flex-direction: column;
-    padding-top: 30px;
-    text-shadow: 0.5px 0.3px #00000055;
-    box-shadow: 2px 3px #00000099;
+    padding-top: 32pt;
+    text-shadow: 0.8pt 0.4pt#00000055;
+    box-shadow: 0 4pt 8pt #0000009e;
+    text-align: center;
   }
   section > article > .bestChoice:after {
     content: '';
     display: block;
     position: absolute;
-    border-right: 7px solid #ffc03e;
+    border-right: 8pt solid #ffc03e;
     left: 0;
     top: 100%;
-    border-bottom: 2px solid transparent;
+    border-bottom: 1pt solid transparent;
   }
   section > article > .bestChoice:before {
     content: '';
     display: block;
     position: absolute;
-    border-right: 7px solid #ffc03e;
+    border-right: 8pt solid #ffc03e;
     left: 0;
     bottom: 100%;
-    border-top: 2px solid transparent;
+    border-top: 4pt solid transparent;
   }
   section > article > .bestChoice {
     position: absolute;
-    left: -7px;
-    top: -7px;
+    left: -7pt;
+    top: -7pt;
     width: auto;
-    height: 30px;
+    height: 32pt;
     display: flex;
     align-items: center;
-    padding: 0 20px 0 13px;
-    border-radius: 0 30px 30px 0;
+    padding: 0 16pt 0 12pt;
+    border-radius: 0 32pt 32pt 0;
     background: #ffeabe;
     font-family: Roboto, sans-serif;
     font-weight: 900;
-    font-size: 17px;
+    font-size: 16pt;
     line-height: 1;
     color: #4c0708;
-    text-shadow: 0.5px 1px #00000055;
-    box-shadow: 2px 3px #00000099;
+    text-shadow: 0.8pt 1pt #00000055;
+    box-shadow: 0 4pt 8pt #0000009e;
   }
   section > article > .discount {
     position: absolute;
-    top: -5px;
-    right: -5px;
-    border-radius: 20.5px;
-    min-width: 60px;
-    border: 1px solid #4c0708;
+    top: -8pt;
+    right: -8pt;
+    border-radius: 20.8pt;
+    min-width: 64pt;
+    border: 1pt solid #4c0708;
     background: #4c0708;
     color: white;
-    line-height: 21px;
-    padding: 0px 8px;
-    text-shadow: 0.5px 1px #00000055;
-    box-shadow: 2px 3px #00000099;
+    line-height: 24pt;
+    padding: 0pt 8pt;
+    text-shadow: 0.8pt 1pt #00000055;
+    box-shadow: 0 4pt 8pt #0000009e;
   }
   section > article > ul {
     list-style: none;
@@ -293,14 +298,14 @@
   }
   section > article > ul > li {
     text-align: start;
-    border-bottom: 1px solid #ccc;
-    padding: 15px 20px 9px 20px;
+    border-bottom: 1pt solid rgba(204, 204, 204, 0.397);
+    padding: 18pt 16pt 8pt 16pt;
   }
   section > article > ul > li > span {
     font-weight: bold;
   }
   section > article > .price {
-    margin-top: 20px;
+    margin-top: 16pt;
     display: flex;
     flex-direction: column;
   }
@@ -314,17 +319,17 @@
   }
   small {
     font-size: 0.8em;
-    padding: 20px;
+    padding: 16pt;
   }
   small :global(*) {
     font-size: 1em;
     color: black;
   }
-  @media screen and (max-width: 820px) {
+  @media screen and (max-width: 816pt) {
     section > article {
       width: 100%;
       flex-basis: 100%;
-      margin-top: 20px;
+      margin-top: 16pt;
     }
   }
   .green {

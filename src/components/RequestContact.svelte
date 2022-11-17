@@ -21,7 +21,8 @@
   let showAlert = false
   let promoTime: Date
 
-  $: margin = screenW > 820 ? 10 : 0
+  $: margin = screenW > 820 ? 16 : 0
+
   $: canProced =
     contactValidation?.contractName &&
     contactValidation?.name &&
@@ -85,7 +86,7 @@
   })
 </script>
 
-<div class="requestContact">
+<div class="requestContact shadowedBox">
   <h2>QUER SABER MAIS? DEIXE SEU CONTATO E CONVERSAREMOS.</h2>
   <div class="form-group">
     <Views.TextEdit
@@ -188,7 +189,6 @@
   .requestContact {
     max-width: 100%;
     overflow: hidden;
-    text-align: justify;
   }
   .form-group {
     display: flex;
@@ -199,7 +199,7 @@
     width: 50%;
     flex-basis: 50%;
   }
-  @media screen and (max-width: 820px) {
+  @media screen and (max-width: 816pt) {
     .form-group > :global(.form-cell) {
       flex: 1;
       width: 100%;
