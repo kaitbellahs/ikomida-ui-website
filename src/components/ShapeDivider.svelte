@@ -57,11 +57,11 @@
     margin-left: auto;
     margin-right: auto;
     height: 100%;
-    padding-top: 0px;
+    padding-top: 0pt;
     max-width: 100%;
-    padding-right: 20px;
-    padding-bottom: 102px;
-    padding-left: 20px;
+    padding-right: 16pt;
+    padding-bottom: 104pt;
+    padding-left: 16pt;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -84,7 +84,7 @@
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -1px;
+    bottom: -1pt;
     pointer-events: none;
   }
   #shapeDivider3 .shapeDivider {
@@ -104,27 +104,27 @@
     width: 100%;
   }
   #shapeDivider1 .shapeDivider svg {
-    height: 90px;
+    height: 88pt;
     width: 142%;
-    left: -128px;
+    left: -128pt;
   }
   #shapeDivider2 .shapeDivider svg {
-    height: 120px;
+    height: 116pt;
     width: 107%;
   }
   #shapeDivider3 .shapeDivider svg {
-    height: 70px;
+    height: 72pt;
   }
 
-  @media screen and (max-width: 820px) {
+  @media screen and (max-width: 816pt) {
     #shapeDivider1 .shapeDivider svg {
-      height: 70px;
+      height: 72pt;
     }
     #shapeDivider2 .shapeDivider svg {
-      height: 80px;
+      height: 80pt;
     }
     #shapeDivider3 .shapeDivider svg {
-      height: 60px;
+      height: 64pt;
     }
   }
 </style>
