@@ -212,26 +212,26 @@
     transform: rotate(-9deg);
   }
   .carousel > div.data {
-    text-shadow: 1px 2px #18056b99;
+    text-shadow: 0pt 4pt 8pt #18056b99;
     color: #fff;
-    padding: 40px;
+    padding: 40pt;
     /* background: #00000085; */
     width: 60%;
     align-items: center;
     display: flex;
     flex-direction: column;
     place-content: center;
-    font-size: 12px;
+    font-size: 12pt;
   }
   .carousel > div > .fidelize {
     max-width: 60%;
     font-size: 1.3em;
-    margin-top: 30px;
+    margin-top: 32pt;
   }
   .carousel > div > h2 {
     /* font-size: 2.5em;
     line-height: 1em; */
-    margin-bottom: 40px;
+    margin-bottom: 32pt;
   }
   .carousel > div > p {
     font-size: 1.5em;
@@ -245,7 +245,7 @@
   .carousel > div > .stop > :global(img) {
     max-width: 25%;
     object-fit: fill;
-    margin-right: 20px;
+    margin-right: 16pt;
   }
   .carousel > div > .you {
     text-align: left;
@@ -255,7 +255,7 @@
   .carousel > div > .you > ul {
     list-style: none;
     margin-left: 0;
-    padding-left: 10px;
+    padding-left: 12pt;
     font-size: 1.2em;
   }
   .carousel > div > .you > ul > li {
@@ -265,11 +265,11 @@
     font-family: RobotoBold;
     font-size: 7em;
     color: #e8d130;
-    padding-top: 10px;
-    text-shadow: 1px 1px #ffffff6b;
+    padding-top: 16pt;
+    text-shadow: 0pt 4pt 8pt #ffffff6b;
   }
   .custom-arrow {
-    width: 20px;
+    width: 16pt;
     background-color: #000000;
     opacity: 0.3;
     position: absolute;
@@ -291,17 +291,17 @@
   }
   .custom-arrow > i {
     border: solid #a29696;
-    border-width: 0 5px 5px 0;
-    padding: 5px;
+    border-width: 0 8pt 8pt 0;
+    padding: 8pt;
     position: relative;
   }
   .custom-arrow-next > i {
     transform: rotate(-45deg);
-    left: -4px;
+    left: -4pt;
   }
   .custom-arrow-prev > i {
     transform: rotate(135deg);
-    right: -4px;
+    right: -4pt;
   }
 
   section.boxes {
@@ -310,15 +310,15 @@
   }
   section.boxes > article {
     flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    margin: 5px;
+    padding: 16pt;
+    border-radius: 8pt;
+    margin: 8pt;
     width: 33%;
     display: flex;
     flex-direction: column;
     flex-basis: 29%;
-    text-shadow: 0.5px 1px #cccccc55;
-    box-shadow: 2px 3px #cccccc99;
+    text-shadow: 0.8pt 1pt #cccccc55;
+    box-shadow: 0 4pt 8pt #0000009e;
     background: #cccccc25;
     color: #190101;
   }
@@ -345,17 +345,17 @@
     line-height: 1em;
     color: #4c0708;
     /* font-size: 2em; */
-    margin-bottom: 20px;
+    margin-bottom: 16pt;
   }
 
   .container > .slide h3 {
     /* font-size: 2.5em; */
-    margin-bottom: 30px;
+    margin-bottom: 32pt;
     /* line-height: 1em; */
   }
-  @media screen and (max-width: 820px) {
+  @media screen and (max-width: 816pt) {
     .carousel {
-      min-height: calc(100vh - 145px);
+      min-height: calc(100vh - 148pt);
       position: relative;
       overflow: hidden;
     }
@@ -389,23 +389,23 @@
       order: 1;
       width: 80%;
       z-index: 999;
-      padding-left: 0px;
+      padding-left: 0pt;
     }
     .carousel > div > .you > b {
       font-size: 2em;
     }
     section.boxes > article {
-      margin-top: 20px;
+      margin-top: 16pt;
       width: 100%;
       flex-basis: 100%;
     }
     .carousel > div {
-      padding: 20px;
+      padding: 16pt;
     }
     .carousel > div > .fidelize {
       max-width: 100%;
       font-size: 1.3em;
-      margin-top: 30px;
+      margin-top: 32pt;
     }
     .carousel > div > h2 {
       font-size: 2em;
@@ -422,7 +422,7 @@
     .carousel > div > .you > ul {
       list-style: circle;
       margin: 0;
-      padding: 20px;
+      padding: 16pt;
       font-size: 1.2em;
     }
     .carousel > div > .stop {
@@ -433,13 +433,13 @@
     .carousel > div > .stop > :global(img) {
       max-width: 40%;
       object-fit: fill;
-      margin: 20px;
+      margin: 16pt;
     }
     .container > .slide {
       flex-direction: column;
     }
     .container > .slide > * {
-      margin-top: 30px;
+      margin-top: 32pt;
       width: 100%;
     }
     .container > .slide.slide1 > :global(img) {

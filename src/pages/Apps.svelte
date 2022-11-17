@@ -17,7 +17,7 @@
 <ShapeDivider />
 <Views.Divider />
 <div class="container">
-  <div class="header">
+  <div class="shadowedBox header">
     <h3>Um só app que você precisa para que tudo dê certo.</h3>
     <p>
       Disponibilizamos um app completo nas principais lojas de aplicativos para Android e iOS (iPhone), para que você
@@ -43,27 +43,27 @@
 
 <style>
   .container {
-    min-height: 300px;
+    min-height: 304pt;
   }
   .header {
     display: flex;
     flex-direction: column;
     align-items: center;
     place-content: center;
-    padding: 30px;
+    padding: 32pt;
     background: #cccccc33;
-    min-height: 300px;
-    border: 1px solid #cccccc44;
-    border-radius: 10px;
+    min-height: 304pt;
+    border: 1pt solid #cccccc44;
+    border-radius: 8pt;
   }
   .links > div {
     display: flex;
     flex-direction: row;
   }
   .links > div > :global(a) {
-    margin: 20px;
+    margin: 16pt;
   }
-  @media screen and (max-width: 820px) {
+  @media screen and (max-width: 816pt) {
     .links > div {
       display: flex;
       flex-direction: column;

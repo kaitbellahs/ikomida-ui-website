@@ -21,7 +21,7 @@
 <ShapeDivider />
 <Views.Divider />
 <div class="container">
-  <div class="header">
+  <div class="shadowedBox header">
     <h3>Entre em contato conosco hoje e agora mesmo.</h3>
     <p>
       Pensando no seu conforto, oferecemos vários meios de comunicação, começando pelo email, passando pelo whatsapp e
@@ -47,42 +47,42 @@
 
 <style>
   .jumbotron {
-    max-height: 900px;
-    min-height: 480px;
+    max-height: 904pt;
+    min-height: 480pt;
     display: flex;
     flex-direction: row;
     place-items: center;
   }
   .jumbotron > * {
     flex: 1;
-    padding: 10px;
-    margin: 10px;
+    padding: 16pt;
+    margin: 16pt;
     width: 50%;
     flex-basis: 40%;
-    /* text-shadow: 0.5px 1px #00000055;
-    box-shadow: 2px 3px #00000099; */
+    /* text-shadow: 0.8pt 1pt #00000055;
+    box-shadow: 0 4pt 8pt #0000009e; */
   }
   .header {
     display: flex;
     flex-direction: column;
     align-items: center;
     place-content: center;
-    padding: 30px;
+    padding: 32pt;
     background: #cccccc33;
-    min-height: 400px;
-    border: 1px solid #cccccc44;
-    border-radius: 10px;
+    min-height: 400pt;
+    border: 1pt solid #cccccc44;
+    border-radius: 8pt;
   }
   .header > h3 {
     /* font-size: 1.6em; */
   }
 
-  @media screen and (max-width: 820px) {
+  @media screen and (max-width: 816pt) {
     .jumbotron {
       flex-direction: column;
     }
     .jumbotron > * {
-      width: calc(100% - 20px);
+      width: calc(100% - 16pt);
       flex-basis: 100%;
     }
   }

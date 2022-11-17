@@ -16,6 +16,7 @@
   let clickId: string | null = null
   let plans: Types.Classes.CPlan[]
   let showResult = false
+  let screenW: number
   let item = {
     orders: 160,
     tax: 2300,
@@ -36,6 +37,9 @@
     plan: Types.Classes.CPlan.fillWith(undefined),
     gain: 0
   }
+
+  $: margin = screenW > 820 ? 16 : 0
+
   function onReset() {
     showResult = false
     resultConcurrence = {
@@ -112,7 +116,7 @@
 <ShapeDivider />
 <Views.Divider />
 <div class="container">
-  <div class="jambtron">
+  <div class="shadowedBox jambtron">
     <h1>Você tem estabelecimento no ramo de gastronomia, bebidas ou similares?</h1>
     <Views.Divider />
     <h2>
@@ -127,7 +131,7 @@
     <Views.Divider />
     <Views.Status>Faça seu cálculo sem compromisso agora mesmo.</Views.Status>
   </div>
-  <div class="content">
+  <div class="shadowedBox content">
     {#if !showResult}
       <div class="form-group">
         <Views.TextEdit
@@ -135,24 +139,28 @@
           bind:value={item.orders}
           initialValue={item.orders}
           type={Types.TTextEdit.NUMBER}
+          rightPadding={margin}
         />
         <Views.TextEdit
           placeHolder="Quanto fatura por mês?"
           bind:value={item.billing}
           initialValue={item.billing}
           type={Types.TTextEdit.CURRENCY}
+          leftPadding={margin}
         />
         <Views.TextEdit
           placeHolder="Quanto paga de comissão por venda?"
           bind:value={item.tax}
           initialValue={item.tax}
           type={Types.TTextEdit.PERCENT}
+          rightPadding={margin}
         />
         <Views.TextEdit
           placeHolder="Quanto paga de mensalidade?"
           bind:value={item.monthly}
           initialValue={item.monthly}
           type={Types.TTextEdit.CURRENCY}
+          leftPadding={margin}
         />
         <Views.TextEdit
           placeHolder="Outros gastos para vender online?"
@@ -160,6 +168,7 @@
           initialValue={item.others}
           type={Types.TTextEdit.CURRENCY}
         />
+        <Views.Divider />
         <Views.Button on:click={onClick}>Calcular</Views.Button>
       </div>
     {:else}
@@ -275,10 +284,11 @@
       </Link>
       <Views.Button on:click={onReset}>Fazer outro calculo</Views.Button>
     {/if}
-    <Views.Divider />
-    <RequestContact />
   </div>
+  <Views.Divider />
+  <RequestContact />
 </div>
+<svelte:window bind:innerWidth={screenW} />
 
 <style>
   .table {
@@ -287,7 +297,8 @@
   }
   .economy {
     color: green;
-    font-size: 2em;
+    font-size: 1.7rem;
+    padding: 8pt 0;
   }
   .green {
     color: green;
@@ -296,39 +307,33 @@
     color: red;
   }
   td {
-    padding: 10px;
+    padding: 16pt;
   }
   .jambtron {
     display: flex;
     flex-direction: column;
     /* align-items: center; */
     place-content: center;
-    margin-bottom: 30px;
+    margin-bottom: 32pt;
     min-height: 20vh;
     background: #cccccc25;
-    border-radius: 10px;
-    box-shadow: 1px 2px #cccccc33;
+    border-radius: 8pt;
+    box-shadow: 0 4pt 8pt #0000009e;
     width: 100%;
-    max-width: 1024px;
-    padding: 30px;
+    max-width: 1024pt;
+    padding: 32pt;
   }
   .jambtron > h1 {
     align-self: center;
     place-self: center;
   }
   .container {
-    max-width: 100%;
     overflow: hidden;
-    text-align: justify;
+    place-items: center;
   }
   .content {
-    max-width: 1024px;
-  }
-  .container > * {
-    text-align: justify;
-  }
-  .container > .content {
-    text-align: justify;
+    max-width: 1024pt;
+    width: 100%;
   }
   .form-group {
     display: flex;
@@ -342,7 +347,7 @@
   .form-group.buttons {
     flex-wrap: nowrap;
   }
-  @media screen and (max-width: 820px) {
+  @media screen and (max-width: 816pt) {
     .form-group > :global(.form-cell) {
       flex: 1;
       width: 100%;
