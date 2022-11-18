@@ -104,7 +104,7 @@
     /* background-color: #202020; */
     font-size: 28pt;
     color: #a80000;
-    margin: 0;
+    margin: 16pt;
     padding: 0;
     display: flex;
     max-height: 72pt;
@@ -183,7 +183,8 @@
       background: #cccccc33;
       min-width: 100%;
       transition: left 300ms;
-      bottom: 0;
+      bottom: -56pt;
+      max-width: 100%;
     }
     header > nav > ul {
       background-color: #000000dd;
@@ -200,9 +201,9 @@
       overflow-y: scroll;
       padding-bottom: 0;
       box-shadow: 0 4pt 8pt #0000009e;
-      min-height: calc(100vh - var(--dropFromHeight) - 62pt);
-      bottom: -62pt;
-      position: relative;
+      min-height: calc(100vh - var(--dropFromHeight) - 56pt);
+      max-height: calc(100vh - var(--dropFromHeight) - 56pt);
+      place-content: flex-start;
     }
     header > nav > ul > li {
       padding: 12pt 16pt;
@@ -210,15 +211,15 @@
       flex-direction: row;
       width: 100%;
       align-items: center;
+      /* flex-grow: 1; */
     }
     header > nav > ul > .logo {
       display: none;
     }
     header > nav.show {
-      left: 0;
+      left: -32pt;
     }
-    header > nav > ul > li#menuRights {
-      flex-grow: 1;
+    header > nav > ul > li:last-of-type {
       align-items: flex-end;
       display: inline-flex;
       /* position: absolute; */
