@@ -25,7 +25,7 @@
 </script>
 
 <header class={style}>
-  <div id="nonProdction" class={!isProd ? 'show' : ''}>
+  <div id="nonProduction" class={!isProd ? 'show' : ''}>
     Este é uma ambiente de testes e tudo o que acontece aqui não tem valor<br /><small
       ><Views.Link url="https://www.ikomida.com" alt="iKomida">ir para site oficial</Views.Link></small
     >
@@ -80,7 +80,7 @@
     right: 0;
     box-shadow: 0 4pt 8pt #0000009e;
   }
-  header > #nonProdction {
+  header > #nonProduction {
     display: none;
     width: 100%;
     border: 1pt solid red;
@@ -90,7 +90,7 @@
     text-align: center;
     color: rgb(53, 1, 1);
   }
-  header > #nonProdction.show {
+  header > #nonProduction.show {
     display: block;
   }
   header.background {

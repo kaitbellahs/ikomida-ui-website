@@ -102,7 +102,7 @@
       {#each plans as plan}
         <article>
           {#if [Types.Types.TDiscount.PERCENT, Types.Types.TDiscount.VALUE].includes(plan.discountType)}
-            <span class="discount"
+            <span class="shadow discount"
               >-{Types.Types.TDiscount.VALUE === plan.discountType
                 ? Utils.Strings.currency(plan.discount)
                 : Utils.Strings.percent(plan.discount)}</span
@@ -172,7 +172,7 @@
             <span class="current">{Utils.Strings.currency(plan.discountedPrice)}/mês</span>
           </div>
           <Views.Divider />
-          <Link to="{plan.id}/{plan.name}/{plan.price}/{plan.dueDateAfterXDays}">
+          <Link to="{plan.id}/{plan.name}/{plan.discountedPrice}/{plan.dueDateAfterXDays}">
             <Views.Button size="half">Tenha seu app Agora</Views.Button>
           </Link>
           {#if plan.dueDateAfterXDays && clickId && promoTime > today}
@@ -214,7 +214,6 @@
     padding: 32pt;
     background: #cccccc33;
     min-height: 400pt;
-    border: 1pt solid #cccccc44;
     border-radius: 8pt;
   }
   .subHeader {
@@ -283,7 +282,6 @@
     right: -8pt;
     border-radius: 20.8pt;
     min-width: 64pt;
-    border: 1pt solid #4c0708;
     background: #4c0708;
     color: white;
     line-height: 24pt;
