@@ -560,7 +560,7 @@
 
           <Views.TextEdit
             type={Types.TTextEdit.ALPHA_NUMERIC}
-            placeHolder="Código de indicação"
+            placeHolder="Código de indicação (opcional)"
             initialValue={$Referral}
             bind:value={subscribeObject.referredBy}
           />
