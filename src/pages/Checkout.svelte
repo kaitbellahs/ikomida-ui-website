@@ -233,9 +233,7 @@
     const response = await validatePhoneValidationCode(subscribeObject)
     if (response?.success) {
       isValidValidationCode = true
-      Stores.MessageAlert.instance.show(
-        `O código inserido é correto!, agora é só clicar no botão “CONTINUAR” para finalizar seu cadastro`
-      )
+      Stores.MessageAlert.instance.show(`O código inserido é correto!, agora escolhe seu meio de pagamento!`)
     } else {
       Stores.MessageAlert.instance.show(response?.data)
     }
@@ -374,6 +372,22 @@
     return subscribeObject.password === password
   }
 
+  function daysToMonths(days: number) {
+    const months = Math.floor(days / 30)
+    const leftDays = days - months * 30
+    const leftDaysString = leftDays > 0 ? `e ${leftDays} dia${months > 1 ? 's' : ''}` : ''
+    return `${months} ${isPlural(days) ? 'meses' : 'mês'}${leftDaysString}`
+  }
+
+  function isPlural(days: number) {
+    return Math.floor(days / 30) > 1 || days - Math.floor(days / 30) * 30 > 1
+  }
+
+  function firstChargeDate() {
+    const date = new Date()
+    date.setDate(date.getDate() + Number(dueDateAfterXDays))
+    return date
+  }
   onDestroy(() => {
     if (timer) {
       clearInterval(timer)
@@ -438,6 +452,7 @@
     subscribeObject.areaCode = 55
     Stores.Loading.instance.stop()
   })
+
   $: Stores.Title.instance.set(`Checkout [${stage + 1}/4]`)
 </script>
 
@@ -447,7 +462,15 @@
   <div class="container">
     <div class="shadowedBox headerData">
       <h1>Contrato de prestação do serviço</h1>
-      <h3>Você escolheu o prato de {planDescription()}!</h3>
+      <h3>Você escolheu o prato <b>{planDescription()}</b>!</h3>
+      <p>Valor: {Utils.Strings.currency(price)}/mês.</p>
+      {#if Number(dueDateAfterXDays)}
+        <p>
+          Você está aproveitando {daysToMonths(Number(dueDateAfterXDays))} gratuitamente, e você só será cobrado a partir
+          de
+          {Utils.Strings.dateToDateString(firstChargeDate())} .
+        </p>
+      {/if}
       <p>Preencha todos dados corretamente!</p>
     </div>
     <Views.Divider />
@@ -680,13 +703,13 @@
             {#if subscribeObject.billingType === Types.Types.Asaas.TAsaasBilling.BOLETO}
               <Views.Status
                 >Será gerado um boleto mensalmente para que você possa realizar os pagamentos do seu prato.<br /><b
-                  >Agora é só clicar no botão continuar</b
+                  >Agora é só clicar no botão Contratar</b
                 ></Views.Status
               >
             {:else if subscribeObject.billingType === Types.Types.Asaas.TAsaasBilling.PIX}
               <Views.Status
                 >Será gerada uma chave PIX mensalmente para realizar os pagamentos do seu prato.<br /><b
-                  >Agora é só clicar no botão continuar</b
+                  >Agora é só clicar no botão Contratar</b
                 ></Views.Status
               >
             {:else if subscribeObject.billingType === Types.Types.Asaas.TAsaasBilling.CREDIT_CARD}

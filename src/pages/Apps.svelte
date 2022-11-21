@@ -53,7 +53,6 @@
     padding: 32pt;
     background: #cccccc33;
     min-height: 304pt;
-    border: 1pt solid #cccccc44;
     border-radius: 8pt;
   }
   .links > div {
