@@ -70,7 +70,6 @@
     padding: 32pt;
     background: #cccccc33;
     min-height: 400pt;
-    border: 1pt solid #cccccc44;
     border-radius: 8pt;
   }
   .header > h3 {
