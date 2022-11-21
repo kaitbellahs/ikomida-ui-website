@@ -8,6 +8,7 @@
   import Description from '../stores/Description'
   import { Preferences } from '@capacitor/preferences'
 
+  const today = new Date()
   const location = useLocation()
   const ADSCLID_PREFERENCE = 'ADSCLID_PREFERENCE'
   const PROMO_TIME_PREFERENCE = 'PROMO_TIME_PREFERENCE'
@@ -273,7 +274,11 @@
           <Views.Divider />
           <Link
             to="/plans/{resultiKomida.plan.id}/{resultiKomida.plan.name}/{resultiKomida.plan.price}/{resultiKomida.plan
-              .dueDateAfterXDays}"
+              .dueDateAfterXDays &&
+            clickId &&
+            promoTime > today
+              ? resultiKomida.plan.dueDateAfterXDays
+              : 0}"
           >
             <Views.Button>Assine já o plano ({resultiKomida.plan.name})</Views.Button>
           </Link>
