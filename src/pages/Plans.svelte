@@ -11,9 +11,9 @@
   const location = useLocation()
   const ADSCLID_PREFERENCE = 'ADSCLID_PREFERENCE'
   const PROMO_TIME_PREFERENCE = 'PROMO_TIME_PREFERENCE'
+  const today = new Date()
 
   let promoTime: Date
-  let today = new Date()
   let clickId: string | null = null
   let plans: Types.Classes.CPlan[]
 
@@ -172,7 +172,11 @@
             <span class="current">{Utils.Strings.currency(plan.discountedPrice)}/mês</span>
           </div>
           <Views.Divider />
-          <Link to="{plan.id}/{plan.name}/{plan.discountedPrice}/{plan.dueDateAfterXDays}">
+          <Link
+            to="{plan.id}/{plan.name}/{plan.discountedPrice}/{plan.dueDateAfterXDays && clickId && promoTime > today
+              ? plan.dueDateAfterXDays
+              : 0}"
+          >
             <Views.Button size="half">Tenha seu app Agora</Views.Button>
           </Link>
           {#if plan.dueDateAfterXDays && clickId && promoTime > today}
