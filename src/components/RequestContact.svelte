@@ -7,9 +7,13 @@
 
   const PROMO_TIME_PREFERENCE = 'PROMO_TIME_PREFERENCE'
   const SHOW_PROMO_PREFERENCE = 'SHOW_PROMO_PREFERENCE'
+  const ADSCLID_PREFERENCE = 'ADSCLID_PREFERENCE'
   const location = useLocation()
   const contact: Types.Classes.CContract = Types.Classes.CContract.fillWith(undefined)
+  const today = new Date()
 
+  let promoTime: Date
+  let clickId: string | null = null
   let contactValidation = {
     contractName: false,
     name: false,
@@ -19,7 +23,6 @@
   }
   let screenW: number
   let showAlert = false
-  let promoTime: Date
 
   $: margin = screenW > 820 ? 16 : 0
 
@@ -60,6 +63,19 @@
   }
 
   onMount(async () => {
+    const params = new URLSearchParams($location?.search)
+    clickId = params.get('gclid')
+    if (clickId) {
+      Preferences.set({
+        key: ADSCLID_PREFERENCE,
+        value: clickId
+      })
+    }
+    clickId = (
+      await Preferences.get({
+        key: ADSCLID_PREFERENCE
+      })
+    )?.value
     const value = (
       await Preferences.get({
         key: SHOW_PROMO_PREFERENCE
@@ -67,20 +83,22 @@
     )?.value
     showAlert = JSON.parse(value === '' || !value ? 'true' : value) && !Utils.Browsers.isMobile()
     if (showAlert) {
-      let savedDate = (
-        await Preferences.get({
-          key: PROMO_TIME_PREFERENCE
-        })
-      )?.value
-      if (!savedDate) {
-        promoTime = new Date()
-        promoTime.setDate(promoTime.getDate() + 7)
-        await Preferences.set({
-          key: PROMO_TIME_PREFERENCE,
-          value: promoTime.toString()
-        })
-      } else {
-        promoTime = new Date(savedDate)
+      if (clickId) {
+        let savedDate = (
+          await Preferences.get({
+            key: PROMO_TIME_PREFERENCE
+          })
+        )?.value
+        if (!savedDate) {
+          promoTime = new Date()
+          promoTime.setDate(promoTime.getDate() + 7)
+          await Preferences.set({
+            key: PROMO_TIME_PREFERENCE,
+            value: promoTime.toString()
+          })
+        } else {
+          promoTime = new Date(savedDate)
+        }
       }
     }
   })
@@ -169,8 +187,8 @@
       <Views.Status
         >Pensando em como vamos te ajudar a tornar seu negócio mais lucrativo, desenvolvemos essa plataforma iKomida
         para lhe ajudar a ganhar mais clientes fiéis a sua marca e vender mais sem precisar se preocupar com pagar uma
-        comissão absurda sobre seu faturamento, {promoTime > new Date()
-          ? 'e além dos valores mensais simbólicos, vamos lhe oferecer 2 meses grátis para que você possa conhecer a plataforma iKomida sem compromisso'
+        comissão absurda sobre seu faturamento, {clickId && promoTime > today
+          ? 'e além dos valores mensais simbólicos, vamos lhe oferecer Até 3 meses gratuitamente para que você possa conhecer a plataforma iKomida sem compromisso'
           : 'e valores mensais simbólicos'}. E claro, se não gostar pode cancelar quando quiser sem carência ou tempo
         mínimo do contrato.</Views.Status
       >
