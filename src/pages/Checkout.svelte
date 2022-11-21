@@ -462,6 +462,7 @@
   <div class="container">
     <div class="shadowedBox headerData">
       <h1>Contrato de prestação do serviço</h1>
+      <Views.Divider />
       <h3>Você escolheu o prato <b>{planDescription()}</b>!</h3>
       <p>Valor: {Utils.Strings.currency(price)}/mês.</p>
       {#if Number(dueDateAfterXDays)}
