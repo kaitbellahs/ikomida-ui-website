@@ -7,6 +7,7 @@
   import RequestContact from '../components/RequestContact.svelte'
   import { Preferences } from '@capacitor/preferences'
   import Description from '../stores/Description'
+  import Helper from '../shared/Helper'
 
   const location = useLocation()
   const ADSCLID_PREFERENCE = 'ADSCLID_PREFERENCE'
@@ -16,17 +17,6 @@
   let promoTime: Date
   let clickId: string | null = null
   let plans: Types.Classes.CPlan[]
-
-  function daysToMonths(days: number) {
-    const months = Math.floor(days / 30)
-    const leftDays = days - months * 30
-    const leftDaysString = leftDays > 0 ? `e ${leftDays} dia${months > 1 ? 's' : ''}` : ''
-    return `${months} ${isPlural(days) ? 'meses' : 'mês'}${leftDaysString}`
-  }
-
-  function isPlural(days: number) {
-    return Math.floor(days / 30) > 1 || days - Math.floor(days / 30) * 30 > 1
-  }
 
   onMount(async () => {
     const params = new URLSearchParams($location?.search)
@@ -64,7 +54,7 @@
   })
   Stores.Title.instance.set(`Pratos`)
   $: Description.instance.set(`Aproveite e tenha seu app nas lojas ${
-    plans?.length > 0 ? `gratuitamente por ${daysToMonths(plans?.[0]?.dueDateAfterXDays ?? 0)} Depois` : 'e'
+    plans?.length > 0 ? `gratuitamente por ${Helper.daysToMonths(plans?.[0]?.dueDateAfterXDays ?? 0)} Depois` : 'e'
   }
      pague somente ${Utils.Strings.currency(plans?.[0]?.discountedPrice ?? 14875)}/mês. cancele quando quiser.`)
 </script>
@@ -86,7 +76,8 @@
       </p>
       {#if plans[0].dueDateAfterXDays && clickId && promoTime > today}
         <h3>
-          Agora aproveita que estamos oferecendo gratuitamente {daysToMonths(plans[0].dueDateAfterXDays)} por tempo limitado
+          Agora aproveita que estamos oferecendo gratuitamente {Helper.daysToMonths(plans[0].dueDateAfterXDays)} por tempo
+          limitado
         </h3>
         <p>Depois pague somente {Utils.Strings.currency(plans[0]?.discountedPrice)}/mês. cancele quando quiser.</p>
       {/if}
@@ -113,7 +104,7 @@
           {/if}
           {#if plan.dueDateAfterXDays && clickId && promoTime > today}
             <Views.Status type={Types.Status.INFO}
-              >Faça uma assinatura e tenha {daysToMonths(plan.dueDateAfterXDays)} grátis</Views.Status
+              >Faça uma assinatura e tenha {Helper.daysToMonths(plan.dueDateAfterXDays)} grátis</Views.Status
             >
             <Views.Divider />
           {/if}
@@ -168,24 +159,24 @@
           <div class="price">
             {#if [Types.Types.TDiscount.PERCENT, Types.Types.TDiscount.VALUE].includes(plan.discountType)}
               <span class="oldPrice">{Utils.Strings.currency(plan.price)}/mês</span>
+              <span class="current">{Utils.Strings.currency(plan.discountedPrice)}/mês</span>
+            {:else}
+              <span class="current">{Utils.Strings.currency(plan.price)}/mês</span>
             {/if}
-            <span class="current">{Utils.Strings.currency(plan.discountedPrice)}/mês</span>
           </div>
           <Views.Divider />
-          <Link
-            to="{plan.id}/{plan.name}/{plan.discountedPrice}/{plan.dueDateAfterXDays && clickId && promoTime > today
-              ? plan.dueDateAfterXDays
-              : 0}"
-          >
+          <Link state={Helper.promoPlan(plan, promoTime, clickId)} to="/checkout">
             <Views.Button size="half">Tenha seu app Agora</Views.Button>
           </Link>
           {#if plan.dueDateAfterXDays && clickId && promoTime > today}
             <small
-              ><Link to="termsOfUse"><u>Sujeito a Termos e Condições</u></Link>. {isPlural(plan.dueDateAfterXDays)
+              ><Link to="termsOfUse"><u>Sujeito a Termos e Condições</u></Link>. {Helper.isPlural(
+                plan.dueDateAfterXDays
+              )
                 ? `Os`
                 : 'O'}
-              {daysToMonths(plan.dueDateAfterXDays)} grátis não estão disponíveis para usuários que contrataram um plano.
-              A oferta termina em {Utils.Strings.dateToDateString(promoTime)}.</small
+              {Helper.daysToMonths(plan.dueDateAfterXDays)} grátis não estão disponíveis para usuários que contrataram um
+              plano. A oferta termina em {Utils.Strings.dateToDateString(promoTime)}.</small
             >
           {/if}
         </article>
