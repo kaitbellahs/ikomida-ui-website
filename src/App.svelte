@@ -101,13 +101,12 @@
       <Home />
     </Route>
     <Route path="about" component={About} />
-    <Route path="plans/*">
-      <Route path="">
-        <Plans />
-      </Route>
-      <Route path=":id/:plan/:price/:dueDateAfterXDays" component={Checkout} />
+    <Route path="plans" component={Plans} />
+    <Route path="checkout/*">
+      <Route path="" component={Checkout} />
+      <Route path=":planId" component={Checkout} />
+      <Route path=":planId/:dueDateAfterXDays" component={Checkout} />
     </Route>
-    <Route path="checkout" component={Checkout} />
     <Route path="features" component={Features} />
     <Route path="result" component={Result} />
     <Route path="termsOfUse" component={TermsOfUse} />

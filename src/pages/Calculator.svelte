@@ -7,6 +7,7 @@
   import { Link, useLocation } from 'svelte-navigator'
   import Description from '../stores/Description'
   import { Preferences } from '@capacitor/preferences'
+  import Helper from '../shared/Helper'
 
   const today = new Date()
   const location = useLocation()
@@ -272,14 +273,7 @@
             perder dinheiro)!</Views.Status
           >
           <Views.Divider />
-          <Link
-            to="/plans/{resultiKomida.plan.id}/{resultiKomida.plan.name}/{resultiKomida.plan.price}/{resultiKomida.plan
-              .dueDateAfterXDays &&
-            clickId &&
-            promoTime > today
-              ? resultiKomida.plan.dueDateAfterXDays
-              : 0}"
-          >
+          <Link state={Helper.promoPlan(resultiKomida.plan, promoTime, clickId)} to="/checkout">
             <Views.Button>Assine já o plano ({resultiKomida.plan.name})</Views.Button>
           </Link>
         {/if}
