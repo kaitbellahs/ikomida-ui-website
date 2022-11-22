@@ -11,6 +11,8 @@
   import ShapeDivider from '../components/ShapeDivider.svelte'
   import { Preferences } from '@capacitor/preferences'
   import { NavigateFn } from 'svelte-navigator'
+  import { getPlan } from '../network/Plans'
+    import Helper from '../shared/Helper'
 
   interface IContractInputs {
     address: {
@@ -24,10 +26,9 @@
     }
   }
 
-  export let id: string
-  export let plan: string
-  export let dueDateAfterXDays: string
-  export let price: number
+  export let plan: Types.Classes.CPlan
+  export let dueDateAfterXDays: number | undefined = undefined
+  export let planId: string | undefined = undefined
   export let navigate: NavigateFn
   export let location: any
 
@@ -66,11 +67,7 @@
     confirmPassword: false,
     phoneValidationCode: false,
     signature: false,
-    plan: {
-      id,
-      name: plan,
-      price
-    },
+    plan,
     payment: {
       number: false,
       holder: false,
@@ -173,19 +170,6 @@
     }
   }
 
-  $: planDescription = () => {
-    switch (plan) {
-      case 'gold':
-        return 'Ouro'
-      case 'silver':
-        return 'Prata'
-      case 'bronze':
-        return 'Bronze'
-      default:
-        return plan
-    }
-  }
-
   $: if (stage === 2) {
     buttonNext = 'Contratar'
   } else {
@@ -265,7 +249,7 @@
     }
     return true
   }
-  $: console.log(subscribeObject?.billingType)
+  $: console.log(plan)
   function validateStage1() {
     if (!subscribeObjectValidation?.address?.postalCode) {
       Stores.MessageAlert.instance.show('O CEP é incorreto.')
@@ -335,7 +319,7 @@
           state: {
             from: location.pathname,
             data: response.data,
-            isPromotion: Number(dueDateAfterXDays) > 0
+            isPromotion: Number(plan?.dueDateAfterXDays) > 0
           },
           replace: false
         })
@@ -372,20 +356,9 @@
     return subscribeObject.password === password
   }
 
-  function daysToMonths(days: number) {
-    const months = Math.floor(days / 30)
-    const leftDays = days - months * 30
-    const leftDaysString = leftDays > 0 ? `e ${leftDays} dia${months > 1 ? 's' : ''}` : ''
-    return `${months} ${isPlural(days) ? 'meses' : 'mês'}${leftDaysString}`
-  }
-
-  function isPlural(days: number) {
-    return Math.floor(days / 30) > 1 || days - Math.floor(days / 30) * 30 > 1
-  }
-
   function firstChargeDate() {
     const date = new Date()
-    date.setDate(date.getDate() + Number(dueDateAfterXDays))
+    date.setDate(date.getDate() + Number(plan?.dueDateAfterXDays))
     return date
   }
   onDestroy(() => {
@@ -441,14 +414,20 @@
     if (term) {
       subscribeObject.termId = term?.id
     }
-    subscribeObject.plan = Types.Classes.CPlan.fromObject({
-      id,
-      name: plan,
-      price
-    })
-    if (subscribeObject.plan && clickId && promoTime > new Date()) {
-      subscribeObject.plan.dueDateAfterXDays = Number(dueDateAfterXDays)
+    if (planId) {
+      const response = await getPlan(planId)
+      if (response.success) {
+        plan = Types.Classes.CPlan.fromObject(response.data)
+        if (dueDateAfterXDays && Number(dueDateAfterXDays) <= Number(plan.dueDateAfterXDays)) {
+          plan.dueDateAfterXDays = dueDateAfterXDays
+        } else {
+          plan.dueDateAfterXDays = undefined
+        }
+      }
+    } else {
+      plan = Types.Classes.CPlan.fromObject(location.state)
     }
+    subscribeObject.plan = plan
     subscribeObject.areaCode = 55
     Stores.Loading.instance.stop()
   })
@@ -458,17 +437,22 @@
 
 <ShapeDivider />
 <Views.Divider />
-{#if subscribeObject}
+{#if subscribeObject && plan && subscribeObject.termId}
   <div class="container">
     <div class="shadowedBox headerData">
       <h1>Contrato de prestação do serviço</h1>
       <Views.Divider />
-      <h3>Você escolheu o prato <b>{planDescription()}</b>!</h3>
-      <p>Valor: {Utils.Strings.currency(price)}/mês.</p>
-      {#if Number(dueDateAfterXDays)}
+      <h3>Você escolheu o prato <b>{plan.name}</b>!</h3>
+      {#if [Types.Types.TDiscount.PERCENT, Types.Types.TDiscount.VALUE].includes(plan.discountType)}
+        <span class="oldPrice">Valor: {Utils.Strings.currency(plan.price)}/mês</span><br />
+        <span class="current">Por apenas: {Utils.Strings.currency(plan.discountedPrice)}/mês</span>
+      {:else}
+        <span>Valor: {Utils.Strings.currency(plan.price)}/mês</span>
+      {/if}
+      {#if plan?.dueDateAfterXDays}
         <p>
-          Você está aproveitando {daysToMonths(Number(dueDateAfterXDays))} gratuitamente, e você só será cobrado a partir
-          de
+          Você está aproveitando {Helper.daysToMonths(Number(plan?.dueDateAfterXDays))} gratuitamente, e você só será cobrado a
+          partir de
           {Utils.Strings.dateToDateString(firstChargeDate())} .
         </p>
       {/if}
@@ -846,6 +830,10 @@
       />
     {/if}
   </div>
+{:else}
+  <Views.CentredMessage
+    text="Algo deu errado, por favor atualize a página, verifique sua conexão à internet ou repete o processo do início."
+  />
 {/if}
 <svelte:window bind:innerWidth={screenW} />
 
@@ -880,6 +868,14 @@
     height: 1pt;
     width: 100%;
     background-color: #ccc;
+  }
+  span.oldPrice {
+    text-decoration: line-through;
+    color: #717171;
+    font-size: 0.8rem;
+  }
+  span.current {
+    color: green;
   }
   @media screen and (max-width: 816pt) {
     .contractData,
