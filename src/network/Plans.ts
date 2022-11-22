@@ -8,3 +8,7 @@ export async function getPlans() {
   }
   return []
 }
+
+export async function getPlan(id?: string) {
+  return await Network.instance?.get(`/plan/${id}`)
+}
