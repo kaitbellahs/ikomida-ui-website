@@ -60,7 +60,7 @@
 
 <ShapeDivider />
 <Views.Divider />
-<div class="shadowedBox container">
+<container class="shadowedBox">
   <h1>Parabéns</h1>
   <p>Fala parceiro {contractResult?.name}</p>
   <p>
@@ -116,7 +116,7 @@
     Ah se nós precisarmos de alguma informação vamos entrar em contato com você, usando os dados que você preencheu, no momento
     da contratação dos nossos serviços.
   </p>
-</div>
+</container>
 
 <style>
   .pix {
@@ -137,9 +137,6 @@
   }
   .pix > div > :global(img) {
     max-width: 128pt;
-  }
-  .container > p {
-    text-indent: 1rem;
   }
   @media screen and (max-width: 816pt) {
     .pix {

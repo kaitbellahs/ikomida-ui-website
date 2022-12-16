@@ -20,7 +20,7 @@
 
 <ShapeDivider />
 <Views.Divider />
-<div class="container">
+<container>
   <div class="shadowedBox header">
     <h3>Entre em contato conosco hoje e agora mesmo.</h3>
     <p>
@@ -29,7 +29,7 @@
     </p>
     <Views.Button on:click={openWhatsapp}>Nos chama no whatsapp agora</Views.Button>
   </div>
-</div>
+</container>
 <div class="jumbotron">
   <div>
     <h1>E pra facilitar!</h1>
@@ -38,12 +38,11 @@
   <div>
     <Views.Image source="/assets/images/contactUs.jpg" name="Entre em contato com iKomida" />
   </div>
-  div>
 </div>
 <Views.Divider />
-<div class="container">
+<container>
   <RequestContact />
-</div>
+</container>
 
 <style>
   .jumbotron {
@@ -59,8 +58,6 @@
     margin: 16pt;
     width: 50%;
     flex-basis: 40%;
-    /* text-shadow: 0.8pt 1pt #00000055;
-    box-shadow: 0 4pt 8pt #0000009e; */
   }
   .header {
     display: flex;
@@ -71,9 +68,6 @@
     background: #cccccc33;
     min-height: 400pt;
     border-radius: 8pt;
-  }
-  .header > h3 {
-    /* font-size: 1.6em; */
   }
 
   @media screen and (max-width: 816pt) {

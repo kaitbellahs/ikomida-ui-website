@@ -117,7 +117,7 @@
 
 <ShapeDivider />
 <Views.Divider />
-<div class="container">
+<container>
   <div class="shadowedBox jambtron">
     <h1>Você tem estabelecimento no ramo de gastronomia, bebidas ou similares?</h1>
     <Views.Divider />
@@ -133,7 +133,7 @@
     <Views.Divider />
     <Views.Status>Faça seu cálculo sem compromisso agora mesmo.</Views.Status>
   </div>
-  <div class="shadowedBox content">
+  <div class="shadowedBox">
     {#if !showResult}
       <div class="form-group">
         <Views.TextEdit
@@ -283,10 +283,10 @@
       </Link>
       <Views.Button on:click={onReset}>Fazer outro calculo</Views.Button>
     {/if}
-  </div>
+    </div>
   <Views.Divider />
   <RequestContact />
-</div>
+</container>
 <svelte:window bind:innerWidth={screenW} />
 
 <style>
@@ -311,7 +311,6 @@
   .jambtron {
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
     place-content: center;
     margin-bottom: 32pt;
     min-height: 20vh;
@@ -326,13 +325,8 @@
     align-self: center;
     place-self: center;
   }
-  .container {
-    overflow: hidden;
+  container {
     place-items: center;
-  }
-  .content {
-    max-width: 1024pt;
-    width: 100%;
   }
   .form-group {
     display: flex;
@@ -343,19 +337,12 @@
     width: 50%;
     flex-basis: 50%;
   }
-  .form-group.buttons {
-    flex-wrap: nowrap;
-  }
   @media screen and (max-width: 816pt) {
     .form-group > :global(.form-cell) {
       flex: 1;
       width: 100%;
       flex-basis: 100%;
       flex-wrap: nowrap;
-    }
-    .form-group.buttons {
-      flex-direction: column-reverse;
-      flex-wrap: wrap;
     }
   }
 </style>

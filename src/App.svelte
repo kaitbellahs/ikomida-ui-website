@@ -26,18 +26,26 @@
   const COOKIES_AGREEMENT_PREFERENCE = 'COOKIES_AGREEMENT_PREFERENCE'
   const originalPushState = history.pushState
   const originalReplaceState = history.replaceState
+  const version = window.version
 
   let pageName: Writable<string | undefined> = Stores.Title.instance.store
   let pageDescription: Writable<string | undefined> = Description.instance.store
   let screenW: number
   let cookiesAgreement = false
   let location = window.location.href
-  const version = window.version
 
   $: if (location) {
     Stores.Loading.instance.start()
   }
-  $: style = ['ikomida.com', 'ikomida.com.br', 'www.ikomida.com', 'www.ikomida.com.br'].includes(window.location.host)
+  $: style = [
+    // '127.0.0.1:8080',
+    // '0.0.0.0:8080',
+    // '192.168.1.104:8080',
+    'ikomida.com',
+    'ikomida.com.br',
+    'www.ikomida.com',
+    'www.ikomida.com.br'
+  ].includes(window.location.host)
     ? ''
     : `margin-top: ${screenW > 820 ? 44 : 65}px !important;`
 
@@ -126,8 +134,9 @@
   <footer class:hasCookiesAgreement={!cookiesAgreement}>
     <section id="socialNetwork">
       <div class="logo">
-        <Views.Image source="/assets/icons/transparent-logo-1.svg" name="iKomida" />
+        <Views.Image source="/assets/icons/logo.png" name="iKomida" />
       </div>
+      <Views.Divider height={16} />
       <div>
         Um produto da <a href="https://tialtonivel.com.br">Ti Alto Nivel</a><br />Todos os direitos reservados<br
         />iKomida website V{version}
@@ -207,26 +216,24 @@
 <Views.MessageAlert />
 <button class="whatsapp" on:click={openWhatsapp}>
   <Views.Image source="assets/icons/whatsapp.png" name="iKomida whatsapp" />
-  <span>Dúvidas entre<br />em contato</span>
+  <!-- <span>Dúvidas entre<br />em contato</span> -->
 </button>
 <svelte:window bind:innerWidth={screenW} />
 
 <style>
   button.whatsapp {
     place-items: center;
-    background-color: rgb(255 255 255 / 50%);
+    background-color: rgb(255 255 255 / 0%);
     border: 0;
     position: fixed;
     bottom: 32pt;
     right: 16pt;
     display: flex;
     flex-direction: column;
+    box-shadow: none;
   }
   button.whatsapp > :global(img) {
     width: 48pt;
-  }
-  button.whatsapp > span {
-    text-shadow: 1pt 1pt #000;
   }
   .cookiesAgreement {
     position: fixed;
@@ -272,6 +279,7 @@
     background-color: #202020;
     color: #fff;
     padding: 16pt 32pt;
+    line-height: 20pt;
   }
   footer.hasCookiesAgreement {
     padding-bottom: 72pt;
@@ -318,8 +326,7 @@
   footer > section#socialNetwork > div > a {
     color: white;
     object-fit: contain;
-    max-height: 72pt;
-    width: inherit;
+    max-height: 56pt;
   }
   footer > section#socialNetwork > div.icons {
     display: flex;
@@ -330,17 +337,14 @@
     height: 39pt;
     width: 39pt;
     margin: 9pt;
-    /* width: fit-content; */
   }
   footer > section#socialNetwork > div.icons > a:nth-child(2) {
     height: 43pt;
     margin: 8pt;
-    /* width: fit-content; */
   }
   footer > section#socialNetwork > div.icons > a:nth-child(3) {
     width: 58pt;
     margin: 0;
-    /* width: fit-content; */
   }
   footer > section#socialNetwork > div.icons > a > :global(img) {
     filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(333deg) brightness(55%) contrast(55%);

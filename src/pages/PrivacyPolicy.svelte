@@ -14,7 +14,7 @@
 
 <ShapeDivider />
 <Views.Divider />
-<div class="container">
+<container>
   {#if term}
     <div class="shadowedBox jambtron">
       <h1>{term?.name}</h1>
@@ -36,13 +36,12 @@
       falha na conexão à rede internet, tente novamente mais tarde ou entre em contato com a gente
     </h2>
   {/if}
-</div>
+</container>
 
 <style>
   .jambtron {
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
     place-content: center;
     margin-bottom: 32pt;
     min-height: 20vh;
@@ -57,18 +56,18 @@
     align-self: center;
     place-self: center;
   }
-  .container {
+  container {
     text-align: justify;
   }
-  .container > * {
+  container > * {
     text-align: justify;
   }
-  .container > h2 {
+  container > h2 {
     font-size: 1.5em;
     text-align: center;
   }
-  .container > .content,
-  .container > small {
+  container > .content,
+  container > small {
     text-align: justify;
   }
 </style>

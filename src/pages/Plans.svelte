@@ -62,7 +62,7 @@
 <ShapeDivider />
 <Views.Divider />
 
-<div class="container">
+<container>
   {#if (plans?.length ?? 0) > 0}
     <div class="shadowedBox header">
       <h2>Nunca foi tão fácil criar seu próprio app para android e iOS para seu estabelecimento.</h2>
@@ -198,7 +198,7 @@
   </p>
   <Views.Divider />
   <RequestContact />
-</div>
+</container>
 
 <style>
   .header {

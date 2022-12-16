@@ -18,15 +18,15 @@
 
 <ShapeDivider />
 <Views.Divider />
-<div class="container">
+<container>
   <div class="shadowedBox header">
     <h1>UMA PLATAFORMA COMPLETA PARA TE AJUDAR A ESCALAR OS GANHOS DO SEU ESTABELECIMENTO.</h1>
     <br /><br />
     Enquanto você foca em gerenciar seu negócio, deixa a gente torná-lo mais lucrativo e mais fácil de gerenciar. Cuidando
     dos seus clientes e facilitando a vida deles, com as nossas tecnologias avançadas que te permitem automatizar quase todo.
   </div>
-</div>
-<div class="container">
+</container>
+<container>
   <div class="jumbotron">
     <div>
       <h2>Você sabia?</h2>
@@ -143,7 +143,7 @@
   </h3>
   <Views.Divider height={60} />
   <RequestContact />
-</div>
+</container>
 
 <style>
   .jumbotron {
@@ -159,8 +159,6 @@
     margin: 16pt;
     width: 50%;
     flex-basis: 40%;
-    /* text-shadow: 0.8pt 1pt #00000055;
-    box-shadow: 0 4pt 8pt #0000009e; */
   }
   .header {
     display: flex;
@@ -172,10 +170,6 @@
     min-height: 400pt;
     border-radius: 8pt;
   }
-  .header > h3 {
-    /* font-size: 1.6em; */
-  }
-
   @media screen and (max-width: 816pt) {
     .jumbotron {
       flex-direction: column;
