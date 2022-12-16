@@ -34,7 +34,7 @@
   }
 </script>
 
-<header class={styles} on:scroll={sceenScroll}>
+<header style="--top:{isProd ? 56 : 152}pt;" class={`${styles}`} on:scroll={sceenScroll}>
   <div id="nonProduction" class={!isProd ? 'show' : ''}>
     Este é uma ambiente de testes e tudo o que acontece aqui não tem valor<br /><small
       ><Views.Link url="https://www.ikomida.com" alt="iKomida">ir para site oficial</Views.Link></small
@@ -190,13 +190,13 @@
       border-radius: 4pt;
     }
     header > container > nav {
-      position: fixed;
+      position: absolute;
       left: -100%;
       min-height: calc(100vh - var(--dropFromHeight));
       background: #cccccc33;
       min-width: 100%;
       transition: left 300ms;
-      bottom: -32pt;
+      top: var(--top);
       max-width: 100%;
     }
     header > container > nav.show {
