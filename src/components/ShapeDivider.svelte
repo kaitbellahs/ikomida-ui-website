@@ -60,7 +60,7 @@
     padding-top: 0pt;
     max-width: 100%;
     padding-right: 16pt;
-    padding-bottom: 104pt;
+    padding-bottom: 136pt;
     padding-left: 16pt;
     display: flex;
     flex-direction: column;

@@ -16,7 +16,7 @@
 
 <ShapeDivider />
 <Views.Divider />
-<div class="container">
+<container>
   <div class="shadowedBox header">
     <h3>Um só app que você precisa para que tudo dê certo.</h3>
     <p>
@@ -24,8 +24,8 @@
       possa gerenciar seu negócio de uma maneira bem simples, eficiente e sem complicações.
     </p>
   </div>
-</div>
-<div class="container">
+</container>
+<container>
   <div class="links">
     <h1>Baixe iKomida Dashboard App</h1>
     <div>
@@ -39,10 +39,10 @@
   </div>
   <Views.Divider />
   <RequestContact />
-</div>
+</container>
 
 <style>
-  .container {
+  container {
     min-height: 304pt;
   }
   .header {

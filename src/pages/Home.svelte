@@ -5,6 +5,7 @@
   import ShapeDivider from '../components/ShapeDivider.svelte'
   import { onMount } from 'svelte'
   import RequestContact from '../components/RequestContact.svelte'
+  import Offer from '../components/Offer.svelte'
 
   onMount(async () => {
     Stores.Loading.instance.stop()
@@ -96,40 +97,30 @@
 </div>
 <ShapeDivider />
 <Views.Divider height={60} />
-<div class="container">
+<container>
   <RequestContact />
   <Views.Divider height={60} />
   <h2 class="sectionsTitle">POR QUE PRECISA TER SEU PRÓPRIO APP???</h2>
   <section class="boxes">
     <article>
       <h3>Lucro</h3>
-      <p>
-        Não sofra mais com taxas abusivas.<br />Aqui você paga 0% sobre suas vendas.
-      </p>
+      <p>Não sofra mais com taxas aultas. Aqui você paga 0% sobre suas vendas.</p>
     </article>
     <article>
       <h3>Layout</h3>
-      <p>
-        Quer app com sua cara?<br />Aqui o app é seu e você quem define seu layout
-      </p>
+      <p>Quer app com sua cara? Aqui o app é seu e você quem define seu layout</p>
     </article>
     <article>
       <h3>Controle</h3>
-      <p>
-        O controle sobre seu app é importante.<br />Aqui você é o dono. Você define e controla tudo.
-      </p>
+      <p>O controle sobre seu app é importante. Aqui você é o dono. Você define e controla tudo.</p>
     </article>
     <article>
       <h3>Fidelidade</h3>
-      <p>
-        Garanta a fidelidade dos seus clientes<br />Com um app da sua marca, os clientes vão sempre lembrar de você.
-      </p>
+      <p>Garanta a fidelidade dos seus clientes Com um app da sua marca, os clientes vão sempre lembrar de você.</p>
     </article>
     <article>
       <h3>Comunicação</h3>
-      <p>
-        Tem produto ou desconto novo?<br />Então é só mandar um push que todos os seus clientes recebem na hora
-      </p>
+      <p>Tem produto ou desconto novo? Então é só mandar um push que todos os seus clientes recebem na hora</p>
     </article>
   </section>
   <Views.Divider height={60} />
@@ -172,23 +163,23 @@
   </section>
   <Views.Divider height={60} />
   <RequestContact />
-</div>
+</container>
+<Offer />
 
 <style>
   button {
     background-color: transparent;
     border: 0;
   }
-  .container > .slide {
+  container > .slide {
     display: flex;
   }
-  .container > .slide > * {
+  container > .slide > * {
     width: 50%;
   }
   .carousel {
     min-height: calc(100vh);
     max-height: 100vh;
-    /* background-image: var(--image); */
     display: flex;
     justify-content: center;
     background-repeat: no-repeat;
@@ -215,7 +206,6 @@
     text-shadow: 0pt 4pt 8pt #18056b99;
     color: #fff;
     padding: 40pt;
-    /* background: #00000085; */
     width: 60%;
     align-items: center;
     display: flex;
@@ -229,8 +219,6 @@
     margin-top: 32pt;
   }
   .carousel > div > h2 {
-    /* font-size: 2.5em;
-    line-height: 1em; */
     margin-bottom: 32pt;
   }
   .carousel > div > p {
@@ -240,7 +228,6 @@
   .carousel > div > .stop {
     text-align: left;
     display: flex;
-    /* width: 70%; */
   }
   .carousel > div > .stop > :global(img) {
     max-width: 25%;
@@ -250,7 +237,6 @@
   .carousel > div > .you {
     text-align: left;
     display: flex;
-    /* width: 70%; */
   }
   .carousel > div > .you > ul {
     list-style: none;
@@ -263,9 +249,9 @@
   }
   .carousel > div > .you > b {
     font-family: RobotoBold;
-    font-size: 7em;
+    font-size: 6em;
     color: #e8d130;
-    padding-top: 16pt;
+    padding-top: 56pt;
     text-shadow: 0pt 4pt 8pt #ffffff6b;
   }
   .custom-arrow {
@@ -324,18 +310,15 @@
   }
   section.boxes > article > p {
     width: 100%;
-    /* font-size: 1.2em; */
     font-family: RobotoBold;
     text-align: center;
   }
   section.boxes > article > h3 {
     width: 100%;
-    /* font-size: 2em; */
     color: #ff0000;
     text-align: center;
-    /* line-height: 1em; */
   }
-  .container > .slide > div {
+  container > .slide > div {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -344,20 +327,21 @@
   .sectionsTitle {
     line-height: 1em;
     color: #4c0708;
-    /* font-size: 2em; */
     margin-bottom: 16pt;
   }
 
-  .container > .slide h3 {
-    /* font-size: 2.5em; */
+  container > .slide h3 {
     margin-bottom: 32pt;
-    /* line-height: 1em; */
   }
   @media screen and (max-width: 816pt) {
     .carousel {
       min-height: calc(100vh - 148pt);
       position: relative;
       overflow: hidden;
+    }
+    .carousel > div > h2 {
+      margin-top: 32pt;
+      margin-bottom: 0pt;
     }
     .carousel > .screenshot {
       width: 100%;
@@ -375,12 +359,9 @@
       order: 0;
       z-index: 99;
     }
-    .carousel > .screenshot > .iphone,
-    .carousel > .screenshot > :global(img),
-    .carousel > .screenshot > .iphone > :global(img) {
+    .carousel > .screenshot > :global(img) {
       max-height: 100%;
       object-fit: contain;
-
       overflow: none;
       transform: none;
     }
@@ -390,6 +371,7 @@
       width: 80%;
       z-index: 999;
       padding-left: 0pt;
+      place-items: baseline;
     }
     .carousel > div > .you > b {
       font-size: 2em;
@@ -417,7 +399,6 @@
     .carousel > div > .you {
       text-align: center;
       display: block;
-      /* width: 70%; */
     }
     .carousel > div > .you > ul {
       list-style: circle;
@@ -428,30 +409,29 @@
     .carousel > div > .stop {
       text-align: center;
       display: block;
-      /* width: 70%; */
     }
     .carousel > div > .stop > :global(img) {
       max-width: 40%;
       object-fit: fill;
       margin: 16pt;
     }
-    .container > .slide {
+    container > .slide {
       flex-direction: column;
     }
-    .container > .slide > * {
+    container > .slide > * {
       margin-top: 32pt;
       width: 100%;
     }
-    .container > .slide.slide1 > :global(img) {
+    container > .slide.slide1 > :global(img) {
       order: 1;
     }
-    .container > .slide.slide1 > div {
+    container > .slide.slide1 > div {
       order: 2;
     }
-    .container > .slide.slide3 > :global(img) {
+    container > .slide.slide3 > :global(img) {
       order: 1;
     }
-    .container > .slide.slide3 > div {
+    container > .slide.slide3 > div {
       order: 2;
     }
   }
