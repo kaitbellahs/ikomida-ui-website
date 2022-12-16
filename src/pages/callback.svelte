@@ -20,13 +20,13 @@
 <Views.Divider />
 
 <h2>Quase pronto</h2>
-<div class="container">
+<container>
   <Views.Divider />
   Agora só
   <Views.Divider />
   <Views.Button sizeMultiplier={0.9} on:click={onClick}>clique aqui</Views.Button>
   <Views.Divider />e vamos te levar de volta para o app para completar a sua integração com pagseguro
-</div>
+</container>
 
 <style>
 </style>

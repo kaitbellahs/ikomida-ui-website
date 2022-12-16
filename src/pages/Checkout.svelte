@@ -438,7 +438,7 @@
 <ShapeDivider />
 <Views.Divider />
 {#if subscribeObject && plan && subscribeObject.termId}
-  <div class="container">
+  <container>
     <div class="shadowedBox headerData">
       <h1>Contrato de prestação do serviço</h1>
       <Views.Divider />
@@ -829,7 +829,7 @@
         ]}
       />
     {/if}
-  </div>
+  </container>
 {:else}
   <Views.CentredMessage
     text="Algo deu errado, por favor atualize a página, verifique sua conexão à internet ou repete o processo do início."
@@ -838,7 +838,7 @@
 <svelte:window bind:innerWidth={screenW} />
 
 <style>
-  .container {
+  container {
     display: flex;
     place-items: center;
   }

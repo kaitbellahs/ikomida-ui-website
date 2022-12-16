@@ -19,7 +19,7 @@
 
 <ShapeDivider />
 <Views.Divider />
-<div class="container">
+<container>
   <div class="shadowedBox header">
     <h3>Uma empresa de tecnologia que pensa em você.</h3>
     <p>
@@ -30,7 +30,7 @@
       seus apps.
     </p>
   </div>
-</div>
+</container>
 <div class="jumbotron">
   <div>
     <h1>Assim como você, gostamos de comer coisas boas!</h1>
@@ -42,7 +42,7 @@
     <Views.Image source="/assets/images/about-1.jpg" name="Sobre iKomida" />
   </div>
 </div>
-<div class="container">
+<container>
   <h1>Viemos para resolver seu problema</h1>
   <p>
     Desde o inicio do nascimento desse projeto, pensamos em resolver os problemas que encontramos conversando com donos
@@ -52,7 +52,7 @@
   </p>
   <Views.Divider />
   <RequestContact />
-</div>
+</container>
 
 <style>
   .jumbotron {
@@ -68,8 +68,6 @@
     margin: 16pt;
     width: 50%;
     flex-basis: 40%;
-    /* text-shadow: 0.8pt 1pt #00000055;
-    box-shadow: 0 4pt 8pt #0000009e; */
   }
   .header {
     display: flex;
@@ -80,9 +78,6 @@
     background: #cccccc33;
     min-height: 400pt;
     border-radius: 8pt;
-  }
-  .header > h3 {
-    /* font-size: 1.6em; */
   }
 
   @media screen and (max-width: 816pt) {
