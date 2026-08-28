@@ -3,7 +3,7 @@
   "version": "1.7.1",
   "private": true,
   "author": "Khalid Ait Bellahs",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "scripts": {
     "sirv": "rollup -c -w",
@@ -93,5 +93,9 @@
     "svelte-fa": "^3.0.3",
     "svelte-navigator": "^3.2.2",
     "uuid": "^9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaitbellahs/ikomida-ui-website.git"
   }
 }
